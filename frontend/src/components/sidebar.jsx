@@ -22,13 +22,13 @@ const navItems = [
   { label: "Diagnose Crop", icon: Camera, path: "/diagnose" },
   { label: "Advisory", icon: CloudSun, path: "/advisory" },
   { label: "Ask AI Assistant", icon: MessageCircle, path: "/askAIAssistant" },
-  { label: "News & Tips", icon: Newspaper, path: "/news" },
+  { label: "News & Tips", icon: Newspaper, path: "/comingSoon" },
 ];
 
 const Sidebar = () => { 
 
   return (
-    <aside className="w-64 min-h-screen bg-gray-50 border-r border-gray-100 flex flex-col p-4 sticky left-0">
+    <aside className="w-64 min-h-screen bg-gray-50 border-r border-gray-100 xl:flex hidden flex-col p-4 sticky left-0">
 
       {/* Nav */}
       <nav className="flex-1 space-y-1 mt-20 ">

@@ -10,14 +10,15 @@ import {
 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/header";
+import Hero from "../components/Hero";
 
 
 // ---- Dummy data (swap for real API/DB data later) ----
-const stats = [
-  { label: "Farms", value: 3, icon: Sprout, tint: "bg-green-50 text-green-600" },
-  { label: "Crops", value: 12, icon: Leaf, tint: "bg-amber-50 text-amber-600" },
-  { label: "Alerts", value: 2, icon: AlertTriangle, tint: "bg-red-50 text-red-600" },
-];
+// const stats = [
+//   { label: "Farms", value: 3, icon: Sprout, tint: "bg-green-50 text-green-600" },
+//   { label: "Crops", value: 12, icon: Leaf, tint: "bg-amber-50 text-amber-600" },
+//   { label: "Alerts", value: 2, icon: AlertTriangle, tint: "bg-red-50 text-red-600" },
+// ];
 
 const quickActions = [
   { label: "Add Farm", icon: PlusCircle, href: "/farms/new" },
@@ -42,30 +43,11 @@ const Dashboard = () => {
       <Header />
       <div className="flex ">
         <Sidebar />
-        <div className=" w-full p-6 space-y-8 bg-gray-200 overflow-y-auto mt-20">
-          {/* Greeting */}
-          <div>
-            <h1 className="text-2xl font-semibold text-gray-900">Good morning, Daniel</h1>
-            <p className="text-gray-500 text-sm mt-1">Here's what's happening on your farms today.</p>
-          </div>
-
-          {/* Stats */}
-          <div className="grid grid-cols-3 gap-4">
-            {stats.map(({ label, value, icon: Icon, tint }) => (
-              <div key={label} className="bg-white rounded-xl border border-gray-100 p-4 flex items-center gap-3">
-                <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${tint}`}>
-                  <Icon size={20} />
-                </div>
-                <div>
-                  <p className="text-lg font-semibold text-gray-900">{value}</p>
-                  <p className="text-xs text-gray-500">{label}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
+        <div className=" w-full space-y-8 bg-gray-200 overflow-y-auto mt-20">       
+          {/* Hero section */}
+          <Hero />
           {/* Quick actions */}
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-3 gap-4 p-6">
             {quickActions.map(({ label, icon: Icon }) => (
               <button
                 key={label}
@@ -78,7 +60,7 @@ const Dashboard = () => {
           </div>
 
           {/* Recent diagnosis preview */}
-          <div className="bg-white rounded-xl border border-gray-100 p-5">
+          <div className="bg-white rounded-xl border border-gray-100 mx-6 p-5">
             <div className="flex items-center justify-between mb-4">
               <h2 className="font-semibold text-gray-900">Recent Diagnosis</h2>
               <a href="/diagnosis" className="text-sm text-green-600 flex items-center gap-1">
