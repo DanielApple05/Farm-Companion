@@ -21,7 +21,7 @@ const navItems = [
   { label: "Livestock", icon: PawPrint, path: "/livestock" },
   { label: "Diagnose Crop", icon: Camera, path: "/diagnose" },
   { label: "Advisory", icon: CloudSun, path: "/advisory" },
-  { label: "Ask AI Assistant", icon: MessageCircle, path: "/chat" },
+  { label: "Ask AI Assistant", icon: MessageCircle, path: "/askAIAssistant" },
   { label: "News & Tips", icon: Newspaper, path: "/news" },
 ];
 
