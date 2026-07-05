@@ -28,7 +28,7 @@ const navItems = [
 const Sidebar = () => { 
 
   return (
-    <aside className="w-64 min-h-screen bg-gray-50 border-r border-gray-100 xl:flex hidden flex-col p-4 sticky left-0">
+    <aside className="w-64 h-screen bg-gray-50 border-r border-gray-100 xl:flex hidden flex-col p-4 sticky top-0 left-0">
 
       {/* Nav */}
       <nav className="flex-1 space-y-1 mt-20 ">

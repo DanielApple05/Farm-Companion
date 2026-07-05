@@ -1,6 +1,8 @@
 import { MapPin, Sprout, PawPrint, PlusCircle, ChevronRight } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
+import AddFarmModal from "../components/AddFarmModal";
+import { useState } from "react";
 
 // ---- Dummy data (swap for real API/DB data later) ----
 const farms = [
@@ -28,6 +30,9 @@ const farms = [
 ];
 
 const MyFarms = () => {
+
+  const [farmModalOpen, setFarmModalOpen] = useState(false);
+
   return (
     <>
       <Header />
@@ -40,12 +45,16 @@ const MyFarms = () => {
               <h1 className="text-2xl font-semibold text-gray-900">My Farms</h1>
               <p className="text-gray-500 text-sm mt-1">{farms.length} farms registered</p>
             </div>
-            <button className="flex items-center gap-2 bg-green-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+            <button 
+            onClick={() => setFarmModalOpen(true)}
+            className="flex items-center gap-2 bg-green-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
               <PlusCircle size={16} />
               Add Farm
             </button>
           </div>
-
+          {
+            farmModalOpen && <AddFarmModal onClose={() => setFarmModalOpen(false)} />
+          }
           {/* Farms list */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {farms.map((farm) => (
