@@ -1,11 +1,14 @@
 import React from 'react';
-import Dashboard from './pages/dashboard';
 import {Routes, Route} from 'react-router-dom';
+import Dashboard from './pages/dashboard';
+import MyFarms from './pages/myFarm';
+
 
 const App = () => {
   return (
     <Routes>
-      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/" element={<Dashboard />} />
+      <Route path="/farms" element={<MyFarms />} />
     </Routes>
   );
 }

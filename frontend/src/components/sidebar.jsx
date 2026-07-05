@@ -11,43 +11,41 @@ import {
   User,
   LogOut,
 } from "lucide-react";
+import { NavLink } from "react-router-dom";
 
 // ---- Nav config (swap `href` for real routes when wiring up React Router) ----
 const navItems = [
-  { label: "Dashboard", icon: LayoutDashboard, href: "/" },
-  { label: "My Farms", icon: Sprout, href: "/farms" },
-  { label: "Crops", icon: Leaf, href: "/crops" },
-  { label: "Livestock", icon: PawPrint, href: "/livestock" },
-  { label: "Diagnose Crop", icon: Camera, href: "/diagnose" },
-  { label: "Advisory", icon: CloudSun, href: "/advisory" },
-  { label: "Ask AI Assistant", icon: MessageCircle, href: "/chat" },
-  { label: "News & Tips", icon: Newspaper, href: "/news" },
+  { label: "Dashboard", icon: LayoutDashboard, path: "/" },
+  { label: "My Farms", icon: Sprout, path: "/farms" },
+  { label: "Crops", icon: Leaf, path: "/crops" },
+  { label: "Livestock", icon: PawPrint, path: "/livestock" },
+  { label: "Diagnose Crop", icon: Camera, path: "/diagnose" },
+  { label: "Advisory", icon: CloudSun, path: "/advisory" },
+  { label: "Ask AI Assistant", icon: MessageCircle, path: "/chat" },
+  { label: "News & Tips", icon: Newspaper, path: "/news" },
 ];
 
-const Sidebar = () => {
-  const [active, setActive] = useState("Dashboard");
+const Sidebar = () => { 
 
   return (
-    <aside className="w-64 min-h-screen bg-gray-50 border-r border-gray-100 flex flex-col p-4 top-24 fixed left-0">
-  
+    <aside className="w-64 min-h-screen bg-gray-50 border-r border-gray-100 flex flex-col p-4 sticky left-0">
+
       {/* Nav */}
-      <nav className="flex-1 space-y-1 ">
-        {navItems.map(({ label, icon: Icon, href }) => {
-          const isActive = active === label;
+      <nav className="flex-1 space-y-1 mt-20 ">
+        {navItems.map(({ label, icon: Icon, path }) => {
           return (
-            <a
+            <NavLink
               key={label}
-              href={href}
-              onClick={() => setActive(label)}
-              className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
-                isActive
+              to={path}
+               reloadDocument
+              className={({ isActive }) => `flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${isActive
                   ? "bg-green-50 text-green-700 font-medium"
                   : "text-gray-600 hover:bg-gray-50"
-              }`}
+                }`}
             >
               <Icon size={18} />
               {label}
-            </a>
+            </NavLink>
           );
         })}
       </nav>
