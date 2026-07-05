@@ -8,8 +8,8 @@ import {
   ChevronRight,
   Bug
 } from "lucide-react";
-import Sidebar from "../assets/components/Sidebar";
-import Header from "../assets/components/header";
+import Sidebar from "../components/Sidebar";
+import Header from "../components/header";
 
 
 // ---- Dummy data (swap for real API/DB data later) ----
@@ -40,9 +40,9 @@ const Dashboard = () => {
   return (
     <>
       <Header />
-      <div className="flex">
+      <div className="flex ">
         <Sidebar />
-        <div className=" w-full p-6 space-y-8">
+        <div className=" w-full p-6 space-y-8 bg-gray-200 overflow-y-auto mt-20">
           {/* Greeting */}
           <div>
             <h1 className="text-2xl font-semibold text-gray-900">Good morning, Daniel</h1>

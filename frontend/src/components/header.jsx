@@ -7,13 +7,13 @@ const user = {
   avatarUrl: "", // add real photo URL later; falls back to initials below
 };
 
-const header = () => {
+const Header = () => {
   const initials = user.name.charAt(0);
 
   return (
-    <header className="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-100">
+    <header className="flex items-center justify-between px-6 py-4 bg-gray-100 border-b border-gray-100 fixed z-10 h-20 w-full">
       {/* Logo */}
-      <div className="flex items-center gap-2 px-2 mb-8">
+      <div className="flex items-center gap-2 px-2 ">
         <Sprout size={22} className="text-green-600" />
         <span className="font-semibold text-gray-900">Farm Companion</span>
       </div>
@@ -49,4 +49,4 @@ const header = () => {
   );
 }
 
-export default header;
+export default Header;

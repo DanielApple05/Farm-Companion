@@ -28,10 +28,10 @@ const Sidebar = () => {
   const [active, setActive] = useState("Dashboard");
 
   return (
-    <aside className="w-64 h-screen bg-white border-r border-gray-100 flex flex-col p-4">
+    <aside className="w-64 min-h-screen bg-gray-50 border-r border-gray-100 flex flex-col p-4 top-24 fixed left-0">
   
       {/* Nav */}
-      <nav className="flex-1 space-y-1">
+      <nav className="flex-1 space-y-1 ">
         {navItems.map(({ label, icon: Icon, href }) => {
           const isActive = active === label;
           return (
