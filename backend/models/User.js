@@ -19,7 +19,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       minlength: 6,
-      select: false, // never return password by default on queries
     },
 
     // Captured after first login (geolocation), reused when pre-filling Add Farm

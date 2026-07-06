@@ -1,18 +1,14 @@
 import { useState } from "react";
 import { Sprout, Mail, Lock, User, Eye, EyeOff } from "lucide-react";
-
-// ---- Expected user shape once auth is wired up ----
-// {
-//   id: string,
-//   name: string,
-//   email: string,
-//   location: string,      // captured after first login, reused for Add Farm
-//   farmFocus: "crop" | "livestock" | "both"
-// }
+import { useRegister, useLogin } from "../api/auth";
+import { useNavigate } from "react-router-dom";
 
 const Auth = () => {
+  const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true); // true = login view, false = signup view
   const [showPassword, setShowPassword] = useState(false);
+  const [message, setMessage] = useState(""); // for displaying error/success messages
+  const [loading, setLoading] = useState(false); // for showing a loading spinner during API calls
 
   const [form, setForm] = useState({
     name: "",
@@ -23,8 +19,42 @@ const Auth = () => {
   const updateField = (field) => (e) => setForm({ ...form, [field]: e.target.value });
 
   // Placeholder — wire up real auth calls later
-  const handleSubmit = () => {
-    console.log(isLogin ? "login" : "signup", form);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!isLogin) {
+      try {
+        setLoading(true);
+        const res = await useRegister({
+          name: form.name,
+          email: form.email,
+          password: form.password,
+        });
+        localStorage.setItem("token", res.data.token);
+        setMessage("Registration successful!");
+        setIsLogin(true); // Switch to login view after successful registration
+        setForm({ name: "", email: "", password: "" }); // Clear form fields
+      } catch (error) {
+        setMessage("An error occurred during registration." || error.message);
+      } finally {
+        setLoading(false);
+        setMessage(""); // Clear message after a short delay
+      }
+    } else {
+      try {
+        setLoading(true);
+        const res = await useLogin({
+          email: form.email,
+          password: form.password,
+        });
+        localStorage.setItem("token", res.data.token);
+        navigate("/dashboard"); // Redirect to dashboard upon successful login
+      } catch (error) {
+        setMessage("An error occurred during login." || error.message);
+      } finally {
+        setLoading(false);
+      }
+    }
   };
 
   const isFormValid = isLogin
@@ -49,86 +79,95 @@ const Auth = () => {
           </p>
         </div>
 
-        {/* Name — signup only */}
-        {!isLogin && (
+        {message && (
+          <div className="w-full bg-red-50 border border-red-200 text-red-500 text-sm rounded-xl px-4 py-3 mb-4">
+            {message}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Name — signup only */}
+          {!isLogin && (
+            <div>
+              <label className="text-sm text-gray-700 font-medium">Name</label>
+              <div className="relative mt-1">
+                <User size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <input
+                  type="text"
+                  value={form.name}
+                  onChange={updateField("name")}
+                  placeholder="John Doe"
+                  className="w-full pl-9 pr-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-200"
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Email */}
           <div>
-            <label className="text-sm text-gray-700 font-medium">Name</label>
+            <label className="text-sm text-gray-700 font-medium">Email</label>
             <div className="relative mt-1">
-              <User size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
-                type="text"
-                value={form.name}
-                onChange={updateField("name")}
-                placeholder="Daniel Ejimofor"
+                type="email"
+                value={form.email}
+                onChange={updateField("email")}
+                placeholder="you@example.com"
                 className="w-full pl-9 pr-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-200"
               />
             </div>
           </div>
-        )}
 
-        {/* Email */}
-        <div>
-          <label className="text-sm text-gray-700 font-medium">Email</label>
-          <div className="relative mt-1">
-            <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-            <input
-              type="email"
-              value={form.email}
-              onChange={updateField("email")}
-              placeholder="you@example.com"
-              className="w-full pl-9 pr-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-200"
-            />
+          {/* Password */}
+          <div>
+            <label className="text-sm text-gray-700 font-medium">Password</label>
+            <div className="relative mt-1">
+              <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                type={showPassword ? "text" : "password"}
+                value={form.password}
+                onChange={updateField("password")}
+                placeholder="••••••••"
+                className="w-full pl-9 pr-9 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-200"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+              >
+                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
           </div>
-        </div>
 
-        {/* Password */}
-        <div>
-          <label className="text-sm text-gray-700 font-medium">Password</label>
-          <div className="relative mt-1">
-            <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-            <input
-              type={showPassword ? "text" : "password"}
-              value={form.password}
-              onChange={updateField("password")}
-              placeholder="••••••••"
-              className="w-full pl-9 pr-9 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-200"
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
-            >
-              {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-            </button>
-          </div>
-        </div>
+          {/* Forgot password — login only */}
+          {isLogin && (
+            <div className="flex justify-end">
+              <a href="/forgot-password" className="text-xs text-green-600">Forgot password?</a>
+            </div>
+          )}
 
-        {/* Forgot password — login only */}
-        {isLogin && (
-          <div className="flex justify-end">
-            <a href="/forgot-password" className="text-xs text-green-600">Forgot password?</a>
-          </div>
-        )}
-
-        {/* Submit */}
-        <button
-          onClick={handleSubmit}
-          disabled={!isFormValid}
-          className="w-full bg-green-600 disabled:bg-gray-200 disabled:text-gray-400 text-white text-sm py-2.5 rounded-lg hover:bg-green-700 transition-colors"
-        >
-          {isLogin ? "Log In" : "Create Account"}
-        </button>
-
-        {/* Switch between login/signup — this is the state-driven toggle */}
-        <p className="text-center text-sm text-gray-500">
-          {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
+          {/* Submit */}
           <button
-            onClick={() => setIsLogin(!isLogin)}
-            className="text-green-600 font-medium"
+            type="submit"
+            disabled={!isFormValid || loading}
+            className="w-full bg-green-600 disabled:bg-gray-200 disabled:text-gray-400 text-white text-sm py-2.5 rounded-lg hover:bg-green-700 transition-colors"
           >
-            {isLogin ? "Sign up" : "Log in"}
+            {loading ? (isLogin ? "loggin in..." : "Registering...") : (isLogin ? "Log In" : "Create Account")}
           </button>
-        </p>
+
+          {/* Switch between login/signup — this is the state-driven toggle */}
+          <p className="text-center text-sm text-gray-500">
+            {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
+            <span
+              onClick={() => setIsLogin(!isLogin)}
+              className="text-green-600 font-medium"
+            >
+              {
+                isLogin ? 'Create Account' : 'Login'}
+            </span>
+          </p>
+        </form>
       </div>
     </div>
   );
