@@ -14,7 +14,6 @@ app.use(express.json());
 // Use routes
 app.use("/api/auth", auth);
 
-
 // Health check
 app.get("/", (req, res) => {
   res.json({ message: "You're now farming" });
