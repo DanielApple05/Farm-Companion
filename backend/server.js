@@ -5,12 +5,15 @@ require("dotenv").config();
 
 // Import routes
 const app = express();
+const auth = require("./routes/authRoutes");
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
-// Routes
+// Use routes
+app.use("/api/auth", auth);
+
 
 // Health check
 app.get("/", (req, res) => {
@@ -18,12 +21,14 @@ app.get("/", (req, res) => {
 });
 
 // Connect to MongoDB then start server
+const port = Number(process.env.PORT);
+
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
     console.log("Connected to MongoDB");
-    app.listen(process.env.PORT, () => {
-      console.log(`Server running on port ${process.env.PORT}`);
+    app.listen(port, () => {
+      console.log(`Server running on port ${port}`);
     });
   })
   .catch((err) => {
