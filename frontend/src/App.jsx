@@ -8,6 +8,7 @@ import Diagnose from './pages/diagnose';
 import Advisory from './pages/advisory';
 import Chat from './pages/askAIAssistant';
 import ComingSoon from './pages/comingSoon';
+import Auth from './pages/auth';
 // import News from './pages/News';
 
 
@@ -22,6 +23,7 @@ const App = () => {
       <Route path="/advisory" element={<Advisory />} />
       <Route path="/askAIAssistant" element={<Chat />} />
       <Route path="/comingSoon" element={<ComingSoon />} />
+      <Route path="/auth" element={<Auth />} />
        {/*  <Route path="/news" element={<News />} /> */}
     </Routes>
   );

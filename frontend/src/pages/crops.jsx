@@ -1,6 +1,8 @@
 import { Leaf, MapPin, Calendar, PlusCircle, ChevronRight, AlertTriangle } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
+import AddCropModal from "../components/AddCropModal";
+import { useState } from "react";
 
 // ---- Dummy data (swap for real API/DB data later) ----
 const crops = [
@@ -44,6 +46,8 @@ const statusStyles = {
 };
 
 const Crops = () => {
+
+  const [ addCropModal, setAddCropModal ] = useState(false);
   return (
     <>
       <Header />
@@ -61,6 +65,9 @@ const Crops = () => {
               Add Crop
             </button>
           </div>
+          {
+            addCropModal && <AddCropModal onClose={() => setAddCropModal(false)} />
+          }
 
           {/* Crops list */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

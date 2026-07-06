@@ -1,13 +1,15 @@
 import { PawPrint, MapPin, PlusCircle, ChevronRight, Syringe } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
+import AddLivestockModal from "../components/addLivestockModal";
+import { useState } from "react";
 
 // ---- Dummy data (swap for real API/DB data later) ----
 const livestock = [
   {
     id: 1,
     type: "Poultry",
-    farm: "Omuahia Farm",
+    farm: "Umuahia Farm",
     headcount: 28,
     breed: "Broiler",
     status: "Healthy",
@@ -15,7 +17,7 @@ const livestock = [
   {
     id: 2,
     type: "Goats",
-    farm: "Omuahia Farm",
+    farm: "Umuahia Farm",
     headcount: 10,
     breed: "West African Dwarf",
     status: "Due for vaccination",
@@ -36,6 +38,8 @@ const statusStyles = {
 };
 
 const Livestock = () => {
+
+  const [ livestockModal, setLivestockModal ] = useState(false);
   return (
     <>
       <Header />
@@ -50,11 +54,14 @@ const Livestock = () => {
                 {livestock.reduce((sum, l) => sum + l.headcount, 0)} animals across all farms
               </p>
             </div>
-            <button className="flex items-center gap-2 bg-green-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+            <button className="flex items-center gap-2 bg-green-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-green-700 transition-colors" onClick={() => setLivestockModal(true)}>
               <PlusCircle size={16} />
               Add Livestock
             </button>
           </div>
+          {
+            livestockModal && <AddLivestockModal onClose={() => setLivestockModal(false)} />
+          }
 
           {/* Livestock list */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

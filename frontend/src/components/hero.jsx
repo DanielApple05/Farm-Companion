@@ -18,7 +18,7 @@ const Hero = ({
     { label: "Crops", value: 12, icon: Leaf, tint: "bg-amber-50 text-amber-600" },
     { label: "Alerts", value: 2, icon: AlertTriangle, tint: "bg-red-50 text-red-600" },
   ],
-  imageUrl = "/images/dashboardHero.png", 
+  imageUrl = "/images/dashboardHero.png",
 }) => {
 
   const navigate = useNavigate();

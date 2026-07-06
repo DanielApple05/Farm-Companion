@@ -11,19 +11,12 @@ import {
 import Sidebar from "../components/Sidebar";
 import Header from "../components/header";
 import Hero from "../components/Hero";
-
-
-// ---- Dummy data (swap for real API/DB data later) ----
-// const stats = [
-//   { label: "Farms", value: 3, icon: Sprout, tint: "bg-green-50 text-green-600" },
-//   { label: "Crops", value: 12, icon: Leaf, tint: "bg-amber-50 text-amber-600" },
-//   { label: "Alerts", value: 2, icon: AlertTriangle, tint: "bg-red-50 text-red-600" },
-// ];
+import { Link } from "react-router-dom";
 
 const quickActions = [
-  { label: "Add Farm", icon: PlusCircle, href: "/farms/new" },
-  { label: "Diagnose Crop", icon: Camera, href: "/diagnose" },
-  { label: "Ask AI Assistant", icon: MessageCircle, href: "/chat" },
+  { label: "Add Farm", icon: PlusCircle, path: "/farms" },
+  { label: "Diagnose Crop", icon: Camera, path: "/diagnose" },
+  { label: "Ask AI Assistant", icon: MessageCircle, path: "/askAIAssistant" },
 ];
 
 const recentDiagnoses = [
@@ -43,19 +36,20 @@ const Dashboard = () => {
       <Header />
       <div className="flex ">
         <Sidebar />
-        <div className=" w-full space-y-8 bg-gray-200 overflow-y-auto mt-20">       
+        <div className=" w-full space-y-8 bg-gray-50 overflow-y-auto mt-20">       
           {/* Hero section */}
           <Hero />
           {/* Quick actions */}
           <div className="grid grid-cols-3 gap-4 p-6">
-            {quickActions.map(({ label, icon: Icon }) => (
-              <button
+            {quickActions.map(({ label, icon: Icon, path }) => (
+              <Link
+                to={path}
                 key={label}
                 className="bg-white border border-gray-100 rounded-xl p-4 flex flex-col items-center gap-2 hover:border-green-300 transition-colors"
               >
                 <Icon size={20} className="text-green-600" />
                 <span className="text-sm text-gray-700">{label}</span>
-              </button>
+              </Link>
             ))}
           </div>
 
