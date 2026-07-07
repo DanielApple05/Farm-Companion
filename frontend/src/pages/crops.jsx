@@ -1,4 +1,4 @@
-import { Leaf, MapPin, Calendar, PlusCircle, ChevronRight, AlertTriangle } from "lucide-react";
+import { Leaf, MapPin, Calendar, PlusCircle, ChevronRight, AlertTriangle, Link } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import AddCropModal from "../components/AddCropModal";
@@ -47,7 +47,7 @@ const statusStyles = {
 
 const Crops = () => {
 
-  const [ addCropModal, setAddCropModal ] = useState(false);
+  const [addCropModal, setAddCropModal] = useState(false);
   return (
     <>
       <Header />
@@ -60,7 +60,9 @@ const Crops = () => {
               <h1 className="text-2xl font-semibold text-gray-900">Crops</h1>
               <p className="text-gray-500 text-sm mt-1">{crops.length} crops across all farms</p>
             </div>
-            <button className="flex items-center gap-2 bg-green-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+            <button
+              onClick={() => setAddCropModal(true)}
+              className="flex items-center gap-2 bg-green-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
               <PlusCircle size={16} />
               Add Crop
             </button>
@@ -105,9 +107,9 @@ const Crops = () => {
                   <span className={`text-xs px-2 py-1 rounded-md ${statusStyles[crop.status]}`}>
                     {crop.status}
                   </span>
-                  <a href={`/crops/${crop.id}`} className="text-sm text-green-600 flex items-center gap-1">
+                  <Link to={`/crops/${crop.id}`} className="text-sm text-green-600 flex items-center gap-1">
                     View <ChevronRight size={14} />
-                  </a>
+                  </Link>
                 </div>
               </div>
             ))}

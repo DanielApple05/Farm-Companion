@@ -37,7 +37,7 @@ const Header = () => {
         />
       </div>
 
-      <div className="hidden md:flex flex-col items-end text-sm ">
+      <div className="hidden md:flex flex-col  text-sm ">
         {loading ? (
           <div className="flex items-center gap-2 text-gray-500">
             <Loader2 size={14} className="animate-spin" />
@@ -52,10 +52,10 @@ const Header = () => {
           <>
             <div className="flex items-center gap-1 text-gray-900 font-medium">
               <WeatherIcon condition={description} size={20} />
-              <span>{cityName || "Lagos"}</span>
+              <span>{cityName || "Port Harcourt"}</span>
             </div>
-            <div className="flex items-center justify-between gap-2">
-              <span className="text-gray-600 ml-0 pl-0">
+            <div className="flex items-center justify-between gap-2 ">
+              <span className="text-gray-600 ">
                 {currentTemp ? `${Math.round(currentTemp)}°C` : "--"}
               </span>
               <span className="text-xs text-gray-500">
@@ -66,7 +66,7 @@ const Header = () => {
         )}
       </div>
 
-      <div className="flex items-center gap-3 min-w-[220px] justify-end">
+
 
         <div className="flex items-center gap-3">
           {user.avatarUrl ? (
@@ -81,7 +81,7 @@ const Header = () => {
             <p className="text-xs text-gray-500 leading-tight">{user.role}</p>
           </div>
         </div>
-      </div>
+      
     </header>
   );
 };

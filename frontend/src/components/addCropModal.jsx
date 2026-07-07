@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { X, Leaf, Calendar, Camera } from "lucide-react";
+import { updateCrop } from "../api/crops";
+
 
 // Dummy — swap for real farms list from API/DB later
 const farmOptions = [
@@ -12,9 +14,22 @@ const AddCropModal = ({ onClose }) => {
   const [cropName, setCropName] = useState("");
   const [farmId, setFarmId] = useState("");
   const [plantedOn, setPlantedOn] = useState("");
+  const [loading, setLoading ] = useState(false);
+  const [ message, setMessage] = useState("");
 
   // Placeholder — wire up real submit logic later
   const handleSubmit = () => {
+    e.preventDefault()
+
+    try {
+      setLoading(true)
+      await updateCrop({ cropName, plantedOn, farmId })
+      
+    } catch (error) {
+      
+    } finally {
+      setLoading(false)
+    }
     console.log({ cropName, farmId, plantedOn });
     onClose?.();
   };
@@ -31,71 +46,73 @@ const AddCropModal = ({ onClose }) => {
         </div>
 
         {/* Crop name */}
-        <div>
-          <label className="text-sm text-gray-700 font-medium">Crop name</label>
-          <div className="relative mt-1">
-            <Leaf size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-            <input
-              type="text"
-              value={cropName}
-              onChange={(e) => setCropName(e.target.value)}
-              placeholder="e.g. Maize"
-              className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-200"
-            />
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label className="text-sm text-gray-700 font-medium">Crop name</label>
+            <div className="relative mt-1">
+              <Leaf size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                value={cropName}
+                onChange={(e) => setCropName(e.target.value)}
+                placeholder="e.g. Maize"
+                className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-200"
+              />
+            </div>
           </div>
-        </div>
 
-        {/* Farm select */}
-        <div>
-          <label className="text-sm text-gray-700 font-medium">Farm</label>
-          <select
-            value={farmId}
-            onChange={(e) => setFarmId(e.target.value)}
-            className="w-full mt-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-200"
-          >
-            <option value="">Select a farm</option>
-            {farmOptions.map((f) => (
-              <option key={f.id} value={f.id}>{f.name}</option>
-            ))}
-          </select>
-        </div>
-
-        {/* Planting date */}
-        <div>
-          <label className="text-sm text-gray-700 font-medium">Planting date</label>
-          <div className="relative mt-1">
-            <Calendar size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-            <input
-              type="date"
-              value={plantedOn}
-              onChange={(e) => setPlantedOn(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-200"
-            />
+          {/* Farm select */}
+          <div>
+            <label className="text-sm text-gray-700 font-medium">Farm</label>
+            <select
+              value={farmId}
+              onChange={(e) => setFarmId(e.target.value)}
+              className="w-full mt-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-200"
+            >
+              <option value="">Select a farm</option>
+              {farmOptions.map((f) => (
+                <option key={f.id} value={f.id}>{f.name}</option>
+              ))}
+            </select>
           </div>
-        </div>
 
-        {/* Optional photo */}
-        <button className="w-full flex items-center justify-center gap-2 text-sm text-gray-500 border-2 border-dashed border-gray-200 rounded-lg py-3 hover:border-green-300 hover:text-green-600 transition-colors">
-          <Camera size={16} />
-          Add a photo (optional)
-        </button>
+          {/* Planting date */}
+          <div>
+            <label className="text-sm text-gray-700 font-medium">Planting date</label>
+            <div className="relative mt-1">
+              <Calendar size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                type="date"
+                value={plantedOn}
+                onChange={(e) => setPlantedOn(e.target.value)}
+                className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-200"
+              />
+            </div>
+          </div>
 
-        {/* Actions */}
-        <div className="flex gap-3 pt-2">
-          <button
-            onClick={onClose}
-            className="flex-1 text-sm py-2.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors"
-          >
-            Cancel
+          {/* Optional photo */}
+          <button className="w-full flex items-center justify-center gap-2 text-sm text-gray-500 border-2 border-dashed border-gray-200 rounded-lg py-3 hover:border-green-300 hover:text-green-600 transition-colors">
+            <Camera size={16} />
+            Add a photo (optional)
           </button>
-          <button
-            onClick={handleSubmit}
-            disabled={!cropName || !farmId}
-            className="flex-1 text-sm py-2.5 rounded-lg bg-green-600 disabled:bg-gray-200 disabled:text-gray-400 text-white hover:bg-green-700 transition-colors"
-          >
-            Add Crop
-          </button>
-        </div>
+
+          {/* Actions */}
+          <div className="flex gap-3 pt-2">
+            <div
+              onClick={onClose}
+              className="flex-1 text-sm py-2.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors"
+            >
+              Cancel
+            </div>
+            <button
+              onSubmit={handleSubmit}
+              disabled={!cropName || !farmId}
+              className="flex-1 text-sm py-2.5 rounded-lg bg-green-600 disabled:bg-gray-200 disabled:text-gray-400 text-white hover:bg-green-700 transition-colors"
+            >
+              { loading ? "adding..." : "Add Crop"}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
