@@ -4,12 +4,14 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { getUserName } from "../helpers";
+import { getGreeting } from "../utils";
 
 // Reusable hero — pass different props to reuse across homepage,
 // or trimmed down (no image) for section banners elsewhere.
 const Hero = ({
   eyebrow = "Built for smallholder farmers",
-  title = "Good morning, Daniel",
+  title = `${getGreeting()}, ${getUserName() || "Farmer"}!`,
   subtitle = "Here's what's happening on your farms today.",
   primaryCta = { label: "view farm", path: "/farms" },
   // secondaryCta = { label: "See how it works", path: "#features" },

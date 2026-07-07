@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Sprout, Mail, Lock, User, Eye, EyeOff } from "lucide-react";
-import { useRegister, useLogin } from "../api/auth";
+import { registerRequest, loginRequest } from "../api/auth";
 import { useNavigate } from "react-router-dom";
 
 const Auth = () => {
@@ -9,7 +9,6 @@ const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [message, setMessage] = useState(""); // for displaying error/success messages
   const [loading, setLoading] = useState(false); // for showing a loading spinner during API calls
-
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -25,17 +24,18 @@ const Auth = () => {
     if (!isLogin) {
       try {
         setLoading(true);
-        const res = await useRegister({
+        const res = await registerRequest({
           name: form.name,
           email: form.email,
           password: form.password,
         });
-        localStorage.setItem("token", res.data.token);
-        setMessage("Registration successful!");
+        localStorage.setItem('token', res.data.token);
+        localStorage.setItem('user', JSON.stringify(res.data.user));
+        setMessage("Registration successful! Please log in.");
         setIsLogin(true); // Switch to login view after successful registration
         setForm({ name: "", email: "", password: "" }); // Clear form fields
       } catch (error) {
-        setMessage("An error occurred during registration." || error.message);
+        setMessage( error.response?.data?.message || error.message || "An error occurred during registration." );
       } finally {
         setLoading(false);
         setMessage(""); // Clear message after a short delay
@@ -43,14 +43,17 @@ const Auth = () => {
     } else {
       try {
         setLoading(true);
-        const res = await useLogin({
+        const res = await loginRequest({
           email: form.email,
           password: form.password,
         });
-        localStorage.setItem("token", res.data.token);
-        navigate("/dashboard"); // Redirect to dashboard upon successful login
+        localStorage.setItem('token', res.data.token);
+        localStorage.setItem('user', JSON.stringify(res.data.user));
+        navigate("/"); // Redirect to dashboard upon successful login
       } catch (error) {
-        setMessage("An error occurred during login." || error.message);
+        setMessage(
+          error.response?.data?.message || error.message || "An error occurred during login."
+        );
       } finally {
         setLoading(false);
       }
