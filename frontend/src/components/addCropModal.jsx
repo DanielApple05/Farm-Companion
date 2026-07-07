@@ -18,20 +18,23 @@ const AddCropModal = ({ onClose }) => {
   const [ message, setMessage] = useState("");
 
   // Placeholder — wire up real submit logic later
-  const handleSubmit = () => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
     try {
       setLoading(true)
-      await updateCrop({ cropName, plantedOn, farmId })
+     const res = await updateCrop({ cropName, plantedOn, farmId })
+     if (!res) {
+      setMessage({ message: res.data.message || "failed to add crops"})
+     }
       
     } catch (error) {
+      setMessage( error.response?.data?.message || error.message || "Can't add crop" );
       
     } finally {
       setLoading(false)
     }
     console.log({ cropName, farmId, plantedOn });
-    onClose?.();
   };
 
   return (
@@ -46,7 +49,12 @@ const AddCropModal = ({ onClose }) => {
         </div>
 
         {/* Crop name */}
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="space-y-3">
+          {message && (
+          <div className="w-full bg-red-50 border border-red-200 text-red-500 text-sm rounded-xl px-4 py-3 mb-4">
+            {message}
+          </div>
+        )}
           <div>
             <label className="text-sm text-gray-700 font-medium">Crop name</label>
             <div className="relative mt-1">
@@ -100,13 +108,13 @@ const AddCropModal = ({ onClose }) => {
           <div className="flex gap-3 pt-2">
             <div
               onClick={onClose}
-              className="flex-1 text-sm py-2.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors"
+              className="flex-1 text-sm py-2.5 rounded-lg border text-center border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors"
             >
               Cancel
             </div>
             <button
               onSubmit={handleSubmit}
-              disabled={!cropName || !farmId}
+              disabled={!cropName || !farmId || loading }
               className="flex-1 text-sm py-2.5 rounded-lg bg-green-600 disabled:bg-gray-200 disabled:text-gray-400 text-white hover:bg-green-700 transition-colors"
             >
               { loading ? "adding..." : "Add Crop"}

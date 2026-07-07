@@ -6,6 +6,8 @@ require("dotenv").config();
 // Import routes
 const app = express();
 const auth = require("./routes/authRoutes");
+const cropRoutes = require("./routes/cropRoutes");
+const farmRoutes = require("./routes/farmRoutes");
 
 // Middleware
 app.use(cors());
@@ -13,6 +15,8 @@ app.use(express.json());
 
 // Use routes
 app.use("/api/auth", auth);
+app.use("/api/cropRoutes", cropRoutes);
+app.use("/api/farmRoutes", farmRoutes);
 
 // Health check
 app.get("/", (req, res) => {

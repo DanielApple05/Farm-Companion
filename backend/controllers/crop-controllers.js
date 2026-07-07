@@ -4,7 +4,7 @@ const Farm = require("../models/Farm");
 // POST /api/crops
 // Creates a crop, links it to its parent farm, and confirms the farm belongs to the logged-in user
 const createCrop = async (req, res) => {
-  const { name, farmId, plantedOn, stage } = req.body;
+  const { name, farmId, plantedOn } = req.body;
 
   try {
     if (!name || !farmId || !plantedOn) {
@@ -21,7 +21,6 @@ const createCrop = async (req, res) => {
       name,
       farm: farmId,
       plantedOn,
-      stage,
     });
 
     // Sync the other side of the relationship
@@ -30,7 +29,6 @@ const createCrop = async (req, res) => {
 
     res.status(201).json(crop);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "Server error" });
   }
 };
