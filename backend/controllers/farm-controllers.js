@@ -6,10 +6,9 @@ const createFarm = async (req, res) => {
 
   try {
 
-    const user = User.findOne({ user._id });
-    if (!user) {
-      return res.status(404).json({ message: "please login" });
-    }
+    if ( !name || !location || !farmType || !firstEntry ) {
+     return res.status(400).json({ message: "All feilds are required"}) 
+    };
 
     const farm = await Farm.create({
       name,
