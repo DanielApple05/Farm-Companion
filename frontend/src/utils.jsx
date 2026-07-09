@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 export const getGreeting = () => {
   const currentHour = new Date().getHours();
   if (currentHour < 12) {
@@ -9,3 +11,7 @@ export const getGreeting = () => {
   }
 };
 
+export const useLogout = (navigate) => {
+  localStorage.removeItem('token');
+   navigate('/auth');
+}

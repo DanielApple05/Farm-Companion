@@ -109,7 +109,7 @@ const Advisory = () => {
             <div className="space-y-3">
               {seasonalTips.map((tip, i) => (
                 <div key={i} className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <div className="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center shrink-0 mt-0.5">
                     <AlertTriangle size={14} className="text-amber-600" />
                   </div>
                   <div>

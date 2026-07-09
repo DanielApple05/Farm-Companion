@@ -6,7 +6,7 @@ import { addFarm } from "../api/farm";
 const detectedLocation = "Port Harcourt, Rivers State";
 
 const AddFarmModal = ({ onClose }) => {
-  const [farmType, setFarmType] = useState("crop"); // "crop" | "livestock"
+  const [type, setType] = useState("crop"); // "crop" | "livestock"
   const [name, setName] = useState("");
   const [location, setLocation] = useState(detectedLocation);
   const [firstEntry, setFirstEntry] = useState("");
@@ -19,8 +19,8 @@ const AddFarmModal = ({ onClose }) => {
 
     try {
       setLoading(true)
-      const res = await addFarm({ name, location, farmType, firstEntry })
-      console.log({ name, location, farmType, firstEntry });
+      const res = await addFarm({ name, location, type })
+      
       if (!res) {
         setMessage({ message: res.data.message || "failed to add farm" })
       }
@@ -54,16 +54,16 @@ const AddFarmModal = ({ onClose }) => {
         )}
           <div className="grid grid-cols-2 gap-2 bg-gray-50 rounded-lg p-1">
             <button
-              onClick={() => setFarmType("crop")}
-              className={`flex items-center justify-center gap-2 text-sm py-2 rounded-md transition-colors ${farmType === "crop" ? "bg-white shadow text-green-700 font-medium" : "text-gray-500"
+              onClick={() => setType("crop")}
+              className={`flex items-center justify-center gap-2 text-sm py-2 rounded-md transition-colors ${type === "crop" ? "bg-white shadow text-green-700 font-medium" : "text-gray-500"
                 }`}
             >
               <Sprout size={16} />
               Crop
             </button>
             <button
-              onClick={() => setFarmType("livestock")}
-              className={`flex items-center justify-center gap-2 text-sm py-2 rounded-md transition-colors ${farmType === "livestock" ? "bg-white shadow text-amber-700 font-medium" : "text-gray-500"
+              onClick={() => setType("livestock")}
+              className={`flex items-center justify-center gap-2 text-sm py-2 rounded-md transition-colors ${type === "livestock" ? "bg-white shadow text-amber-700 font-medium" : "text-gray-500"
                 }`}
             >
               <PawPrint size={16} />
@@ -101,13 +101,13 @@ const AddFarmModal = ({ onClose }) => {
           {/* First entry — label + placeholder swap based on farmType */}
           <div>
             <label className="text-sm text-gray-700 font-medium">
-              {farmType === "crop" ? "First crop to add" : "First livestock group to add"}
+              {type === "crop" ? "First crop to add" : "First livestock group to add"}
             </label>
             <input
               type="text"
               value={firstEntry}
               onChange={(e) => setFirstEntry(e.target.value)}
-              placeholder={farmType === "crop" ? "e.g. Maize" : "e.g. Goats"}
+              placeholder={type === "crop" ? "e.g. Maize" : "e.g. Goats"}
               className="w-full mt-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-200"
             />
           </div>

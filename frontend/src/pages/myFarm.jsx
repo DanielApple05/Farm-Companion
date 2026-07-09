@@ -2,36 +2,29 @@ import { MapPin, Sprout, PawPrint, PlusCircle, ChevronRight } from "lucide-react
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import AddFarmModal from "../components/AddFarmModal";
-import { useState } from "react";
-
-// ---- Dummy data (swap for real API/DB data later) ----
-const farms = [
-  {
-    id: 1,
-    name: "Rumuokoro Farm",
-    location: "Rumuokoro, Port Harcourt",
-    crops: 6,
-    livestock: 0,
-  },
-  {
-    id: 2,
-    name: "Umuahia Farm",
-    location: "Umuahia, Abia State",
-    crops: 4,
-    livestock: 12,
-  },
-  {
-    id: 3,
-    name: "Elele Farm",
-    location: "Elele, Rivers State",
-    crops: 2,
-    livestock: 30,
-  },
-];
+import { useState, useEffect } from "react";
+import { getFarms } from "../api/farm";
 
 const MyFarms = () => {
 
   const [farmModalOpen, setFarmModalOpen] = useState(false);
+  const [farms, setFarms] = useState([]);
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    const fetchFarms = async () => {
+      try {
+        const response = await getFarms();
+        setFarms(response.data);
+        console.log(response.data)
+      } catch (error) {
+        setMessage(error?.response?.data?.message || "Failed to fetch farms");
+        console.log(error?.response?.data?.message)
+      }
+    };
+    fetchFarms();
+  }, [])
 
   return (
     <>
@@ -45,9 +38,9 @@ const MyFarms = () => {
               <h1 className="text-2xl font-semibold text-gray-900">My Farms</h1>
               <p className="text-gray-500 text-sm mt-1">{farms.length} farms registered</p>
             </div>
-            <button 
-            onClick={() => setFarmModalOpen(true)}
-            className="flex items-center gap-2 bg-green-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+            <button
+              onClick={() => setFarmModalOpen(true)}
+              className="flex items-center gap-2 bg-green-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
               <PlusCircle size={16} />
               Add Farm
             </button>
@@ -73,11 +66,11 @@ const MyFarms = () => {
                 <div className="flex items-center gap-4 text-sm text-gray-600">
                   <span className="flex items-center gap-1">
                     <Sprout size={14} className="text-green-600" />
-                    {farm.crops} crops
+                    {farm.crops?.length || 0} crops
                   </span>
                   <span className="flex items-center gap-1">
                     <PawPrint size={14} className="text-amber-600" />
-                    {farm.livestock} animals
+                    {farm.livestock?.length || 0} animals
                   </span>
                 </div>
 

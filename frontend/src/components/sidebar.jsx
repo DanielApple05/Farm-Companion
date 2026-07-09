@@ -11,7 +11,8 @@ import {
   User,
   LogOut,
 } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { useLogout } from "../utils";
+import { NavLink, Link, useNavigate } from "react-router-dom";
 
 // ---- Nav config (swap `href` for real routes when wiring up React Router) ----
 const navItems = [
@@ -26,6 +27,8 @@ const navItems = [
 ];
 
 const Sidebar = () => { 
+
+  const navigate = useNavigate();
 
   return (
     <aside className="w-64 h-screen bg-gray-50 border-r border-gray-100 xl:flex hidden flex-col p-4 sticky top-0 left-0">
@@ -56,10 +59,13 @@ const Sidebar = () => {
           <User size={18} />
           Profile
         </a>
-        <a href="/logout" className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-50">
+        <button 
+        onClick={() => useLogout(navigate)}
+        className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-50 cursor-pointer"
+         >
           <LogOut size={18} />
           Logout
-        </a>
+        </button>
       </div>
     </aside>
   );
