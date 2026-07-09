@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   ArrowRight, Link, Sprout,
   Leaf,
@@ -6,6 +7,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { getUserName } from "../helpers";
 import { getGreeting } from "../utils";
+import { getFarms } from "../api/farm";
 
 // Reusable hero — pass different props to reuse across homepage,
 // or trimmed down (no image) for section banners elsewhere.
@@ -14,16 +16,51 @@ const Hero = ({
   title = `${getGreeting()}, ${getUserName() || "Farmer"}!`,
   subtitle = "Here's what's happening on your farms today.",
   primaryCta = { label: "view farm", path: "/farms" },
-  // secondaryCta = { label: "See how it works", path: "#features" },
-  stats = [
-    { label: "Farms", value: 3, icon: Sprout, tint: "bg-green-50 text-green-600" },
-    { label: "Crops", value: 12, icon: Leaf, tint: "bg-amber-50 text-amber-600" },
-    { label: "Alerts", value: 2, icon: AlertTriangle, tint: "bg-red-50 text-red-600" },
-  ],
   imageUrl = "/images/dashboardHero.png",
 }) => {
 
   const navigate = useNavigate();
+  const [farms, setFarms] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const stats = [
+  {
+    label: "Farms",
+    value: farms.length || 0,
+    icon: Sprout,
+    tint: "bg-green-50 text-green-600",
+  },
+  {
+    label: "Crops",
+    value: farms.crops?.length || 0,
+    icon: Leaf,
+    tint: "bg-amber-50 text-amber-600",
+  },
+  {
+    label: "Alerts",
+    value: 0,
+    icon: AlertTriangle,
+    tint: "bg-red-50 text-red-600",
+  },
+];
+
+   useEffect(() => {
+    const fetchFarms = async () => {
+      try {
+        setLoading(true)
+        const response = await getFarms();
+        setFarms(response.data);
+        console.log(response.data)
+      } catch (error) {
+        setMessage(error?.response?.data?.message || "Failed to fetch farms");
+        console.log(error?.response?.data?.message)
+      } finally {
+        setLoading(false)
+      }
+    };
+    fetchFarms();
+  }, []);
+  
+  
 
   return (
     <section className="relative overflow-hidden rounded-b-2xl bg-green-50 h-96">

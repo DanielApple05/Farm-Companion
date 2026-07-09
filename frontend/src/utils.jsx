@@ -12,6 +12,6 @@ export const getGreeting = () => {
 };
 
 export const useLogout = (navigate) => {
-  localStorage.removeItem('token');
+  localStorage.clear();
    navigate('/auth');
 }

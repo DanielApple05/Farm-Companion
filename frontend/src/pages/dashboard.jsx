@@ -1,3 +1,4 @@
+
 import {
   Sprout,
   Leaf,
@@ -12,6 +13,7 @@ import Sidebar from "../components/Sidebar";
 import Header from "../components/header";
 import Hero from "../components/Hero";
 import { Link } from "react-router-dom";
+
 
 const quickActions = [
   { label: "Add Farm", icon: PlusCircle, path: "/farms" },
