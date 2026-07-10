@@ -20,7 +20,6 @@ const AddCropModal = ({ onClose }) => {
     try {
       setLoading(true)
       const response = await createCrop({ cropName, plantedOn, farmId })
-      console.log(response.data)
       setIsSuccess(true);
       setMessage("Crop added successfully!");
       // auto-close the modal after a moment so the user sees the confirmation

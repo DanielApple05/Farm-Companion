@@ -1,12 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X, PawPrint, Hash, Camera } from "lucide-react";
+import { createLivestock } from "../api/liveStock";
+import { getFarms } from "../api/farm";
 
-// Dummy — swap for real farms list from API/DB later
-const farmOptions = [
-  { id: 1, name: "Rumuokoro Farm" },
-  { id: 2, name: "Omuahia Farm" },
-  { id: 3, name: "Elele Farm" },
-];
 
 const livestockTypes = ["Poultry", "Goats", "Cattle", "Sheep"];
 
@@ -15,12 +11,44 @@ const AddLivestockModal = ({ onClose }) => {
   const [breed, setBreed] = useState("");
   const [headcount, setHeadcount] = useState("");
   const [farmId, setFarmId] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [isSuccess, setIsSuccess] = useState("");
+  const [farmOptions, setFarmOptions] = useState([]);
 
   // Placeholder — wire up real submit logic later
-  const handleSubmit = () => {
-    console.log({ type, breed, headcount, farmId });
-    onClose?.();
-  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      setLoading(true);
+      const response = await createLivestock({ type, breed, headcount, farmId });
+      setIsSuccess(true);
+      setMessage("Crop added successfully!");
+      setTimeout(() => {
+        onClose();
+      }, 1200);
+    } catch (error) {
+      setMessage(error.response.data.message || "failed")
+    } finally {
+      setLoading(false);
+    }
+  }
+
+    useEffect(() => {
+      const fetchFarm = async () => {
+        try {
+          const response = await getFarms();
+          setFarmOptions(response.data);
+        } catch (error) {
+          setMessage(
+            error?.response?.data?.message || "Failed to fetch farms"
+          );
+        }
+      };
+  
+      fetchFarm();
+    }, []);
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
@@ -33,92 +61,102 @@ const AddLivestockModal = ({ onClose }) => {
           </button>
         </div>
 
-        {/* Livestock type */}
-        <div>
-          <label className="text-sm text-gray-700 font-medium">Type</label>
-          <div className="grid grid-cols-4 gap-2 mt-1">
-            {livestockTypes.map((t) => (
-              <button
-                key={t}
-                onClick={() => setType(t)}
-                className={`flex flex-col items-center gap-1 py-2 rounded-lg border text-xs transition-colors ${
-                  type === t
+        <form onSubmit={handleSubmit}>
+          {message && (
+            <div
+              className={`w-full border text-sm rounded-xl px-4 py-3 mb-4 ${isSuccess
+                ? "bg-green-50 border-green-200 text-green-600"
+                : "bg-red-50 border-red-200 text-red-500"
+                }`}
+            >
+              {message}
+            </div>
+          )}
+          <div>
+            <label className="text-sm text-gray-700 font-medium">Type</label>
+            <div className="grid grid-cols-4 gap-2 mt-1">
+              {livestockTypes.map((t) => (
+                <button
+                  key={t}
+                  onClick={() => setType(t)}
+                  className={`flex flex-col items-center gap-1 py-2 rounded-lg border text-xs transition-colors ${type === t
                     ? "border-amber-400 bg-amber-50 text-amber-700 font-medium"
                     : "border-gray-200 text-gray-500 hover:border-gray-300"
-                }`}
-              >
-                <PawPrint size={16} />
-                {t}
-              </button>
-            ))}
+                    }`}
+                >
+                  <PawPrint size={16} />
+                  {t}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* Breed */}
-        <div>
-          <label className="text-sm text-gray-700 font-medium">Breed</label>
-          <input
-            type="text"
-            value={breed}
-            onChange={(e) => setBreed(e.target.value)}
-            placeholder="e.g. West African Dwarf"
-            className="w-full mt-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-200"
-          />
-        </div>
-
-        {/* Headcount */}
-        <div>
-          <label className="text-sm text-gray-700 font-medium">Headcount</label>
-          <div className="relative mt-1">
-            <Hash size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          {/* Breed */}
+          <div>
+            <label className="text-sm text-gray-700 font-medium">Breed</label>
             <input
-              type="number"
-              min="1"
-              value={headcount}
-              onChange={(e) => setHeadcount(e.target.value)}
-              placeholder="e.g. 10"
-              className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-200"
+              type="text"
+              value={breed}
+              onChange={(e) => setBreed(e.target.value)}
+              placeholder="e.g. West African Dwarf"
+              className="w-full mt-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-200"
             />
           </div>
-        </div>
 
-        {/* Farm select */}
-        <div>
-          <label className="text-sm text-gray-700 font-medium">Farm</label>
-          <select
-            value={farmId}
-            onChange={(e) => setFarmId(e.target.value)}
-            className="w-full mt-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-200"
-          >
-            <option value="">Select a farm</option>
-            {farmOptions.map((f) => (
-              <option key={f.id} value={f.id}>{f.name}</option>
-            ))}
-          </select>
-        </div>
+          {/* Headcount */}
+          <div>
+            <label className="text-sm text-gray-700 font-medium">Headcount</label>
+            <div className="relative mt-1">
+              <Hash size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                type="number"
+                min="1"
+                value={headcount}
+                onChange={(e) => setHeadcount(e.target.value)}
+                placeholder="e.g. 10"
+                className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-200"
+              />
+            </div>
+          </div>
 
-        {/* Optional photo */}
-        <button className="w-full flex items-center justify-center gap-2 text-sm text-gray-500 border-2 border-dashed border-gray-200 rounded-lg py-3 hover:border-green-300 hover:text-green-600 transition-colors">
-          <Camera size={16} />
-          Add a photo (optional)
-        </button>
+          {/* Farm select */}
+          <div>
+            <label className="text-sm text-gray-700 font-medium">Farm</label>
+            <select
+              value={farmId}
+              onChange={(e) => setFarmId(e.target.value)}
+              className="w-full mt-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-200"
+            >
+              <option value="">Select a farm</option>
+              {farmOptions.map((f) => (
+                <option key={f.id} value={f.id}>{f.name}</option>
+              ))}
+            </select>
+          </div>
 
-        {/* Actions */}
-        <div className="flex gap-3 pt-2">
-          <button
-            onClick={onClose}
-            className="flex-1 text-sm py-2.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors"
-          >
-            Cancel
+          {/* Optional photo */}
+          <button className="w-full flex items-center justify-center gap-2 text-sm text-gray-500 border-2 border-dashed border-gray-200 rounded-lg py-3 hover:border-green-300 hover:text-green-600 transition-colors">
+            <Camera size={16} />
+            Add a photo (optional)
           </button>
-          <button
-            onClick={handleSubmit}
-            disabled={!type || !headcount || !farmId}
-            className="flex-1 text-sm py-2.5 rounded-lg bg-green-600 disabled:bg-gray-200 disabled:text-gray-400 text-white hover:bg-green-700 transition-colors"
-          >
-            Add Livestock
-          </button>
-        </div>
+
+          {/* Actions */}
+          <div className="flex gap-3 pt-2">
+            <div
+              onClick={onClose}
+              className="flex-1 text-sm py-2.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors"
+            >
+              Cancel
+            </div>
+            <button
+              type="submit"
+              disabled={!type || !headcount || !farmId || loading}
+              className="flex-1 text-sm py-2.5 rounded-lg bg-green-600 disabled:bg-gray-200 disabled:text-gray-400 text-white hover:bg-green-700 transition-colors"
+            >
+              Add Livestock
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

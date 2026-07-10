@@ -2,7 +2,8 @@ import { PawPrint, MapPin, PlusCircle, ChevronRight, Syringe } from "lucide-reac
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import AddLivestockModal from "../components/addLivestockModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+// import { createLivestock } from "../api/liveStock";
 
 // ---- Dummy data (swap for real API/DB data later) ----
 const livestock = [
@@ -39,7 +40,22 @@ const statusStyles = {
 
 const Livestock = () => {
 
-  const [ livestockModal, setLivestockModal ] = useState(false);
+  const [livestockModal, setLivestockModal] = useState(false);
+  // const [livestock, setLivestock] = useState([]);
+  // const [loading, setLoading] = useState(false);
+  // const [message, setMessage] = useState("")
+
+  // useEffect(() => {
+  //   const fetchLivestock = async () => {
+  //     try {
+  //       const response = await createLivestock();
+  //       setLivestock(response.data);
+  //     } catch (error) {
+  //       setMessage(error.response.data.message)
+  //     }
+  //   }
+  // }, [])
+
   return (
     <>
       <Header />

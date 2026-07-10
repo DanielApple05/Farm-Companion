@@ -8,6 +8,7 @@ const app = express();
 const auth = require("./routes/authRoutes");
 const cropRoutes = require("./routes/cropRoutes");
 const farmRoutes = require("./routes/farmRoutes");
+const livestockRoutes = require("./routes/livestockRoutes");
 
 // Middleware
 app.use(cors());
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use("/api/auth", auth);
 app.use("/api/crop", cropRoutes);
 app.use("/api/farms", farmRoutes);
+app.use("/api/livestock", livestockRoutes);
 
 // Health check
 app.get("/", (req, res) => {
