@@ -49,7 +49,6 @@ const Hero = ({
         setLoading(true)
         const response = await getFarms();
         setFarms(response.data);
-        console.log(response.data)
       } catch (error) {
         setMessage(error?.response?.data?.message || "Failed to fetch farms");
         console.log(error?.response?.data?.message)

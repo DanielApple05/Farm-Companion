@@ -1,21 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X, Leaf, Calendar, Camera } from "lucide-react";
-import { updateCrop } from "../api/crops";
+import { createCrop } from "../api/crops";
+import { getFarms } from "../api/farm";
 
-
-// Dummy — swap for real farms list from API/DB later
-const farmOptions = [
-  { id: 1, name: "Rumuokoro Farm" },
-  { id: 2, name: "Omuahia Farm" },
-  { id: 3, name: "Elele Farm" },
-];
 
 const AddCropModal = ({ onClose }) => {
   const [cropName, setCropName] = useState("");
   const [farmId, setFarmId] = useState("");
   const [plantedOn, setPlantedOn] = useState("");
-  const [loading, setLoading ] = useState(false);
-  const [ message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [farmOptions, setFarmOptions] = useState([]);
 
   // Placeholder — wire up real submit logic later
   const handleSubmit = async (e) => {
@@ -23,19 +19,36 @@ const AddCropModal = ({ onClose }) => {
 
     try {
       setLoading(true)
-     const response = await updateCrop({ cropName, plantedOn, farmId })
-     console.log(response.data)
-     if (!response) {
-      setMessage({ message: response.data.message || "failed to add crops"})
-     }
-      
+      const response = await createCrop({ cropName, plantedOn, farmId })
+      console.log(response.data)
+      setIsSuccess(true);
+      setMessage("Crop added successfully!");
+      // auto-close the modal after a moment so the user sees the confirmation
+      setTimeout(() => {
+        onClose();
+      }, 1200);
     } catch (error) {
-      setMessage( error.response?.data?.message || error.message || "Can't add crop" );
-      
+      setMessage(error.response?.data?.message || error.message || "Can't add crop");
+
     } finally {
       setLoading(false)
     }
   };
+
+  useEffect(() => {
+    const fetchFarm = async () => {
+      try {
+        const response = await getFarms();
+        setFarmOptions(response.data);
+      } catch (error) {
+        setMessage(
+          error?.response?.data?.message || "Failed to fetch farms"
+        );
+      }
+    };
+
+    fetchFarm();
+  }, []);
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
@@ -51,10 +64,15 @@ const AddCropModal = ({ onClose }) => {
         {/* Crop name */}
         <form onSubmit={handleSubmit} className="space-y-3">
           {message && (
-          <div className="w-full bg-red-50 border border-red-200 text-red-500 text-sm rounded-xl px-4 py-3 mb-4">
-            {message}
-          </div>
-        )}
+            <div
+              className={`w-full border text-sm rounded-xl px-4 py-3 mb-4 ${isSuccess
+                  ? "bg-green-50 border-green-200 text-green-600"
+                  : "bg-red-50 border-red-200 text-red-500"
+                }`}
+            >
+              {message}
+            </div>
+          )}
           <div>
             <label className="text-sm text-gray-700 font-medium">Crop name</label>
             <div className="relative mt-1">
@@ -72,14 +90,18 @@ const AddCropModal = ({ onClose }) => {
           {/* Farm select */}
           <div>
             <label className="text-sm text-gray-700 font-medium">Farm</label>
+
             <select
               value={farmId}
               onChange={(e) => setFarmId(e.target.value)}
               className="w-full mt-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-200"
             >
               <option value="">Select a farm</option>
-              {farmOptions.map((f) => (
-                <option key={f.id} value={f.id}>{f.name}</option>
+
+              {farmOptions.map((farm) => (
+                <option key={farm._id} value={farm._id}>
+                  {farm.name}
+                </option>
               ))}
             </select>
           </div>
@@ -114,10 +136,10 @@ const AddCropModal = ({ onClose }) => {
             </div>
             <button
               onSubmit={handleSubmit}
-              disabled={!cropName || !farmId || loading }
+              disabled={!cropName || !farmId || loading}
               className="flex-1 text-sm py-2.5 rounded-lg bg-green-600 disabled:bg-gray-200 disabled:text-gray-400 text-white hover:bg-green-700 transition-colors"
             >
-              { loading ? "adding..." : "Add Crop"}
+              {loading ? "adding..." : "Add Crop"}
             </button>
           </div>
         </form>

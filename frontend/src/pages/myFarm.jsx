@@ -47,7 +47,7 @@ const MyFarms = () => {
               className="flex items-center gap-2 bg-green-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
               <PlusCircle size={16} />
               Add Farm
-            </button>
+            </button> 
           </div>
           {
             farmModalOpen && <AddFarmModal onClose={() => setFarmModalOpen(false)} />

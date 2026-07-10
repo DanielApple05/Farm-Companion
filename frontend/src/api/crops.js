@@ -1,3 +1,5 @@
 import API from "./axios";
 
-export const updateCrop = (data) => API.post('/crop', data);
+
+export const createCrop = (data) => API.post('/crop', data);
+export const getCrops = (data) => API.post('/crop', data);

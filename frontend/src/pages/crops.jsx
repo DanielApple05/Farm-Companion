@@ -2,43 +2,44 @@ import { Leaf, MapPin, Calendar, PlusCircle, ChevronRight, AlertTriangle, Link }
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import AddCropModal from "../components/AddCropModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getCrops } from "../api/crops";
 
 // ---- Dummy data (swap for real API/DB data later) ----
-const crops = [
-  {
-    id: 1,
-    name: "Maize",
-    farm: "Rumuokoro Farm",
-    plantedOn: "Apr 12",
-    stage: "Vegetative",
-    status: "Flagged",
-  },
-  {
-    id: 2,
-    name: "Cassava",
-    farm: "Rumuokoro Farm",
-    plantedOn: "Feb 20",
-    stage: "Maturing",
-    status: "Healthy",
-  },
-  {
-    id: 3,
-    name: "Tomato",
-    farm: "Omuahia Farm",
-    plantedOn: "May 1",
-    stage: "Flowering",
-    status: "Healthy",
-  },
-  {
-    id: 4,
-    name: "Pepper",
-    farm: "Elele Farm",
-    plantedOn: "May 8",
-    stage: "Seedling",
-    status: "Healthy",
-  },
-];
+// const crops = [
+//   {
+//     id: 1,
+//     name: "Maize",
+//     farm: "Rumuokoro Farm",
+//     plantedOn: "Apr 12",
+//     stage: "Vegetative",
+//     status: "Flagged",
+//   },
+//   {
+//     id: 2,
+//     name: "Cassava",
+//     farm: "Rumuokoro Farm",
+//     plantedOn: "Feb 20",
+//     stage: "Maturing",
+//     status: "Healthy",
+//   },
+//   {
+//     id: 3,
+//     name: "Tomato",
+//     farm: "Omuahia Farm",
+//     plantedOn: "May 1",
+//     stage: "Flowering",
+//     status: "Healthy",
+//   },
+//   {
+//     id: 4,
+//     name: "Pepper",
+//     farm: "Elele Farm",
+//     plantedOn: "May 8",
+//     stage: "Seedling",
+//     status: "Healthy",
+//   },
+// ];
 
 const statusStyles = {
   Healthy: "bg-green-50 text-green-700",
@@ -46,6 +47,25 @@ const statusStyles = {
 };
 
 const Crops = () => {
+
+  const [crops, setCrops] = useState([]);
+  const [ loading, setLoading] = useState(false);
+  const [ message, setMessage] = useState("");
+
+  useEffect(() => {
+    const fetchCrops = async () => {
+      try {
+        setLoading(true)
+        const response = await getCrops();
+        setCrops(response.data);
+      } catch (error) {
+        setMessage(error.response.data || " failed to fetch crops")
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchCrops();
+  }, [])
 
   const [addCropModal, setAddCropModal] = useState(false);
   return (
