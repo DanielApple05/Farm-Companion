@@ -23,9 +23,10 @@ const AddCropModal = ({ onClose }) => {
 
     try {
       setLoading(true)
-     const res = await updateCrop({ cropName, plantedOn, farmId })
-     if (!res) {
-      setMessage({ message: res.data.message || "failed to add crops"})
+     const response = await updateCrop({ cropName, plantedOn, farmId })
+     console.log(response.data)
+     if (!response) {
+      setMessage({ message: response.data.message || "failed to add crops"})
      }
       
     } catch (error) {
@@ -34,7 +35,6 @@ const AddCropModal = ({ onClose }) => {
     } finally {
       setLoading(false)
     }
-    console.log({ cropName, farmId, plantedOn });
   };
 
   return (

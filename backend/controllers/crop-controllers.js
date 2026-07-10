@@ -4,23 +4,27 @@ const Farm = require("../models/Farm");
 // POST /api/crops
 // Creates a crop, links it to its parent farm, and confirms the farm belongs to the logged-in user
 const createCrop = async (req, res) => {
-  const { name, farmId, plantedOn } = req.body;
+  const { name, farmId, plantedOn, photoUrl } = req.body;
 
   try {
-    if (!name || !farmId || !plantedOn) {
-      return res.status(400).json({ message: "name, farmId, and plantedOn are required" });
-    }
+    // if (!name || !farmId || !plantedOn) {
+    //   return res
+    //     .status(400)
+    //     .json({ message: "cropName, farmId, and plantedOn are required" });
+    // }
 
     // Confirm the farm exists AND belongs to the logged-in user before attaching a crop to it
-    const farm = await Farm.findOne({ _id: farmId, owner: req.user.id });
+    const farm = await Farm.findOne(req.user.id);
     if (!farm) {
       return res.status(404).json({ message: "Farm not found" });
     }
 
     const crop = await Crop.create({
-      name,
+      name: cropName,
       farm: farmId,
       plantedOn,
+      photoUrl,
+      owner: user._id,
     });
 
     // Sync the other side of the relationship
@@ -54,7 +58,10 @@ const getCrops = async (req, res) => {
 // GET /api/crops/:id
 const getCropById = async (req, res) => {
   try {
-    const crop = await Crop.findById(req.params.id).populate("farm", "name location owner");
+    const crop = await Crop.findById(req.params.id).populate(
+      "farm",
+      "name location owner",
+    );
 
     if (!crop) {
       return res.status(404).json({ message: "Crop not found" });
@@ -62,7 +69,9 @@ const getCropById = async (req, res) => {
 
     // Ownership check — the crop's farm must belong to the logged-in user
     if (crop.farm.owner.toString() !== req.user.id) {
-      return res.status(403).json({ message: "Not authorized to view this crop" });
+      return res
+        .status(403)
+        .json({ message: "Not authorized to view this crop" });
     }
 
     res.json(crop);
@@ -82,7 +91,9 @@ const updateCrop = async (req, res) => {
     }
 
     if (crop.farm.owner.toString() !== req.user.id) {
-      return res.status(403).json({ message: "Not authorized to update this crop" });
+      return res
+        .status(403)
+        .json({ message: "Not authorized to update this crop" });
     }
 
     const { name, stage, status, yield: cropYield } = req.body;
@@ -110,7 +121,9 @@ const deleteCrop = async (req, res) => {
     }
 
     if (crop.farm.owner.toString() !== req.user.id) {
-      return res.status(403).json({ message: "Not authorized to delete this crop" });
+      return res
+        .status(403)
+        .json({ message: "Not authorized to delete this crop" });
     }
 
     // Remove the crop, then pull its reference out of the parent farm

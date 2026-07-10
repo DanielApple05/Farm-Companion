@@ -15,7 +15,7 @@ app.use(express.json());
 
 // Use routes
 app.use("/api/auth", auth);
-app.use("/api/cropRoutes", cropRoutes);
+app.use("/api/crop", cropRoutes);
 app.use("/api/farms", farmRoutes);
 
 // Health check
