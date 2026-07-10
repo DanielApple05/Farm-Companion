@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import {
   ArrowRight, Link, Sprout,
   Leaf,
-  AlertTriangle,
+  AlertTriangle, Loader2
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { getUserName } from "../helpers";
 import { getGreeting } from "../utils";
 import { getFarms } from "../api/farm";
+import { getCrops } from "../api/crops"
 
 // Reusable hero — pass different props to reuse across homepage,
 // or trimmed down (no image) for section banners elsewhere.
@@ -22,28 +23,31 @@ const Hero = ({
   const navigate = useNavigate();
   const [farms, setFarms] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [cropLoading, setCropLoading] = useState(false);
+  const [crops, setCrops] = useState([]);
+  const [message, setMessage] = useState("");
   const stats = [
-  {
-    label: "Farms",
-    value: farms.length || 0,
-    icon: Sprout,
-    tint: "bg-green-50 text-green-600",
-  },
-  {
-    label: "Crops",
-    value: farms.crops?.length || 0,
-    icon: Leaf,
-    tint: "bg-amber-50 text-amber-600",
-  },
-  {
-    label: "Alerts",
-    value: 0,
-    icon: AlertTriangle,
-    tint: "bg-red-50 text-red-600",
-  },
-];
+    {
+      label: "Farms",
+      value: farms.length || 0,
+      icon: Sprout,
+      tint: "bg-green-50 text-green-600",
+    },
+    {
+      label: "Crops",
+      value: crops.length || 0,
+      icon: Leaf,
+      tint: "bg-amber-50 text-amber-600",
+    },
+    {
+      label: "Alerts",
+      value: 0,
+      icon: AlertTriangle,
+      tint: "bg-red-50 text-red-600",
+    },
+  ];
 
-   useEffect(() => {
+  useEffect(() => {
     const fetchFarms = async () => {
       try {
         setLoading(true)
@@ -58,8 +62,24 @@ const Hero = ({
     };
     fetchFarms();
   }, []);
-  
-  
+
+  useEffect(() => {
+    const fetchCrops = async () => {
+      try {
+        setCropLoading(true)
+        const response = await getCrops();
+        setCrops(response.data);
+      } catch (error) {
+        setMessage(error?.response?.data?.message || "Failed to fetch crops");
+        console.log(error?.response?.data?.message)
+      } finally {
+        setCropLoading(false)
+      }
+    };
+    fetchCrops();
+  }, []);
+
+
 
   return (
     <section className="relative overflow-hidden rounded-b-2xl bg-green-50 h-96">
@@ -83,7 +103,13 @@ const Hero = ({
                   <Icon size={20} />
                 </div>
                 <div>
-                  <p className="text-lg font-semibold text-gray-900">{value}</p>
+                  {loading || cropLoading ? (
+                    <div className="flex items-center gap-2 text-gray-500">
+                      <Loader2 size={14} className="animate-spin" />
+                    </div>
+                  ) : (
+                    <p className="text-lg font-semibold text-gray-900">{value}</p>
+                  )}
                   <p className="text-xs text-gray-500">{label}</p>
                 </div>
               </div>

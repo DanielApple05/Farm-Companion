@@ -41,7 +41,6 @@ const Header = () => {
         {loading ? (
           <div className="flex items-center gap-2 text-gray-500">
             <Loader2 size={14} className="animate-spin" />
-            <span>Loading...</span>
           </div>
         ) : error ? (
           <div className="flex items-center gap-2 text-red-500">
