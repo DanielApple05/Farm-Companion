@@ -3,35 +3,7 @@ import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import AddLivestockModal from "../components/addLivestockModal";
 import { useEffect, useState } from "react";
-// import { createLivestock } from "../api/liveStock";
-
-// ---- Dummy data (swap for real API/DB data later) ----
-const livestock = [
-  {
-    id: 1,
-    type: "Poultry",
-    farm: "Umuahia Farm",
-    headcount: 28,
-    breed: "Broiler",
-    status: "Healthy",
-  },
-  {
-    id: 2,
-    type: "Goats",
-    farm: "Umuahia Farm",
-    headcount: 10,
-    breed: "West African Dwarf",
-    status: "Due for vaccination",
-  },
-  {
-    id: 3,
-    type: "Cattle",
-    farm: "Elele Farm",
-    headcount: 4,
-    breed: "White Fulani",
-    status: "Healthy",
-  },
-];
+import { getLivestock } from "../api/livestock";
 
 const statusStyles = {
   Healthy: "bg-green-50 text-green-700",
@@ -41,20 +13,21 @@ const statusStyles = {
 const Livestock = () => {
 
   const [livestockModal, setLivestockModal] = useState(false);
-  // const [livestock, setLivestock] = useState([]);
-  // const [loading, setLoading] = useState(false);
-  // const [message, setMessage] = useState("")
+  const [livestock, setLivestock] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
-  // useEffect(() => {
-  //   const fetchLivestock = async () => {
-  //     try {
-  //       const response = await createLivestock();
-  //       setLivestock(response.data);
-  //     } catch (error) {
-  //       setMessage(error.response.data.message)
-  //     }
-  //   }
-  // }, [])
+  useEffect(() => {
+    const fetchLivestock = async () => {
+      try {
+        const response = await getLivestock();
+        setLivestock(response.data);
+      } catch (error) {
+        setMessage(error.response.data.message)
+      }
+    }
+    fetchLivestock();
+  }, [])
 
   return (
     <>
@@ -83,7 +56,7 @@ const Livestock = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {livestock.map((group) => (
               <div
-                key={group.id}
+                key={group._id}
                 className="bg-white rounded-xl border border-gray-100 p-5 flex flex-col gap-4 hover:border-green-300 transition-colors cursor-pointer"
               >
                 <div className="flex items-start justify-between">
@@ -100,7 +73,7 @@ const Livestock = () => {
 
                 <p className="text-xs text-gray-500 flex items-center gap-1">
                   <MapPin size={12} />
-                  {group.farm}
+                  {group.farm.livestock}
                 </p>
 
                 <div className="flex items-center gap-4 text-sm text-gray-600">
@@ -112,7 +85,7 @@ const Livestock = () => {
                   <span className={`text-xs px-2 py-1 rounded-md ${statusStyles[group.status]}`}>
                     {group.status}
                   </span>
-                  <a href={`/livestock/${group.id}`} className="text-sm text-green-600 flex items-center gap-1">
+                  <a href={`/livestock/${group._id}`} className="text-sm text-green-600 flex items-center gap-1">
                     View <ChevronRight size={14} />
                   </a>
                 </div>

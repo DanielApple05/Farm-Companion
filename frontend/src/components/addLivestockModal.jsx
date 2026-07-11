@@ -4,7 +4,7 @@ import { createLivestock } from "../api/liveStock";
 import { getFarms } from "../api/farm";
 
 
-const livestockTypes = ["Poultry", "Goats", "Cattle", "Sheep"];
+const livestockTypes = [ {id: 1, specie: "Poultry"}, {id: 2, specie: "Goats"}, {id: 3, specie: "Cattle"}, {id: 4, specie: "Sheep"}];
 
 const AddLivestockModal = ({ onClose }) => {
   const [type, setType] = useState("");
@@ -17,23 +17,24 @@ const AddLivestockModal = ({ onClose }) => {
   const [farmOptions, setFarmOptions] = useState([]);
 
   // Placeholder — wire up real submit logic later
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    try {
-      setLoading(true);
-      const response = await createLivestock({ type, breed, headcount, farmId });
-      setIsSuccess(true);
-      setMessage("Crop added successfully!");
-      setTimeout(() => {
-        onClose();
-      }, 1200);
-    } catch (error) {
-      setMessage(error.response.data.message || "failed")
-    } finally {
-      setLoading(false);
-    }
+  try {
+    setLoading(true);
+    const response = await createLivestock({ type, breed, headcount, farmId });
+    setIsSuccess(true);
+    setMessage("Livestock added successfully!");
+    setTimeout(() => {
+      onClose();
+    }, 1200);
+  } catch (error) {
+    setMessage(error.response?.data?.message || "Failed to add livestock");
+    console.log(error.response?.data);
+  } finally {
+    setLoading(false);
   }
+};
 
     useEffect(() => {
       const fetchFarm = async () => {
@@ -61,7 +62,7 @@ const AddLivestockModal = ({ onClose }) => {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="space-y-3">
           {message && (
             <div
               className={`w-full border text-sm rounded-xl px-4 py-3 mb-4 ${isSuccess
@@ -77,15 +78,15 @@ const AddLivestockModal = ({ onClose }) => {
             <div className="grid grid-cols-4 gap-2 mt-1">
               {livestockTypes.map((t) => (
                 <button
-                  key={t}
-                  onClick={() => setType(t)}
-                  className={`flex flex-col items-center gap-1 py-2 rounded-lg border text-xs transition-colors ${type === t
+                  key={t._id}
+                  onClick={() => setType(t.specie)}
+                  className={`flex flex-col items-center gap-1 py-2 rounded-lg border text-xs transition-colors ${type === t.specie
                     ? "border-amber-400 bg-amber-50 text-amber-700 font-medium"
                     : "border-gray-200 text-gray-500 hover:border-gray-300"
                     }`}
                 >
                   <PawPrint size={16} />
-                  {t}
+                  {t.specie}
                 </button>
               ))}
             </div>
@@ -129,7 +130,7 @@ const AddLivestockModal = ({ onClose }) => {
             >
               <option value="">Select a farm</option>
               {farmOptions.map((f) => (
-                <option key={f.id} value={f.id}>{f.name}</option>
+                <option key={f._id} value={f._id}>{f.name}</option>
               ))}
             </select>
           </div>
