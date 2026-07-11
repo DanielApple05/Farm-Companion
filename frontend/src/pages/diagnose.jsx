@@ -1,19 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Camera, Upload, ChevronDown, Bug, MessageCircle, Send, X, Loader2 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { diagnoseCrop } from "../api/diagnose";
 import { getCrops } from "../api/crops";
 
-const recentDiagnoses = [
-  { crop: "Maize", issue: "Northern Leaf Blight", risk: "Medium", date: "May 10" },
-  { crop: "Tomato", issue: "Early Blight", risk: "Low", date: "May 8" },
-];
-
 const riskStyles = {
   Low: "bg-green-50 text-green-700",
   Medium: "bg-amber-50 text-amber-700",
   High: "bg-red-50 text-red-700",
+};
+
+// Kindwise gives a confidence %, not a risk label — map it to something readable
+const confidenceToRisk = (confidence) => {
+  if (confidence >= 80) return "High";
+  if (confidence >= 50) return "Medium";
+  return "Low";
 };
 
 const DiagnoseCrop = () => {
@@ -22,8 +24,9 @@ const DiagnoseCrop = () => {
   const [cropLoading, setCropLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  // The crop the user actually picks from the dropdown — a plain string, not the list
+  // The crop the user actually picks from the dropdown — its _id, not its name
   const [selectedCrop, setSelectedCrop] = useState("");
+
   const [selectedImage, setSelectedImage] = useState(null);
   const [diagnosisResult, setDiagnosisResult] = useState(null);
   const [diagnosing, setDiagnosing] = useState(false);
@@ -37,7 +40,6 @@ const DiagnoseCrop = () => {
         setCropOptions(response.data);
       } catch (error) {
         setMessage(error?.response?.data?.message || "Failed to fetch crops");
-        console.log(error?.response?.data?.message);
       } finally {
         setCropLoading(false);
       }
@@ -49,7 +51,7 @@ const DiagnoseCrop = () => {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append("crop", selectedCrop);
+    formData.append("cropId", selectedCrop);
     formData.append("image", selectedImage);
 
     try {
@@ -57,6 +59,10 @@ const DiagnoseCrop = () => {
       setDiagnoseError("");
       const response = await diagnoseCrop(formData);
       setDiagnosisResult(response.data);
+
+      // Refresh crops so the new diagnosis shows up in "Recent Diagnoses" right away
+      const refreshed = await getCrops();
+      setCropOptions(refreshed.data);
     } catch (error) {
       setDiagnoseError(error.response?.data?.message || "Diagnosis failed. Try again.");
     } finally {
@@ -68,6 +74,23 @@ const DiagnoseCrop = () => {
     const file = e.target.files[0]; // the first (and here, only) selected file
     setSelectedImage(file);
   };
+
+  // Real recent diagnoses — flatten every crop's diagnosisLogs, tag with the crop name,
+  // sort newest first, take the top 5. No hardcoded dummy array.
+  const recentDiagnoses = useMemo(() => {
+    return cropOptions
+      .flatMap((crop) =>
+        (crop.diagnosisLogs || []).map((log) => ({
+          crop: crop.name,
+          issue: log.disease,
+          risk: confidenceToRisk(log.confidence),
+          date: new Date(log.createdAt).toLocaleDateString(),
+          createdAt: log.createdAt,
+        }))
+      )
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      .slice(0, 5);
+  }, [cropOptions]);
 
   return (
     <>
@@ -108,7 +131,7 @@ const DiagnoseCrop = () => {
                         {cropLoading ? "Loading your crops..." : "Select a crop"}
                       </option>
                       {cropOptions.map((c) => (
-                        <option key={c._id} value={c.name}>{c.name}</option>
+                        <option key={c._id} value={c._id}>{c.name}</option>
                       ))}
                     </select>
                     <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
@@ -173,12 +196,9 @@ const DiagnoseCrop = () => {
                   {diagnoseError}
                 </div>
               )}
-              {diagnosisResult.detectedCrop &&
-                diagnosisResult.detectedCrop.toLowerCase() !== diagnosisResult.selectedCrop.toLowerCase() && (
-                  <div className="bg-amber-50 border border-amber-200 text-amber-700 text-sm rounded-lg px-3 py-2">
-                    You selected <strong>{diagnosisResult.selectedCrop}</strong>, but this photo looks like it might be <strong>{diagnosisResult.detectedCrop}</strong>. Double check you uploaded the right photo.
-                  </div>
-                )}
+
+              {/* Everything below is safely guarded by `diagnosisResult &&` first —
+                  nothing here can run while diagnosisResult is still null */}
               {diagnosisResult && !diagnosing && (
                 <div className="bg-white rounded-xl border border-gray-100 p-5 space-y-4">
                   <div className="flex items-center justify-between">
@@ -188,7 +208,7 @@ const DiagnoseCrop = () => {
                       </div>
                       <div>
                         <h2 className="font-medium text-gray-900">{diagnosisResult.disease}</h2>
-                        <p className="text-xs text-gray-500">{diagnosisResult.crop}</p>
+                        <p className="text-xs text-gray-500">{diagnosisResult.selectedCrop}</p>
                       </div>
                     </div>
                     <span className="text-xs bg-amber-50 text-amber-700 px-2 py-1 rounded-md">
@@ -196,14 +216,44 @@ const DiagnoseCrop = () => {
                     </span>
                   </div>
 
-                  {/* explanation will come from Claude later — placeholder for now */}
+                  {diagnosisResult.detectedCrop &&
+                    diagnosisResult.detectedCrop.toLowerCase() !== diagnosisResult.selectedCrop?.toLowerCase() && (
+                      <div className="bg-amber-50 border border-amber-200 text-amber-700 text-sm rounded-lg px-3 py-2">
+                        You selected <strong>{diagnosisResult.selectedCrop}</strong>, but this photo looks like it might be{" "}
+                        <strong>{diagnosisResult.detectedCrop}</strong>. Double check you uploaded the right photo.
+                      </div>
+                    )}
+
+                  {diagnosisResult.explanation && (
+                    <p className="text-sm text-gray-600 leading-relaxed">{diagnosisResult.explanation}</p>
+                  )}
+
+                  <div className="pt-3 border-t border-gray-100">
+                    <div className="relative">
+                      <input
+                        type="text"
+                        placeholder="Ask a follow-up question..."
+                        className="w-full pl-3 pr-10 py-2 text-sm rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-200"
+                      />
+                      <button className="absolute right-2 top-1/2 -translate-y-1/2 text-green-600">
+                        <Send size={16} />
+                      </button>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
 
-            {/* Right: recent diagnoses */}
+            {/* Right: recent diagnoses — real data, derived from fetched crops */}
             <div className="bg-white rounded-xl border border-gray-100 p-5 h-fit space-y-3">
               <h2 className="font-medium text-gray-900 mb-2">Recent Diagnoses</h2>
+
+              {cropLoading && <p className="text-xs text-gray-400">Loading...</p>}
+
+              {!cropLoading && recentDiagnoses.length === 0 && (
+                <p className="text-xs text-gray-400">No diagnoses yet — your results will show up here.</p>
+              )}
+
               {recentDiagnoses.map((d, i) => (
                 <div key={i} className="flex items-center justify-between text-sm py-2 border-b border-gray-50 last:border-0">
                   <div>
@@ -213,6 +263,7 @@ const DiagnoseCrop = () => {
                   <span className={`text-xs px-2 py-1 rounded-md ${riskStyles[d.risk]}`}>{d.risk}</span>
                 </div>
               ))}
+
               <button className="w-full flex items-center justify-center gap-2 text-sm text-green-600 pt-2">
                 <MessageCircle size={14} />
                 Ask AI Assistant instead
