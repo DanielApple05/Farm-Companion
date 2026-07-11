@@ -9,16 +9,18 @@ const auth = require("./routes/authRoutes");
 const cropRoutes = require("./routes/cropRoutes");
 const farmRoutes = require("./routes/farmRoutes");
 const livestockRoutes = require("./routes/livestockRoutes");
+const diagnoseRoutes = require("./routes/diagnoseRoutes");
 
 // Middleware
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: "10mb" }));
 
 // Use routes
 app.use("/api/auth", auth);
 app.use("/api/crop", cropRoutes);
 app.use("/api/farms", farmRoutes);
 app.use("/api/livestock", livestockRoutes);
+ app.use("/api/diagnose", diagnoseRoutes)
 
 // Health check
 app.get("/", (req, res) => {
