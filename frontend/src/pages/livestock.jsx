@@ -4,6 +4,7 @@ import Header from "../components/Header";
 import AddLivestockModal from "../components/addLivestockModal";
 import { useEffect, useState } from "react";
 import { getLivestock } from "../api/livestock";
+import LivestockLoading from "../components/livestockLoadingGrid";
 
 const statusStyles = {
   Healthy: "bg-green-50 text-green-700",
@@ -20,10 +21,13 @@ const Livestock = () => {
   useEffect(() => {
     const fetchLivestock = async () => {
       try {
+        setLoading(true);
         const response = await getLivestock();
         setLivestock(response.data);
       } catch (error) {
         setMessage(error.response.data.message)
+      } finally {
+        setLoading(false)
       }
     }
     fetchLivestock();
@@ -54,43 +58,46 @@ const Livestock = () => {
 
           {/* Livestock list */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {livestock.map((group) => (
-              <div
-                key={group._id}
-                className="bg-white rounded-xl border border-gray-100 p-5 flex flex-col gap-4 hover:border-green-300 transition-colors cursor-pointer"
-              >
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-9 h-9 rounded-lg bg-amber-50 flex items-center justify-center">
-                      <PawPrint size={16} className="text-amber-600" />
+            {loading ? (
+              <LivestockLoading />
+            ) :
+              (livestock.map((group) => (
+                <div
+                  key={group._id}
+                  className="bg-white rounded-xl border border-gray-100 p-5 flex flex-col gap-4 hover:border-green-300 transition-colors cursor-pointer"
+                >
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-9 h-9 rounded-lg bg-amber-50 flex items-center justify-center">
+                        <PawPrint size={16} className="text-amber-600" />
+                      </div>
+                      <h2 className="font-medium text-gray-900">{group.type}</h2>
                     </div>
-                    <h2 className="font-medium text-gray-900">{group.type}</h2>
+                    {group.status === "Due for vaccination" && (
+                      <Syringe size={16} className="text-red-500" />
+                    )}
                   </div>
-                  {group.status === "Due for vaccination" && (
-                    <Syringe size={16} className="text-red-500" />
-                  )}
-                </div>
 
-                <p className="text-xs text-gray-500 flex items-center gap-1">
-                  <MapPin size={12} />
-                  {group.farm.livestock}
-                </p>
+                  <p className="text-xs text-gray-500 flex items-center gap-1">
+                    <MapPin size={12} />
+                    {group.farm.livestock}
+                  </p>
 
-                <div className="flex items-center gap-4 text-sm text-gray-600">
-                  <span>{group.headcount} heads</span>
-                  <span>{group.breed}</span>
-                </div>
+                  <div className="flex items-center gap-4 text-sm text-gray-600">
+                    <span>{group.headcount} heads</span>
+                    <span>{group.breed}</span>
+                  </div>
 
-                <div className="flex items-center justify-between mt-auto">
-                  <span className={`text-xs px-2 py-1 rounded-md ${statusStyles[group.status]}`}>
-                    {group.status}
-                  </span>
-                  <a href={`/livestock/${group._id}`} className="text-sm text-green-600 flex items-center gap-1">
-                    View <ChevronRight size={14} />
-                  </a>
-                </div>
-              </div>
-            ))}
+                  <div className="flex items-center justify-between mt-auto">
+                    <span className={`text-xs px-2 py-1 rounded-md ${statusStyles[group.status]}`}>
+                      {group.status}
+                    </span>
+                    <a href={`/livestock/${group._id}`} className="text-sm text-green-600 flex items-center gap-1">
+                      View <ChevronRight size={14} />
+                    </a>
+                  </div>
+                </div>)
+              ))}
           </div>
         </div>
       </div>
