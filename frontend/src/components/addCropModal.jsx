@@ -35,7 +35,7 @@ const AddCropModal = ({ onClose }) => {
   };
 
   useEffect(() => {
-    const fetchFarm = async () => {
+    const fetchFarm = async () => { 
       try {
         const response = await getFarms();
         setFarmOptions(response.data);

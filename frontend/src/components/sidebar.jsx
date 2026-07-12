@@ -10,6 +10,7 @@ import {
   Newspaper,
   User,
   LogOut,
+  Users
 } from "lucide-react";
 import { useLogout } from "../utils";
 import { NavLink, Link, useNavigate } from "react-router-dom";
@@ -23,7 +24,8 @@ const navItems = [
   { label: "Diagnose Crop", icon: Camera, path: "/diagnose" },
   { label: "Advisory", icon: CloudSun, path: "/advisory" },
   { label: "Ask AI Assistant", icon: MessageCircle, path: "/askAIAssistant" },
-  { label: "News & Tips", icon: Newspaper, path: "/comingSoon" },
+  { label: "News & Tips", icon: Newspaper, path: "/news" },
+  { label: "Community", icon: Users, path: "/comingSoon" },
 ];
 
 const Sidebar = () => { 

@@ -5,6 +5,7 @@ import AddFarmModal from "../components/AddFarmModal";
 import { useState, useEffect } from "react";
 import { getFarms } from "../api/farm";
 import FarmCardSkeleton from "../components/farmSkeleton";
+import { Link } from "react-router-dom";
 
 const MyFarms = () => {
   
@@ -82,9 +83,9 @@ const MyFarms = () => {
                       </span>
                     </div>
 
-                    <a href={`/farms/${farm.id}`} className="text-sm text-green-600 flex items-center gap-1 mt-auto">
+                    <Link to='/farmDetails' className="text-sm text-green-600 flex items-center gap-1 mt-auto">
                       View details <ChevronRight size={14} />
-                    </a> 
+                    </Link> 
                   </div>)
                 ))}
           </div>
