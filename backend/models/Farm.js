@@ -52,8 +52,19 @@ const farmSchema = new mongoose.Schema(
         ref: "Livestock",
       },
     ],
+    equipment: [
+      {
+        name: String,
+        quantity: Number,
+        condition: {
+          type: String,
+          enum: ["Good", "Needs repair", "Broken"],
+          default: "Good",
+        },
+      },
+    ],
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 module.exports = mongoose.model("Farm", farmSchema);

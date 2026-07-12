@@ -107,5 +107,63 @@ const deleteFarm = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
  
-module.exports = { createFarm, getFarms, getFarmById, updateFarm, deleteFarm };
+// POST /api/farms/:farmId/equipment
+// Adds a piece of equipment to a farm's embedded equipment list
+const addEquipment = async (req, res) => {
+  try {
+    const farm = await Farm.findOne({ _id: req.params.farmId, owner: req.user.id });
+ 
+    if (!farm) {
+      return res.status(404).json({ message: "Farm not found" });
+    }
+ 
+    const { name, quantity, condition } = req.body;
+    if (!name || !quantity) {
+      return res.status(400).json({ message: "name and quantity are required" });
+    }
+ 
+    farm.equipment.push({ name, quantity, condition });
+    await farm.save();
+ 
+    // Return just the newly added item — the last one pushed —
+    // so the frontend can append it without refetching the whole farm
+    const newItem = farm.equipment[farm.equipment.length - 1];
+    res.status(201).json(newItem);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+ 
+// DELETE /api/farms/:farmId/equipment/:equipmentId
+const deleteEquipment = async (req, res) => {
+  try {
+    const farm = await Farm.findOne({ _id: req.params.farmId, owner: req.user.id });
+ 
+    if (!farm) {
+      return res.status(404).json({ message: "Farm not found" });
+    }
+ 
+    farm.equipment = farm.equipment.filter(
+      (item) => item._id.toString() !== req.params.equipmentId
+    );
+    await farm.save();
+ 
+    res.json({ message: "Equipment removed" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+ 
+module.exports = {
+  createFarm,
+  getFarms,
+  getFarmById,
+  updateFarm,
+  deleteFarm,
+  addEquipment,
+  deleteEquipment,
+};

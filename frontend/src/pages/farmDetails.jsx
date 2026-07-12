@@ -1,30 +1,12 @@
 import { MapPin, Sprout, PawPrint, Wrench, PlusCircle, ChevronRight, AlertTriangle, Ruler } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
+import AddEquipmentModal from "../components/addEquipmentModal";
+import { useState, useEffect } from "react";
+import { getFarmById } from "../api/farm";
+import { useParams } from "react-router-dom";
 
-// ---- Dummy data (swap for real API/DB data later) ----
-const farm = {
-  name: "Rumuokoro Farm",
-  location: "Rumuokoro, Port Harcourt",
-  size: { value: 2.5, unit: "hectares" },
-  type: "mixed",
-};
 
-const crops = [
-  { id: 1, name: "Maize", plantedOn: "Apr 12", stage: "Vegetative", status: "Flagged" },
-  { id: 2, name: "Cassava", plantedOn: "Feb 20", stage: "Maturing", status: "Healthy" },
-];
-
-const livestock = [
-  { id: 1, type: "Goats", headcount: 10, breed: "West African Dwarf", status: "Due for vaccination" },
-  { id: 2, type: "Poultry", headcount: 28, breed: "Broiler", status: "Healthy" },
-];
-
-const equipment = [
-  { id: 1, name: "Knapsack Sprayer", quantity: 2, condition: "Good" },
-  { id: 2, name: "Wheelbarrow", quantity: 1, condition: "Needs repair" },
-  { id: 3, name: "Irrigation Pump", quantity: 1, condition: "Good" },
-];
 
 const statusStyles = {
   Healthy: "bg-green-50 text-green-700",
@@ -39,6 +21,57 @@ const conditionStyles = {
 };
 
 const FarmDetail = () => {
+
+  const { id } = useParams();
+
+  const [equipModalOpen, setEquipModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const [farm, setFarm] = useState({
+    name: "",
+    location: "",
+    crops: [],
+    livestock: [],
+    equipment: [],
+  });
+
+  useEffect(() => {
+    const fetchFarmById = async () => {
+      try {
+        setLoading(true);
+
+        const response = await getFarmById(id);
+        // If your API returns { farm: {...} }, change this to response.data.farm
+        setFarm(response.data);
+         console.log(response.data);
+      } catch (error) {
+        console.error(
+          error?.response?.data?.message || error.message
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchFarmById();
+    }
+  }, [id]);
+
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <div className="flex min-h-screen">
+          <Sidebar />
+          <div className="flex-1 flex items-center justify-center">
+            Loading farm...
+          </div>
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <Header />
@@ -59,14 +92,14 @@ const FarmDetail = () => {
                 Edit Farm
               </button>
             </div>
-
+            {/* 
             <div className="flex items-center gap-6 mt-4 pt-4 border-t border-gray-100 text-sm text-gray-600">
               <span className="flex items-center gap-1">
                 <Ruler size={14} className="text-gray-400" />
                 {farm.size.value} {farm.size.unit}
               </span>
               <span className="capitalize">{farm.type} farm</span>
-            </div>
+            </div> */}
           </div>
 
           {/* Quick stats */}
@@ -76,7 +109,7 @@ const FarmDetail = () => {
                 <Sprout size={18} className="text-green-600" />
               </div>
               <div>
-                <p className="text-lg font-semibold text-gray-900">{crops.length}</p>
+                <p className="text-lg font-semibold text-gray-900">{farm.crops?.length || 0}</p>
                 <p className="text-xs text-gray-500">Crops</p>
               </div>
             </div>
@@ -86,7 +119,10 @@ const FarmDetail = () => {
               </div>
               <div>
                 <p className="text-lg font-semibold text-gray-900">
-                  {livestock.reduce((sum, l) => sum + l.headcount, 0)}
+                  {farm.livestock?.reduce(
+                    (sum, animal) => sum + (animal.headcount || 0),
+                    0
+                  )}
                 </p>
                 <p className="text-xs text-gray-500">Animals</p>
               </div>
@@ -96,7 +132,7 @@ const FarmDetail = () => {
                 <Wrench size={18} className="text-gray-600" />
               </div>
               <div>
-                <p className="text-lg font-semibold text-gray-900">{equipment.length}</p>
+                <p className="text-lg font-semibold text-gray-900">{farm.equipment?.length || 0}</p>
                 <p className="text-xs text-gray-500">Equipment</p>
               </div>
             </div>
@@ -115,14 +151,14 @@ const FarmDetail = () => {
               </button>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {crops.map((c) => (
-                <div key={c.id} className="flex items-center justify-between bg-gray-50 rounded-lg p-3">
+              {farm.crops?.map((c) => (
+                <div key={c._id} className="flex items-center justify-between bg-gray-50 rounded-lg p-3">
                   <div>
                     <p className="text-sm font-medium text-gray-900 flex items-center gap-1">
                       {c.name}
                       {c.status === "Flagged" && <AlertTriangle size={12} className="text-amber-500" />}
                     </p>
-                    <p className="text-xs text-gray-500">{c.plantedOn} · {c.stage}</p>
+                    <p className="text-xs text-gray-500">{new Date(c.plantedOn).toLocaleDateString()} · {c.stage}</p>
                   </div>
                   <span className={`text-xs px-2 py-1 rounded-md ${statusStyles[c.status]}`}>{c.status}</span>
                 </div>
@@ -137,14 +173,15 @@ const FarmDetail = () => {
                 <PawPrint size={16} className="text-amber-600" />
                 Livestock
               </h2>
-              <button className="flex items-center gap-1 text-sm text-green-600">
+              <button
+                className="flex items-center gap-1 text-sm text-green-600">
                 <PlusCircle size={14} />
                 Add Livestock
               </button>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {livestock.map((l) => (
-                <div key={l.id} className="flex items-center justify-between bg-gray-50 rounded-lg p-3">
+              {farm.livestock?.map((l) => (
+                <div key={l._id} className="flex items-center justify-between bg-gray-50 rounded-lg p-3">
                   <div>
                     <p className="text-sm font-medium text-gray-900">{l.type}</p>
                     <p className="text-xs text-gray-500">{l.headcount} heads · {l.breed}</p>
@@ -162,14 +199,25 @@ const FarmDetail = () => {
                 <Wrench size={16} className="text-gray-600" />
                 Equipment & Tools
               </h2>
-              <button className="flex items-center gap-1 text-sm text-green-600">
+              <button
+                onClick={() => setEquipModalOpen(true)}
+                className="flex items-center gap-1 text-sm text-green-600">
                 <PlusCircle size={14} />
                 Add Equipment
               </button>
             </div>
+            {equipModalOpen && (
+              <AddEquipmentModal
+                farmId={farm._id}
+                onClose={() => setEquipModalOpen(false)}
+                onAdded={(newItem) =>
+                  setFarm({ ...farm, equipment: [...(farm.equipment || []), newItem] })
+                }
+              />
+            )}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {equipment.map((e) => (
-                <div key={e.id} className="flex items-center justify-between bg-gray-50 rounded-lg p-3">
+              {farm.equipment?.map((e) => (
+                <div key={e._id} className="flex items-center justify-between bg-gray-50 rounded-lg p-3">
                   <div>
                     <p className="text-sm font-medium text-gray-900">{e.name}</p>
                     <p className="text-xs text-gray-500">Qty: {e.quantity}</p>
