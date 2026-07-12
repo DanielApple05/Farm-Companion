@@ -2,7 +2,7 @@ import { Search, Sprout, CloudSun, Loader2, AlertCircle } from "lucide-react";
 import { getUserName, getInitials } from "../helpers";
 import { useEffect } from "react";
 import { useWeather } from "../api/weather";
-import WeatherIcon from "./WeatherIcon";
+import { getWeatherIcon } from "./WeatherIcon";
 
 const user = {
   role: "Smallholder Farmer",
@@ -20,6 +20,8 @@ const Header = () => {
   const cityName = weatherData?.city?.name;
   const currentTemp = weatherData?.list?.[0]?.main?.temp;
   const description = weatherData?.list?.[0]?.weather?.[0]?.description;
+  const iconCode = weatherData?.list?.[0]?.weather?.[0]?.icon;
+  const WeatherIconComponent = getWeatherIcon(iconCode);
 
   return (
     <header className="flex items-center justify-between px-6 py-4 bg-gray-100 border-b border-gray-100 fixed z-10 h-20 w-full">
@@ -50,7 +52,7 @@ const Header = () => {
         ) : (
           <>
             <div className="flex items-center gap-1 text-gray-900 font-medium">
-              <WeatherIcon condition={description} size={20} />
+            <WeatherIconComponent size={20} className="text-amber-400" />
               <span>{cityName || "Port Harcourt"}</span>
             </div>
             <div className="flex items-center justify-between gap-2 ">

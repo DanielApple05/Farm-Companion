@@ -68,7 +68,7 @@ const Advisory = () => {
                   <p className="text-sm font-medium text-gray-900">{humidity}%</p>
                 </div>
                 <div>
-                  <CloudSun size={14} className="mx-auto text-amber-400 mb-1" />
+                  <WeatherIconComponent size={14} className="mx-auto text-amber-400 mb-1" />
                   <p className="text-xs text-gray-500">Rain</p>
                   <p className="text-sm font-medium text-gray-900">{rainChance}%</p>
                 </div>

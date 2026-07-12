@@ -4,7 +4,7 @@ import Header from "../components/Header";
 
 // Reusable — pass a title/message so this same page can cover News & Tips,
 // Market Prices, Community, or anything else not built yet.
-const ComingSoon = ({ title = "News & Tips", message = "This feature is on the way. Check back soon!" }) => {
+const ComingSoon = ({ title = "Community", message = "This feature is on the way. Check back soon!" }) => {
   return (
     <>
       <Header />
