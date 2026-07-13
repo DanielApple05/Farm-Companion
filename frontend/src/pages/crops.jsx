@@ -53,7 +53,9 @@ const Crops = () => {
             </button>
           </div>
           {
-            addCropModal && <AddCropModal onClose={() => setAddCropModal(false)} />
+            addCropModal && <AddCropModal onClose={() => setAddCropModal(false)} onAdded={(newItem) =>
+              setCrops([...crops, newItem ])
+            } />
           }
 
           {/* Crops list */}
@@ -80,13 +82,13 @@ const Crops = () => {
 
                   <p className="text-xs text-gray-500 flex items-center gap-1">
                     <MapPin size={12} />
-                    {crop.farm.name}
+                    {crop.farm.name || crop.farm }
                   </p>
 
                   <div className="flex items-center gap-4 text-sm text-gray-600">
                     <span className="flex items-center gap-1">
                       <Calendar size={14} />
-                      {crop.plantedOn}
+                      {new Date(crop.plantedOn).toLocaleDateString()}
                     </span>
                     <span>{crop.stage}</span>
                   </div>

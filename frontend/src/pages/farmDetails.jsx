@@ -2,6 +2,7 @@ import { MapPin, Sprout, PawPrint, Wrench, PlusCircle, ChevronRight, AlertTriang
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import AddEquipmentModal from "../components/addEquipmentModal";
+import AddCropModal from "../components/AddCropModal";
 import { useState, useEffect } from "react";
 import { getFarmById } from "../api/farm";
 import { useParams } from "react-router-dom";
@@ -26,6 +27,7 @@ const FarmDetail = () => {
 
   const [equipModalOpen, setEquipModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [ cropModal, setCropModal] = useState(false);
 
   const [farm, setFarm] = useState({
     name: "",
@@ -43,7 +45,6 @@ const FarmDetail = () => {
         const response = await getFarmById(id);
         // If your API returns { farm: {...} }, change this to response.data.farm
         setFarm(response.data);
-         console.log(response.data);
       } catch (error) {
         console.error(
           error?.response?.data?.message || error.message
@@ -142,11 +143,22 @@ const FarmDetail = () => {
                 <Sprout size={16} className="text-green-600" />
                 Crops
               </h2>
-              <button className="flex items-center gap-1 text-sm text-green-600">
+              <button 
+              onClick={() => setCropModal(true)}
+              className="flex items-center gap-1 text-sm text-green-600">
                 <PlusCircle size={14} />
                 Add Crop
               </button>
             </div>
+              { cropModal && (
+              <AddCropModal
+                farmId={farm._id}
+                onClose={() => setCropModal(false)}
+                onAdded={(newItem) =>
+                  setFarm({ ...farm, crops: [...(farm.crops || []), newItem] })
+                }
+              />
+            )}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {farm.crops?.map((c) => (
                 <div key={c._id} className="flex items-center justify-between bg-gray-50 rounded-lg p-3">

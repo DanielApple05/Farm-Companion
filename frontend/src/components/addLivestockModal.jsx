@@ -4,7 +4,7 @@ import { createLivestock } from "../api/liveStock";
 import { getFarms } from "../api/farm";
 
 
-const livestockTypes = [ {id: 1, specie: "Poultry"}, {id: 2, specie: "Goats"}, {id: 3, specie: "Cattle"}, {id: 4, specie: "Sheep"}];
+const livestockTypes = [{ id: 1, specie: "Poultry" }, { id: 2, specie: "Goats" }, { id: 3, specie: "Cattle" }, { id: 4, specie: "Sheep" }];
 
 const AddLivestockModal = ({ onClose }) => {
   const [type, setType] = useState("");
@@ -17,39 +17,39 @@ const AddLivestockModal = ({ onClose }) => {
   const [farmOptions, setFarmOptions] = useState([]);
 
   // Placeholder — wire up real submit logic later
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  try {
-    setLoading(true);
-    const response = await createLivestock({ type, breed, headcount, farmId });
-    setIsSuccess(true);
-    setMessage("Livestock added successfully!");
-    setTimeout(() => {
-      onClose();
-    }, 1200);
-  } catch (error) {
-    setMessage(error.response?.data?.message || "Failed to add livestock");
-    console.log(error.response?.data);
-  } finally {
-    setLoading(false);
-  }
-};
+    try {
+      setLoading(true);
+      const response = await createLivestock({ type, breed, headcount, farmId });
+      setIsSuccess(true);
+      setMessage("Livestock added successfully!");
+      setTimeout(() => {
+        onClose();
+      }, 1200);
+    } catch (error) {
+      setMessage(error.response?.data?.message || "Failed to add livestock");
+      console.log(error.response?.data);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    useEffect(() => {
-      const fetchFarm = async () => {
-        try {
-          const response = await getFarms();
-          setFarmOptions(response.data);
-        } catch (error) {
-          setMessage(
-            error?.response?.data?.message || "Failed to fetch farms"
-          );
-        }
-      };
-  
-      fetchFarm();
-    }, []);
+  useEffect(() => {
+    const fetchFarm = async () => {
+      try {
+        const response = await getFarms();
+        setFarmOptions(response.data);
+      } catch (error) {
+        setMessage(
+          error?.response?.data?.message || "Failed to fetch farms"
+        );
+      }
+    };
+
+    fetchFarm();
+  }, []);
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">

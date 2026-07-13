@@ -80,7 +80,7 @@ const Livestock = () => {
 
                   <p className="text-xs text-gray-500 flex items-center gap-1">
                     <MapPin size={12} />
-                    {group.farm.livestock}
+                    {group.farm.name }
                   </p>
 
                   <div className="flex items-center gap-4 text-sm text-gray-600">

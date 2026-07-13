@@ -1,3 +1,4 @@
 import API from "./axios";
 
-export const addEquipment = (data) => API.post(`/farms/${id}`, data);
+export const addEquipment = (farmId, data) =>
+  API.post(`/farms/${farmId}/equipment`, data);

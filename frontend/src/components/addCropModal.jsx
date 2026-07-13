@@ -4,25 +4,27 @@ import { createCrop } from "../api/crops";
 import { getFarms } from "../api/farm";
 
 
-const AddCropModal = ({ onClose }) => {
+const AddCropModal = ({ farmId, onClose, onAdded }) => {
   const [cropName, setCropName] = useState("");
-  const [farmId, setFarmId] = useState("");
+  const [ selectedFarmId, setSelectedFarmId] = useState("");
   const [plantedOn, setPlantedOn] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
   const [farmOptions, setFarmOptions] = useState([]);
+  // const [selectedFarmId, setSelectedFarmId] = useState(farmId || "");
 
   // Placeholder — wire up real submit logic later
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
+    const finalFarmId = farmId || selectedFarmId;
 
     try {
       setLoading(true)
-      const response = await createCrop({ cropName, plantedOn, farmId })
+      const response = await createCrop({ cropName, plantedOn, farmId: finalFarmId })
       setIsSuccess(true);
       setMessage("Crop added successfully!");
-      // auto-close the modal after a moment so the user sees the confirmation
+      onAdded?.(response.data);
       setTimeout(() => {
         onClose();
       }, 1200);
@@ -35,7 +37,8 @@ const AddCropModal = ({ onClose }) => {
   };
 
   useEffect(() => {
-    const fetchFarm = async () => { 
+    if (farmId) return;
+    const fetchFarm = async () => {
       try {
         const response = await getFarms();
         setFarmOptions(response.data);
@@ -45,9 +48,8 @@ const AddCropModal = ({ onClose }) => {
         );
       }
     };
-
     fetchFarm();
-  }, []);
+  }, [farmId]);
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
@@ -65,8 +67,8 @@ const AddCropModal = ({ onClose }) => {
           {message && (
             <div
               className={`w-full border text-sm rounded-xl px-4 py-3 mb-4 ${isSuccess
-                  ? "bg-green-50 border-green-200 text-green-600"
-                  : "bg-red-50 border-red-200 text-red-500"
+                ? "bg-green-50 border-green-200 text-green-600"
+                : "bg-red-50 border-red-200 text-red-500"
                 }`}
             >
               {message}
@@ -87,24 +89,24 @@ const AddCropModal = ({ onClose }) => {
           </div>
 
           {/* Farm select */}
-          <div>
-            <label className="text-sm text-gray-700 font-medium">Farm</label>
+          { !farmId &&
+            (<div>
+              <label className="text-sm text-gray-700 font-medium">Farm</label>
+              <select
+                value={farmId}
+                onChange={(e) => setSelectedFarmId(e.target.value)}
+                className="w-full mt-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-200"
+              >
+                <option value="">Select a farm</option>
 
-            <select
-              value={farmId}
-              onChange={(e) => setFarmId(e.target.value)}
-              className="w-full mt-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-200"
-            >
-              <option value="">Select a farm</option>
-
-              {farmOptions.map((farm) => (
-                <option key={farm._id} value={farm._id}>
-                  {farm.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
+                {farmOptions.map((farm) => (
+                  <option key={farm._id} value={farm._id}>
+                    {farm.name}
+                  </option>
+                ))}
+              </select>
+            </div>)
+          }
           {/* Planting date */}
           <div>
             <label className="text-sm text-gray-700 font-medium">Planting date</label>
@@ -120,10 +122,10 @@ const AddCropModal = ({ onClose }) => {
           </div>
 
           {/* Optional photo */}
-          <button className="w-full flex items-center justify-center gap-2 text-sm text-gray-500 border-2 border-dashed border-gray-200 rounded-lg py-3 hover:border-green-300 hover:text-green-600 transition-colors">
+          <div className="w-full flex items-center justify-center gap-2 text-sm text-gray-500 border-2 border-dashed border-gray-200 rounded-lg py-3 hover:border-green-300 hover:text-green-600 transition-colors">
             <Camera size={16} />
             Add a photo (optional)
-          </button>
+          </div>
 
           {/* Actions */}
           <div className="flex gap-3 pt-2">
@@ -134,8 +136,8 @@ const AddCropModal = ({ onClose }) => {
               Cancel
             </div>
             <button
-              onSubmit={handleSubmit}
-              disabled={!cropName || !farmId || loading}
+              type="submit"
+              disabled={!cropName || !plantedOn || loading}
               className="flex-1 text-sm py-2.5 rounded-lg bg-green-600 disabled:bg-gray-200 disabled:text-gray-400 text-white hover:bg-green-700 transition-colors"
             >
               {loading ? "adding..." : "Add Crop"}

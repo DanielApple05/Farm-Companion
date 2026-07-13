@@ -124,7 +124,7 @@ const addEquipment = async (req, res) => {
       return res.status(400).json({ message: "name and quantity are required" });
     }
  
-    farm.equipment.push({ name, quantity, condition }, farmId);
+    farm.equipment.push({ name, quantity, condition });
     await farm.save();
  
     // Return just the newly added item — the last one pushed —
