@@ -95,7 +95,7 @@ const AddEquipmentModal = ({ farmId, onClose, onAdded }) => {
             <div className="grid grid-cols-3 gap-2 mt-1">
               {conditionOptions.map((option) => (
                 <button
-                  key={option}
+                  key={option._id}
                   type="button"
                   onClick={() => setCondition(option)}
                   className={`text-xs py-2 rounded-lg border transition-colors ${

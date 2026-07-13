@@ -52,10 +52,7 @@ const FarmDetail = () => {
         setLoading(false);
       }
     };
-
-    if (id) {
       fetchFarmById();
-    }
   }, [id]);
 
   if (loading) {

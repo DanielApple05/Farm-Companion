@@ -6,7 +6,7 @@ const { createFarm, getFarms, addEquipment, deleteEquipment, getFarmById } = req
  
 router.post("/", protect, createFarm);
 router.get("/", protect, getFarms);
-router.get("/:farmId", protect, getFarmById);
+router.get("/:id", protect, getFarmById);
 router.post("/:farmId/equipment", protect, addEquipment);
 router.delete("/:farmId/equipment/:equipmentId", protect, deleteEquipment);
  

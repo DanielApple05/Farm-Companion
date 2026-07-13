@@ -25,7 +25,7 @@ const App = () => {
       <Route path="/askAIAssistant" element={<Chat />} />
       <Route path="/comingSoon" element={<ComingSoon />} />
       <Route path="/auth" element={<Auth />} />
-      <Route path="/farmDetails" element={<FarmDetail />} />
+       <Route path="/farms/:id" element={<FarmDetail />} />
       <Route path="/news" element={<News />} />
     </Routes>
   );

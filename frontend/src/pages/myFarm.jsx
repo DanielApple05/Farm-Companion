@@ -83,7 +83,7 @@ const MyFarms = () => {
                       </span>
                     </div>
 
-                    <Link to='/farmDetails' className="text-sm text-green-600 flex items-center gap-1 mt-auto">
+                    <Link to={`/farms/${farm._id}`} className="text-sm text-green-600 flex items-center gap-1 mt-auto">
                       View details <ChevronRight size={14} />
                     </Link> 
                   </div>)
