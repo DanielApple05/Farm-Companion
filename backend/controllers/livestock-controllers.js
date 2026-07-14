@@ -115,8 +115,8 @@ const addVaccination = async (req, res) => {
       return res.status(404).json({ message: "Livestock not found" });
     }
 
-    if (livestock.farm.owner.toString() !== req.user.id) {
-      return res.status(403).json({ message: "Not authorized to update this livestock group" });
+      if (!isOwnerMatch(livestock.farm.owner, req.user.id)) {
+      return res.status(403).json({ message: "Not authorized to view this livestock" });
     }
 
     const { name, dueDate } = req.body;

@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, MapPin, PawPrint, Loader2, Syringe, Droplet, MessageCircle } from "lucide-react";
+import { ArrowLeft, MapPin, PawPrint, Loader2, Syringe, Droplet, MessageCircle, PlusCircle } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { getLivestockById } from "../api/livestock";
+import AddLivestockModal from "../components/addLivestockModal";
+import AddVaccinationModal from "../components/addVacinationModal";
 
 const statusStyles = {
   Healthy: "bg-green-50 text-green-700",
@@ -17,6 +19,7 @@ const LivestockDetail = () => {
   const [livestock, setLivestock] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [vaccinationModalOpen, setVaccinationModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchLivestock = async () => {
@@ -118,7 +121,24 @@ const LivestockDetail = () => {
 
           {/* Upcoming care / vaccinations */}
           <div className="bg-white rounded-xl border border-gray-100 p-5">
-            <h2 className="font-medium text-gray-900 mb-4">Upcoming Care</h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-medium text-gray-900">Upcoming Care</h2>
+              <button
+                onClick={() => setVaccinationModalOpen(true)}
+                className="flex items-center gap-1 text-sm text-green-600"
+              >
+                <PlusCircle size={14} />
+                Schedule
+              </button>
+            </div>
+
+            {vaccinationModalOpen && (
+              <AddVaccinationModal
+                livestockId={livestock._id}
+                onClose={() => setVaccinationModalOpen(false)}
+                onAdded={(updatedLivestock) => setLivestock(updatedLivestock)}
+              />
+            )}
 
             {vaccinations.length === 0 && (
               <p className="text-xs text-gray-400">No scheduled vaccinations yet.</p>
@@ -130,7 +150,7 @@ const LivestockDetail = () => {
                 return (
                   <div key={i} className="flex items-center gap-3 bg-gray-50 rounded-lg p-3">
                     <div
-                      className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                      className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
                         v.completedOn ? "bg-green-50" : isOverdue ? "bg-red-50" : "bg-amber-50"
                       }`}
                     >
