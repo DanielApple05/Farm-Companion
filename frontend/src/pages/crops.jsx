@@ -1,10 +1,11 @@
-import { Leaf, MapPin, Calendar, PlusCircle, ChevronRight, AlertTriangle, Link } from "lucide-react";
+import { Leaf, MapPin, Calendar, PlusCircle, ChevronRight, AlertTriangle } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import AddCropModal from "../components/AddCropModal";
 import { useEffect, useState } from "react";
 import { getCrops } from "../api/crops";
 import CropsLoading from "../components/cropLoadingGrid";
+import { Link } from "react-router-dom";
 
 const statusStyles = {
   Healthy: "bg-green-50 text-green-700",
@@ -54,7 +55,7 @@ const Crops = () => {
           </div>
           {
             addCropModal && <AddCropModal onClose={() => setAddCropModal(false)} onAdded={(newItem) =>
-              setCrops([...crops, newItem ])
+              setCrops([...crops, newItem])
             } />
           }
 
@@ -79,12 +80,10 @@ const Crops = () => {
                       <AlertTriangle size={16} className="text-amber-500" />
                     )}
                   </div>
-
                   <p className="text-xs text-gray-500 flex items-center gap-1">
                     <MapPin size={12} />
-                    {crop.farm.name || crop.farm }
+                    {crop.farm.name || crop.farm}
                   </p>
-
                   <div className="flex items-center gap-4 text-sm text-gray-600">
                     <span className="flex items-center gap-1">
                       <Calendar size={14} />
@@ -92,7 +91,6 @@ const Crops = () => {
                     </span>
                     <span>{crop.stage}</span>
                   </div>
-
                   <div className="flex items-center justify-between mt-auto">
                     <span className={`text-xs px-2 py-1 rounded-md ${statusStyles[crop.status]}`}>
                       {crop.status}

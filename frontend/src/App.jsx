@@ -11,6 +11,7 @@ import ComingSoon from './pages/comingSoon';
 import Auth from './pages/auth';
 import FarmDetail from './pages/farmDetails';
 import News from './pages/news';
+import CropDetail from './pages/cropDetail';
 
 
 const App = () => {
@@ -25,8 +26,9 @@ const App = () => {
       <Route path="/askAIAssistant" element={<Chat />} />
       <Route path="/comingSoon" element={<ComingSoon />} />
       <Route path="/auth" element={<Auth />} />
-       <Route path="/farms/:id" element={<FarmDetail />} />
+      <Route path="/farms/:id" element={<FarmDetail />} />
       <Route path="/news" element={<News />} />
+      <Route path="/crops/:id" element={<CropDetail />} />
     </Routes>
   );
 }

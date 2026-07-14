@@ -6,7 +6,7 @@ import AddCropModal from "../components/AddCropModal";
 import AddLivestockModal from "../components/addLivestockModal";
 import { useState, useEffect } from "react";
 import { getFarmById } from "../api/farm";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 
 
@@ -163,7 +163,7 @@ const FarmDetail = () => {
             )}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {farm.crops?.map((c) => (
-                <div key={c._id} className="flex items-center justify-between bg-gray-50 rounded-lg p-3">
+                <Link to={`/crops/${c._id}`} key={c._id} className="flex items-center justify-between bg-gray-50 rounded-lg p-3">
                   <div>
                     <p className="text-sm font-medium text-gray-900 flex items-center gap-1">
                       {c.name}
@@ -172,7 +172,7 @@ const FarmDetail = () => {
                     <p className="text-xs text-gray-500">{new Date(c.plantedOn).toLocaleDateString()} · {c.stage}</p>
                   </div>
                   <span className={`text-xs px-2 py-1 rounded-md ${statusStyles[c.status]}`}>{c.status}</span>
-                </div>
+                </Link>
               ))}
             </div>
           </div>

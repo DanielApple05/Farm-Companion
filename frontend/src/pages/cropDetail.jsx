@@ -32,8 +32,7 @@ const CropDetail = () => {
         setLoading(false);
       }
     };
-
-    if (id) fetchCrop();
+     fetchCrop();
   }, [id]);
 
   if (loading) {
@@ -131,7 +130,7 @@ const CropDetail = () => {
             <h2 className="font-medium text-gray-900 mb-4">Growth Stage</h2>
             <div className="flex items-center">
               {stageOrder.map((stage, i) => (
-                <div key={stage} className="flex items-center flex-1 last:flex-none">
+                <div key={stage._id} className="flex items-center flex-1 last:flex-none">
                   <div className="flex flex-col items-center gap-1">
                     <div
                       className={`w-3 h-3 rounded-full ${
@@ -164,7 +163,7 @@ const CropDetail = () => {
 
             <div className="space-y-3">
               {diagnosisLogs.map((log, i) => (
-                <div key={i} className="bg-gray-50 rounded-lg p-4">
+                <div key={i._id} className="bg-gray-50 rounded-lg p-4">
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
                       <div className="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center">

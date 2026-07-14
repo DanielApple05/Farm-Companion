@@ -65,9 +65,7 @@ const getCropById = async (req, res) => {
 
     // Ownership check — the crop's farm must belong to the logged-in user
     if (crop.farm.owner.toString() !== req.user.id) {
-      return res
-        .status(403)
-        .json({ message: "Not authorized to view this crop" });
+      return res.status(403).json({ message: "Not authorized to view this crop" });
     }
 
     res.json(crop);
