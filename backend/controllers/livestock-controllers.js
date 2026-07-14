@@ -1,6 +1,11 @@
 const Livestock = require("../models/Livestock");
 const Farm = require("../models/Farm");
 
+const isOwnerMatch = (ownerId, userId) => {
+  if (!ownerId || !userId) return false;
+  return ownerId.toString() === userId.toString();
+};
+
 // POST /api/livestock
 // Creates a livestock group, links it to its parent farm, and confirms the farm belongs to the logged-in user
 const createLivestock = async (req, res) => {
@@ -62,8 +67,8 @@ const getLivestockById = async (req, res) => {
       return res.status(404).json({ message: "Livestock not found" });
     }
 
-    if (livestock.farm.owner.toString() !== req.user.id) {
-      return res.status(403).json({ message: "Not authorized to view this livestock group" });
+     if (!isOwnerMatch(livestock.farm.owner, req.user.id)) {
+      return res.status(403).json({ message: "Not authorized to view this livestock" });
     }
 
     res.json(livestock);

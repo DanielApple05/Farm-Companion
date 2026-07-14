@@ -12,6 +12,7 @@ import Auth from './pages/auth';
 import FarmDetail from './pages/farmDetails';
 import News from './pages/news';
 import CropDetail from './pages/cropDetail';
+import LivestockDetail from './pages/livestockDetail';
 
 
 const App = () => {
@@ -29,6 +30,7 @@ const App = () => {
       <Route path="/farms/:id" element={<FarmDetail />} />
       <Route path="/news" element={<News />} />
       <Route path="/crops/:id" element={<CropDetail />} />
+      <Route path="/livestock/:id" element={<LivestockDetail />} />
     </Routes>
   );
 }

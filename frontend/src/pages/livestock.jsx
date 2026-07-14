@@ -5,6 +5,7 @@ import AddLivestockModal from "../components/addLivestockModal";
 import { useEffect, useState } from "react";
 import { getLivestock } from "../api/livestock";
 import LivestockLoading from "../components/livestockLoadingGrid";
+import { Link } from "react-router-dom";
 
 const statusStyles = {
   Healthy: "bg-green-50 text-green-700",
@@ -92,9 +93,9 @@ const Livestock = () => {
                     <span className={`text-xs px-2 py-1 rounded-md ${statusStyles[group.status]}`}>
                       {group.status}
                     </span>
-                    <a href={`/livestock/${group._id}`} className="text-sm text-green-600 flex items-center gap-1">
+                    <Link to={`/livestock/${group._id}`} className="text-sm text-green-600 flex items-center gap-1">
                       View <ChevronRight size={14} />
-                    </a>
+                    </Link>
                   </div>
                 </div>)
               ))}
