@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, MapPin, Calendar, Leaf, AlertTriangle, Loader2, Bug, Scale } from "lucide-react";
-import Sidebar from "../components/Sidebar";
-import Header from "../components/Header";
+import Sidebar from "../components/sidebar";
+import Header from "../components/header";
 import { getCropById } from "../api/crops";
 
 const statusStyles = {
@@ -23,16 +23,21 @@ const CropDetail = () => {
     const fetchCrop = async () => {
       try {
         setLoading(true);
+        setMessage("");
         const response = await getCropById(id);
         setCrop(response.data);
       } catch (error) {
-        setMessage(error.response?.data?.message || "Failed to load crop");
-        console.error(error);
+        const apiMessage = error?.response?.data?.message || error?.message || "Failed to load crop";
+        setMessage(apiMessage);
+        setCrop(null);
       } finally {
         setLoading(false);
       }
     };
-     fetchCrop();
+
+    if (id) {
+      fetchCrop();
+    }
   }, [id]);
 
   if (loading) {
@@ -57,10 +62,12 @@ const CropDetail = () => {
         <div className="flex min-h-screen">
           <Sidebar />
           <div className="w-full p-6 mt-20 bg-gray-50">
-            {message && (
+            {message ? (
               <div className="bg-red-50 border border-red-200 text-red-500 text-sm rounded-xl px-4 py-3">
                 {message}
               </div>
+            ) : (
+              <div className="text-sm text-gray-500">No crop data found.</div>
             )}
           </div>
         </div>
@@ -130,7 +137,7 @@ const CropDetail = () => {
             <h2 className="font-medium text-gray-900 mb-4">Growth Stage</h2>
             <div className="flex items-center">
               {stageOrder.map((stage, i) => (
-                <div key={stage._id} className="flex items-center flex-1 last:flex-none">
+                <div key={stage} className="flex items-center flex-1 last:flex-none">
                   <div className="flex flex-col items-center gap-1">
                     <div
                       className={`w-3 h-3 rounded-full ${
@@ -163,7 +170,7 @@ const CropDetail = () => {
 
             <div className="space-y-3">
               {diagnosisLogs.map((log, i) => (
-                <div key={i._id} className="bg-gray-50 rounded-lg p-4">
+                <div key={log._id} className="bg-gray-50 rounded-lg p-4">
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
                       <div className="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center">

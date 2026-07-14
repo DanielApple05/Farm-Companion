@@ -1,6 +1,11 @@
 const Crop = require("../models/Crop");
 const Farm = require("../models/Farm");
 
+const isOwnerMatch = (ownerId, userId) => {
+  if (!ownerId || !userId) return false;
+  return ownerId.toString() === userId.toString();
+};
+
 // POST /api/crops
 // Creates a crop, links it to its parent farm, and confirms the farm belongs to the logged-in user
 const createCrop = async (req, res) => {
@@ -64,7 +69,7 @@ const getCropById = async (req, res) => {
     }
 
     // Ownership check — the crop's farm must belong to the logged-in user
-    if (crop.farm.owner.toString() !== req.user.id) {
+    if (!isOwnerMatch(crop.farm.owner, req.user.id)) {
       return res.status(403).json({ message: "Not authorized to view this crop" });
     }
 
@@ -84,7 +89,7 @@ const updateCrop = async (req, res) => {
       return res.status(404).json({ message: "Crop not found" });
     }
 
-    if (crop.farm.owner.toString() !== req.user.id) {
+    if (!isOwnerMatch(crop.farm.owner, req.user.id)) {
       return res
         .status(403)
         .json({ message: "Not authorized to update this crop" });
@@ -114,7 +119,7 @@ const deleteCrop = async (req, res) => {
       return res.status(404).json({ message: "Crop not found" });
     }
 
-    if (crop.farm.owner.toString() !== req.user.id) {
+    if (!isOwnerMatch(crop.farm.owner, req.user.id)) {
       return res
         .status(403)
         .json({ message: "Not authorized to delete this crop" });
