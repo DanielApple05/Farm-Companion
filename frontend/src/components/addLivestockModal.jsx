@@ -6,11 +6,11 @@ import { getFarms } from "../api/farm";
 
 const livestockTypes = [{ id: 1, specie: "Poultry" }, { id: 2, specie: "Goats" }, { id: 3, specie: "Cattle" }, { id: 4, specie: "Sheep" }];
 
-const AddLivestockModal = ({ onClose }) => {
+const AddLivestockModal = ({ farmId, onClose, onAdded }) => {
   const [type, setType] = useState("");
   const [breed, setBreed] = useState("");
   const [headcount, setHeadcount] = useState("");
-  const [farmId, setFarmId] = useState("");
+  const [selectedFarmId, setSelectedFarmId] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState("");
@@ -19,12 +19,12 @@ const AddLivestockModal = ({ onClose }) => {
   // Placeholder — wire up real submit logic later
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       setLoading(true);
       const response = await createLivestock({ type, breed, headcount, farmId });
       setIsSuccess(true);
       setMessage("Livestock added successfully!");
+      onAdded(response.data);
       setTimeout(() => {
         onClose();
       }, 1200);
@@ -37,6 +37,7 @@ const AddLivestockModal = ({ onClose }) => {
   };
 
   useEffect(() => {
+    if (farmId) return;
     const fetchFarm = async () => {
       try {
         const response = await getFarms();
@@ -47,9 +48,8 @@ const AddLivestockModal = ({ onClose }) => {
         );
       }
     };
-
     fetchFarm();
-  }, []);
+  }, [farmId]);
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
@@ -121,11 +121,11 @@ const AddLivestockModal = ({ onClose }) => {
           </div>
 
           {/* Farm select */}
-          <div>
+          { !farmId && (<div>
             <label className="text-sm text-gray-700 font-medium">Farm</label>
             <select
               value={farmId}
-              onChange={(e) => setFarmId(e.target.value)}
+              onChange={(e) => setSelectedFarmId(e.target.value)}
               className="w-full mt-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-200"
             >
               <option value="">Select a farm</option>
@@ -134,12 +134,12 @@ const AddLivestockModal = ({ onClose }) => {
               ))}
             </select>
           </div>
-
+          )}
           {/* Optional photo */}
-          <button className="w-full flex items-center justify-center gap-2 text-sm text-gray-500 border-2 border-dashed border-gray-200 rounded-lg py-3 hover:border-green-300 hover:text-green-600 transition-colors">
+          <div className="w-full flex items-center justify-center gap-2 text-sm text-gray-500 border-2 border-dashed border-gray-200 rounded-lg py-3 hover:border-green-300 hover:text-green-600 transition-colors">
             <Camera size={16} />
             Add a photo (optional)
-          </button>
+          </div>
 
           {/* Actions */}
           <div className="flex gap-3 pt-2">
@@ -151,7 +151,7 @@ const AddLivestockModal = ({ onClose }) => {
             </div>
             <button
               type="submit"
-              disabled={!type || !headcount || !farmId || loading}
+              disabled={!type || !headcount || loading}
               className="flex-1 text-sm py-2.5 rounded-lg bg-green-600 disabled:bg-gray-200 disabled:text-gray-400 text-white hover:bg-green-700 transition-colors"
             >
               Add Livestock

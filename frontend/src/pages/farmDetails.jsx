@@ -3,6 +3,7 @@ import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import AddEquipmentModal from "../components/addEquipmentModal";
 import AddCropModal from "../components/AddCropModal";
+import AddLivestockModal from "../components/addLivestockModal";
 import { useState, useEffect } from "react";
 import { getFarmById } from "../api/farm";
 import { useParams } from "react-router-dom";
@@ -28,6 +29,7 @@ const FarmDetail = () => {
   const [equipModalOpen, setEquipModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [ cropModal, setCropModal] = useState(false);
+  const [ livestockModal, setLivestockModal] = useState(false);
 
   const [farm, setFarm] = useState({
     name: "",
@@ -183,11 +185,21 @@ const FarmDetail = () => {
                 Livestock
               </h2>
               <button
+              onClick={() => setLivestockModal(true)}
                 className="flex items-center gap-1 text-sm text-green-600">
                 <PlusCircle size={14} />
                 Add Livestock
               </button>
             </div>
+              { livestockModal && (
+              <AddLivestockModal
+                farmId={farm._id}
+                onClose={() => setLivestockModal(false)}
+                onAdded={(newStock) =>
+                  setFarm({ ...farm, livestock: [...(farm.livestock || []), newStock] })
+                }
+              />
+            )}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {farm.livestock?.map((l) => (
                 <div key={l._id} className="flex items-center justify-between bg-gray-50 rounded-lg p-3">
