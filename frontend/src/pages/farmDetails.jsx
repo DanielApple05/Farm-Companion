@@ -7,6 +7,7 @@ import AddLivestockModal from "../components/addLivestockModal";
 import { useState, useEffect } from "react";
 import { getFarmById } from "../api/farm";
 import { useParams, Link } from "react-router-dom";
+import FarmFinances from "../components/farmFinances";
 
 
 
@@ -250,6 +251,7 @@ const FarmDetail = () => {
               ))}
             </div>
           </div>
+          <FarmFinances farmId={farm._id} />
         </div>
       </div>
     </>
