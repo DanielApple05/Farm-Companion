@@ -4,7 +4,7 @@ export const getGreeting = () => {
   const currentHour = new Date().getHours();
   if (currentHour < 12) {
     return "Good morning";
-  } else if (currentHour < 18) {
+  } else if (currentHour < 15) {
     return "Good afternoon";
   } else {
     return "Good evening";

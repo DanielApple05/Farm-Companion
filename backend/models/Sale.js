@@ -51,6 +51,11 @@ const saleSchema = new mongoose.Schema(
       ref: "Livestock",
       default: null,
     },
+    quantitySold: {
+      type: Number,
+      min: 1,
+      default: null,
+    },
   },
   {
     timestamps: true,
@@ -59,7 +64,7 @@ const saleSchema = new mongoose.Schema(
     // never written to the database, always derived fresh from amount/amountPaid.
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-  }
+  },
 );
 
 saleSchema.virtual("amountOwed").get(function () {
