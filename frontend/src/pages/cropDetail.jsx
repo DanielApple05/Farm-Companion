@@ -4,6 +4,7 @@ import { ArrowLeft, MapPin, Calendar, Leaf, AlertTriangle, Loader2, Bug, Scale }
 import Sidebar from "../components/sidebar";
 import Header from "../components/header";
 import { getCropById } from "../api/crops";
+// import { calculateCropStage } from "../utils";
 
 const statusStyles = {
   Healthy: "bg-green-50 text-green-700",
@@ -13,6 +14,8 @@ const statusStyles = {
 const stageOrder = ["Seedling", "Vegetative", "Flowering", "Maturing", "Harvested"];
 
 const CropDetail = () => {
+
+  // const { stage, daysElapsed, totaldays, percentComplete, daysOverdue} = calculateCropStage();
   const { id } = useParams();
 
   const [crop, setCrop] = useState(null);
