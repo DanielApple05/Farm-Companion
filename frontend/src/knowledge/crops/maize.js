@@ -428,5 +428,463 @@ export const maizeTips = [
 
     severity: "info",
   },
+    {
+    id: "maize-031",
 
+    title: "Watch for birds feeding on developing cobs",
+
+    body: "As maize cobs mature, birds may begin feeding on exposed kernels, especially in fields close to trees or bushes. Regularly inspect your field and use safe bird deterrents if bird damage becomes significant.",
+
+    crop: "maize",
+
+    category: "Pest Management",
+
+    stage: "Maturing",
+
+    trigger: {
+      type: "daysAfterPlanting",
+      min: 70,
+      max: 110,
+    },
+
+    priority: 7,
+
+    severity: "important",
+  },
+
+  {
+    id: "maize-032",
+
+    title: "Continue monitoring for stem borers",
+
+    body: "Stem borers can continue damaging maize even after flowering. Look for holes in stems, sawdust-like material, or weakened plants. Early detection helps prevent lodging and yield loss.",
+
+    crop: "maize",
+
+    category: "Pest Management",
+
+    stage: "Maturing",
+
+    trigger: {
+      type: "daysAfterPlanting",
+      min: 60,
+      max: 100,
+    },
+
+    priority: 8,
+
+    severity: "warning",
+  },
+
+  {
+    id: "maize-033",
+
+    title: "Reduce water stress during grain filling",
+
+    body: "Grain filling determines the final size and weight of maize kernels. If rainfall becomes scarce during this period and irrigation is available, maintain adequate soil moisture to support healthy grain development.",
+
+    crop: "maize",
+
+    category: "Water Management",
+
+    stage: "Maturing",
+
+    trigger: {
+      type: "weather",
+      value: "drySpell",
+    },
+
+    priority: 9,
+
+    severity: "important",
+  },
+
+  {
+    id: "maize-034",
+
+    title: "Inspect cobs for pest damage",
+
+    body: "Check developing cobs for insect feeding, mold, or damaged husks. Early identification allows affected cobs to be removed before damage spreads or reduces grain quality.",
+
+    crop: "maize",
+
+    category: "Crop Monitoring",
+
+    stage: "Maturing",
+
+    trigger: {
+      type: "daysAfterPlanting",
+      min: 70,
+      max: 100,
+    },
+
+    priority: 8,
+
+    severity: "important",
+  },
+
+  {
+    id: "maize-035",
+
+    title: "Avoid harvesting immature maize",
+
+    body: "Harvesting too early results in soft kernels with high moisture content, reducing grain quality and storage life. Wait until the crop reaches full maturity before harvesting.",
+
+    crop: "maize",
+
+    category: "Harvest",
+
+    stage: "Maturing",
+
+    trigger: {
+      type: "daysAfterPlanting",
+      min: 85,
+      max: 100,
+    },
+
+    priority: 9,
+
+    severity: "important",
+  },
+
+  {
+    id: "maize-036",
+
+    title: "Look for signs of harvest readiness",
+
+    body: "Maize is usually ready for harvest when the husks turn brown, the kernels become hard, and the grain has reached physiological maturity. Harvesting at the right time helps maximize yield and grain quality.",
+
+    crop: "maize",
+
+    category: "Harvest",
+
+    stage: "Maturing",
+
+    trigger: {
+      type: "daysAfterPlanting",
+      min: 90,
+      max: 110,
+    },
+
+    priority: 10,
+
+    severity: "important",
+  },
+
+  {
+    id: "maize-037",
+
+    title: "Harvest before prolonged rainfall",
+
+    body: "If mature maize is left in the field during extended periods of rain, grain quality may decline due to mold, sprouting, or increased pest activity. Plan harvest when dry weather is expected.",
+
+    crop: "maize",
+
+    category: "Weather",
+
+    stage: "Maturing",
+
+    trigger: {
+      type: "weather",
+      value: "rainExpected",
+    },
+
+    priority: 10,
+
+    severity: "warning",
+  },
+
+  {
+    id: "maize-038",
+
+    title: "Dry harvested maize thoroughly",
+
+    body: "After harvesting, dry maize properly before storage to reduce the risk of mold growth and grain spoilage. Well-dried grain stores longer and maintains better quality.",
+
+    crop: "maize",
+
+    category: "Post-Harvest",
+
+    stage: "Harvested",
+
+    trigger: {
+      type: "stage",
+      value: "Harvested",
+    },
+
+    priority: 10,
+
+    severity: "important",
+  },
+
+  {
+    id: "maize-039",
+
+    title: "Store maize in a clean, dry place",
+
+    body: "Before storing harvested maize, clean the storage area and ensure it is dry and well ventilated. Proper storage helps prevent insect infestation, mold growth, and post-harvest losses.",
+
+    crop: "maize",
+
+    category: "Post-Harvest",
+
+    stage: "Harvested",
+
+    trigger: {
+      type: "stage",
+      value: "Harvested",
+    },
+
+    priority: 9,
+
+    severity: "important",
+  },
+
+  {
+    id: "maize-040",
+
+    title: "Review your maize season",
+
+    body: "After harvest, review your planting date, fertilizer applications, pest challenges, weather conditions, and final yield. Keeping notes helps improve planning and productivity for the next maize season.",
+
+    crop: "maize",
+
+    category: "Farm Management",
+
+    stage: "Harvested",
+
+    trigger: {
+      type: "stage",
+      value: "Harvested",
+    },
+
+    priority: 7,
+
+    severity: "info",
+  },
+    {
+    id: "maize-041",
+
+    title: "Inspect stored maize every two weeks",
+
+    body: "Even after harvest, stored maize should be checked regularly for insects, mold, unusual odors, or moisture buildup. Early detection helps prevent large storage losses.",
+
+    crop: "maize",
+
+    category: "Post-Harvest",
+
+    stage: "Harvested",
+
+    trigger: {
+      type: "biWeeklyReminder",
+    },
+
+    priority: 8,
+
+    severity: "important",
+  },
+
+  {
+    id: "maize-042",
+
+    title: "Protect stored grain from rodents",
+
+    body: "Rats and mice can consume and contaminate stored maize. Seal entry points into storage areas and inspect regularly for signs of rodent activity to reduce post-harvest losses.",
+
+    crop: "maize",
+
+    category: "Post-Harvest",
+
+    stage: "Harvested",
+
+    trigger: {
+      type: "always",
+    },
+
+    priority: 9,
+
+    severity: "warning",
+  },
+
+  {
+    id: "maize-043",
+
+    title: "Store only properly dried maize",
+
+    body: "Grain with high moisture content is more likely to develop mold and spoil during storage. Ensure maize is thoroughly dried before placing it into storage bags or silos.",
+
+    crop: "maize",
+
+    category: "Post-Harvest",
+
+    stage: "Harvested",
+
+    trigger: {
+      type: "stage",
+      value: "Harvested",
+    },
+
+    priority: 10,
+
+    severity: "important",
+  },
+
+  {
+    id: "maize-044",
+
+    title: "Separate damaged cobs before storage",
+
+    body: "Remove insect-damaged, moldy, or broken cobs before storing maize. Damaged grain can increase the spread of pests and diseases to healthy maize during storage.",
+
+    crop: "maize",
+
+    category: "Post-Harvest",
+
+    stage: "Harvested",
+
+    trigger: {
+      type: "stage",
+      value: "Harvested",
+    },
+
+    priority: 9,
+
+    severity: "important",
+  },
+
+  {
+    id: "maize-045",
+
+    title: "Monitor weather before harvesting",
+
+    body: "Check the weather forecast before harvesting. Dry conditions make harvesting easier and reduce the chances of grain absorbing excess moisture.",
+
+    crop: "maize",
+
+    category: "Weather",
+
+    stage: "Maturing",
+
+    trigger: {
+      type: "weather",
+      value: "clearWeather",
+    },
+
+    priority: 8,
+
+    severity: "info",
+  },
+
+  {
+    id: "maize-046",
+
+    title: "Inspect fields after heavy rainfall",
+
+    body: "Heavy rainfall can cause lodging, flooding, and nutrient loss. Walk through the field after major rain events to assess crop condition and identify areas that may need attention.",
+
+    crop: "maize",
+
+    category: "Weather",
+
+    stage: "Any",
+
+    trigger: {
+      type: "weather",
+      value: "afterHeavyRain",
+    },
+
+    priority: 9,
+
+    severity: "important",
+  },
+
+  {
+    id: "maize-047",
+
+    title: "Harvest lodged maize promptly",
+
+    body: "If maize plants have fallen over because of wind or heavy rain, harvest them as soon as practical. Lodged plants are more susceptible to pests, diseases, and grain quality loss.",
+
+    crop: "maize",
+
+    category: "Harvest",
+
+    stage: "Harvested",
+
+    trigger: {
+      type: "weather",
+      value: "strongWind",
+    },
+
+    priority: 9,
+
+    severity: "warning",
+  },
+
+  {
+    id: "maize-048",
+
+    title: "Avoid storing grain directly on the floor",
+
+    body: "Store maize on pallets or raised platforms instead of directly on concrete or soil. This improves air circulation and reduces moisture absorption from the floor.",
+
+    crop: "maize",
+
+    category: "Post-Harvest",
+
+    stage: "Harvested",
+
+    trigger: {
+      type: "always",
+    },
+
+    priority: 8,
+
+    severity: "important",
+  },
+
+  {
+    id: "maize-049",
+
+    title: "Clean storage areas before the next harvest",
+
+    body: "Remove old grain, dust, insects, and debris from storage facilities before storing a new harvest. Clean storage reduces the risk of pest infestation and grain contamination.",
+
+    crop: "maize",
+
+    category: "Post-Harvest",
+
+    stage: "Harvested",
+
+    trigger: {
+      type: "always",
+    },
+
+    priority: 8,
+
+    severity: "important",
+  },
+
+  {
+    id: "maize-050",
+
+    title: "Prepare early for the next maize season",
+
+    body: "After completing harvest and storage, begin planning for the next planting season. Review lessons from the previous season, source quality seed early, and prepare land ahead of the rains to avoid last-minute delays.",
+
+    crop: "maize",
+
+    category: "Farm Management",
+
+    stage: "Harvested",
+
+    trigger: {
+      type: "stage",
+      value: "Harvested",
+    },
+
+    priority: 8,
+
+    severity: "info",
+  },
 ];

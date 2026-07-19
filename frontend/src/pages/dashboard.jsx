@@ -12,6 +12,7 @@ import {
 import Sidebar from "../components/Sidebar";
 import Header from "../components/header";
 import Hero from "../components/Hero";
+import DailyTips from "../components/dailyTips";
 import { Link } from "react-router-dom";
 
 
@@ -78,6 +79,7 @@ const Dashboard = () => {
               ))}
             </div>
           </div>
+          <DailyTips />
         </div>
       </div>
     </>

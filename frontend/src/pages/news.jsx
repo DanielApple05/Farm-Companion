@@ -3,8 +3,8 @@ import { Newspaper, ExternalLink, Lightbulb, Loader2 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { getAgricultureNews } from "../api/news";
-import WeeklyTip  from "../components/weeklyTip";
-import MonthlyTip from "../components/monthlyTip";
+// import WeeklyTip  from "../components/weeklyTip";
+// import MonthlyTip from "../components/monthlyTip";
 
 
 const News = () => {
@@ -109,8 +109,8 @@ const News = () => {
             <h2 className="font-medium text-gray-900 flex items-center gap-2 mb-4">
               Tips & Guides
             </h2>
-            <WeeklyTip />
-            <MonthlyTip />
+            {/* <WeeklyTip />
+            <MonthlyTip /> */}
           </div>
         </div>
       </div>
