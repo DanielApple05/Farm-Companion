@@ -1,34 +1,36 @@
 const mongoose = require("mongoose");
- 
+const { calculateCropStage } = require("../utils/cropMaturity");
+
 const cropSchema = new mongoose.Schema(
   {
     name: {
       type: String,
       required: true,
+      trim: true,
     },
- 
+
     farm: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Farm",
       required: true,
     },
- 
+
     plantedOn: {
       type: Date,
       required: true,
     },
- 
+
     status: {
       type: String,
       enum: ["Healthy", "Flagged"],
       default: "Healthy",
     },
- 
+
     photoUrl: {
       type: String,
       default: "",
     },
- 
+
     // History of diagnosis results from the Diagnose Crop flow (Pl@ntNet + Claude explanation)
     diagnosisLogs: [
       {
@@ -39,29 +41,32 @@ const cropSchema = new mongoose.Schema(
         createdAt: { type: Date, default: Date.now },
       },
     ],
- 
+
     // Optional yield tracking, filled in after harvest
     yield: {
       amount: Number,
       unit: { type: String, enum: ["kg", "tons", "bags"], default: "kg" },
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
 );
 
-// stage is now calculated live from plantedOn + crop name — never stored,
-// never goes stale, no manual updating needed. Frontend code reading
-// `crop.stage` keeps working exactly the same, just backed by real math now.
+// stage is calculated live from plantedOn + crop name — never stored,
+// never goes stale, no manual updating needed.
 cropSchema.virtual("stage").get(function () {
   return calculateCropStage(this.name, this.plantedOn).stage;
 });
- 
+
 cropSchema.virtual("percentComplete").get(function () {
   return calculateCropStage(this.name, this.plantedOn).percentComplete;
 });
- 
+
 cropSchema.virtual("isOverdue").get(function () {
   return calculateCropStage(this.name, this.plantedOn).isOverdue;
 });
- 
+
 module.exports = mongoose.model("Crop", cropSchema);

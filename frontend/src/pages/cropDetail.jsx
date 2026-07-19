@@ -15,7 +15,6 @@ const stageOrder = ["Seedling", "Vegetative", "Flowering", "Maturing", "Harveste
 
 const CropDetail = () => {
 
-  // const { stage, daysElapsed, totaldays, percentComplete, daysOverdue} = calculateCropStage();
   const { id } = useParams();
 
   const [crop, setCrop] = useState(null);
@@ -82,6 +81,8 @@ const CropDetail = () => {
   const diagnosisLogs = [...(crop.diagnosisLogs || [])].sort(
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
   );
+  console.log("crop.stage:", crop.stage);
+console.log("stageIndex:", stageOrder.indexOf(crop.stage));
 
   return (
     <>
