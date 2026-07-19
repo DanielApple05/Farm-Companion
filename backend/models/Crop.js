@@ -18,13 +18,6 @@ const cropSchema = new mongoose.Schema(
       required: true,
     },
  
-    // Growth stage — updated manually for now, could later be inferred from plantedOn + crop type
-    stage: {
-      type: String,
-      // enum: ["Seedling", "Vegetative", "Flowering", "Maturing", "Harvested"],
-      default: "Seedling",
-    },
- 
     status: {
       type: String,
       enum: ["Healthy", "Flagged"],
@@ -55,5 +48,20 @@ const cropSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+// stage is now calculated live from plantedOn + crop name — never stored,
+// never goes stale, no manual updating needed. Frontend code reading
+// `crop.stage` keeps working exactly the same, just backed by real math now.
+cropSchema.virtual("stage").get(function () {
+  return calculateCropStage(this.name, this.plantedOn).stage;
+});
+ 
+cropSchema.virtual("percentComplete").get(function () {
+  return calculateCropStage(this.name, this.plantedOn).percentComplete;
+});
+ 
+cropSchema.virtual("isOverdue").get(function () {
+  return calculateCropStage(this.name, this.plantedOn).isOverdue;
+});
  
 module.exports = mongoose.model("Crop", cropSchema);
