@@ -3,26 +3,9 @@ import { Newspaper, ExternalLink, Lightbulb, Loader2 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { getAgricultureNews } from "../api/news";
+import WeeklyTip  from "../components/weeklyTip";
+import MonthlyTip from "../components/monthlyTip";
 
-// ---- Curated tips (static for now — could move to its own DB collection later) ----
-const tips = [
-  {
-    title: "5 Ways to Improve Soil Fertility",
-    summary: "Healthy soil leads to higher yields — simple habits that make a real difference.",
-  },
-  {
-    title: "Fall Armyworm: What You Need to Know",
-    summary: "Identify early, act fast. Recognizing the signs before it spreads.",
-  },
-  {
-    title: "Smart Watering Tips",
-    summary: "Water smart, save more — timing and technique matter as much as quantity.",
-  },
-  {
-    title: "Top High-Demand Crops in Nigeria",
-    summary: "Crops with strong market value worth considering for your next planting season.",
-  },
-];
 
 const News = () => {
   const [articles, setArticles] = useState([]);
@@ -122,22 +105,12 @@ const News = () => {
           </div>
 
           {/* Curated tips & guides */}
-          <div>
+          <div className="space-y-5">
             <h2 className="font-medium text-gray-900 flex items-center gap-2 mb-4">
-              <Lightbulb size={16} className="text-amber-500" />
               Tips & Guides
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {tips.map((tip, i) => (
-                <div
-                  key={i}
-                  className="bg-white rounded-xl border border-gray-100 p-4 hover:border-green-300 transition-colors cursor-pointer"
-                >
-                  <p className="text-sm font-medium text-gray-900">{tip.title}</p>
-                  <p className="text-xs text-gray-500 mt-2">{tip.summary}</p>
-                </div>
-              ))}
-            </div>
+            <WeeklyTip />
+            <MonthlyTip />
           </div>
         </div>
       </div>
