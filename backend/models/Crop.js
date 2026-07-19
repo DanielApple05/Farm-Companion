@@ -21,7 +21,7 @@ const cropSchema = new mongoose.Schema(
     // Growth stage — updated manually for now, could later be inferred from plantedOn + crop type
     stage: {
       type: String,
-      enum: ["Seedling", "Vegetative", "Flowering", "Maturing", "Harvested"],
+      // enum: ["Seedling", "Vegetative", "Flowering", "Maturing", "Harvested"],
       default: "Seedling",
     },
  

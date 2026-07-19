@@ -42,16 +42,24 @@ export const getDailyTips = (context = {}, count = 3) => {
   const pool = relevant.length > 0 ? relevant : generalFarmTips;
 
   const ranked = [...pool].sort((a, b) => {
-    const severityDiff = (severityRank[b.severity] || 0) - (severityRank[a.severity] || 0);
+    const severityDiff =
+      (severityRank[b.severity] || 0) - (severityRank[a.severity] || 0);
     if (severityDiff !== 0) return severityDiff;
     return (b.priority || 0) - (a.priority || 0);
   });
 
   // Daily rotation offset — same tips all day, shifts the following day,
   // so returning users see some variety even when the top-ranked set is large.
-  const dayOfYear = Math.floor(
-    (new Date() - new Date(new Date().getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24)
-  );
+  const today = new Date();
+
+  const startOfYear = new Date(today.getFullYear(), 0, 0);
+
+  const millisecondsPassed = today - startOfYear;
+
+  const millisecondsPerDay = 1000 * 60 * 60 * 24;
+
+  const dayOfYear = Math.floor(millisecondsPassed / millisecondsPerDay);
+
   const offset = dayOfYear % ranked.length;
   const rotated = [...ranked.slice(offset), ...ranked.slice(0, offset)];
 

@@ -12,7 +12,6 @@ const AddCropModal = ({ farmId, onClose, onAdded }) => {
   const [message, setMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
   const [farmOptions, setFarmOptions] = useState([]);
-  // const [selectedFarmId, setSelectedFarmId] = useState(farmId || "");
 
   // Placeholder — wire up real submit logic later
   const handleSubmit = async (e) => {

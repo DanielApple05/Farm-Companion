@@ -32,6 +32,7 @@ const DailyTips = () => {
   useEffect(() => {
     const buildContext = async () => {
       try {
+        setLoading(true);
         const cropsRes = await getCrops();
         const crops = cropsRes.data.map((c) => ({
           name: c.name,
