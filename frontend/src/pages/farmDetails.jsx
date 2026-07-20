@@ -6,7 +6,7 @@ import AddCropModal from "../components/AddCropModal";
 import AddLivestockModal from "../components/addLivestockModal";
 import { useState, useEffect } from "react";
 import { getFarmById } from "../api/farm";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import FarmFinances from "../components/farmFinances";
 
 
@@ -26,12 +26,12 @@ const conditionStyles = {
 const FarmDetail = () => {
 
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [equipModalOpen, setEquipModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [ cropModal, setCropModal] = useState(false);
-  const [ livestockModal, setLivestockModal] = useState(false);
-
+  const [cropModal, setCropModal] = useState(false);
+  const [livestockModal, setLivestockModal] = useState(false);
   const [farm, setFarm] = useState({
     name: "",
     location: "",
@@ -40,13 +40,22 @@ const FarmDetail = () => {
     equipment: [],
   });
 
+  const handleDelete = async () => {
+    try {
+      await deleteCrop(id);
+      navigate(crop.farm?._id ? `/farms/${crop.farm._id}` : "/crops");
+    } catch (error) {
+      setMessage(error.response?.data?.message || "Failed to delete crop");
+      console.log(error.response?.data)
+    }
+  };
+
   useEffect(() => {
     const fetchFarmById = async () => {
       try {
         setLoading(true);
 
         const response = await getFarmById(id);
-        // If your API returns { farm: {...} }, change this to response.data.farm
         setFarm(response.data);
       } catch (error) {
         console.error(
@@ -56,7 +65,7 @@ const FarmDetail = () => {
         setLoading(false);
       }
     };
-      fetchFarmById();
+    fetchFarmById();
   }, [id]);
 
   if (loading) {
@@ -146,14 +155,14 @@ const FarmDetail = () => {
                 <Sprout size={16} className="text-green-600" />
                 Crops
               </h2>
-              <button 
-              onClick={() => setCropModal(true)}
-              className="flex items-center gap-1 text-sm text-green-600">
+              <button
+                onClick={() => setCropModal(true)}
+                className="flex items-center gap-1 text-sm text-green-600">
                 <PlusCircle size={14} />
                 Add Crop
               </button>
             </div>
-              { cropModal && (
+            {cropModal && (
               <AddCropModal
                 farmId={farm._id}
                 onClose={() => setCropModal(false)}
@@ -186,13 +195,13 @@ const FarmDetail = () => {
                 Livestock
               </h2>
               <button
-              onClick={() => setLivestockModal(true)}
+                onClick={() => setLivestockModal(true)}
                 className="flex items-center gap-1 text-sm text-green-600">
                 <PlusCircle size={14} />
                 Add Livestock
               </button>
             </div>
-              { livestockModal && (
+            {livestockModal && (
               <AddLivestockModal
                 farmId={farm._id}
                 onClose={() => setLivestockModal(false)}

@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, MapPin, Calendar, Leaf, AlertTriangle, Loader2, Bug, Scale } from "lucide-react";
 import Sidebar from "../components/sidebar";
 import Header from "../components/header";
-import { getCropById } from "../api/crops";
+import { getCropById, deleteCrop } from "../api/crops";
+import DeleteButton from "../components/deleteButton";
 // import { calculateCropStage } from "../utils";
 
 const statusStyles = {
@@ -16,10 +17,21 @@ const stageOrder = ["Seedling", "Vegetative", "Flowering", "Maturing", "Harveste
 const CropDetail = () => {
 
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [crop, setCrop] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+
+  const handleDelete = async () => {
+    try {
+      await deleteCrop(id);
+      navigate(crop.farm?._id ? `/farms/${crop.farm._id}` : "/crops");
+    } catch (error) {
+      setMessage(error.response?.data?.message || "Failed to delete crop");
+      console.log(error.response?.data)
+    }
+  };
 
   useEffect(() => {
     const fetchCrop = async () => {
@@ -82,7 +94,7 @@ const CropDetail = () => {
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
   );
   console.log("crop.stage:", crop.stage);
-console.log("stageIndex:", stageOrder.indexOf(crop.stage));
+  console.log("stageIndex:", stageOrder.indexOf(crop.stage));
 
   return (
     <>
@@ -117,9 +129,12 @@ console.log("stageIndex:", stageOrder.indexOf(crop.stage));
                   </p>
                 </div>
               </div>
-              <span className={`text-xs px-2 py-1 rounded-md ${statusStyles[crop.status]}`}>
-                {crop.status}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className={`text-xs px-2 py-1 rounded-md ${statusStyles[crop.status]}`}>
+                  {crop.status}
+                </span>
+                <DeleteButton onDelete={handleDelete} label="Delete Crop" />
+              </div>
             </div>
 
             <div className="flex items-center gap-6 mt-4 pt-4 border-t border-gray-100 text-sm text-gray-600">
@@ -144,14 +159,12 @@ console.log("stageIndex:", stageOrder.indexOf(crop.stage));
                 <div key={stage} className="flex items-center flex-1 last:flex-none">
                   <div className="flex flex-col items-center gap-1">
                     <div
-                      className={`w-3 h-3 rounded-full ${
-                        i <= stageIndex ? "bg-green-600" : "bg-gray-200"
-                      }`}
+                      className={`w-3 h-3 rounded-full ${i <= stageIndex ? "bg-green-600" : "bg-gray-200"
+                        }`}
                     />
                     <span
-                      className={`text-xs whitespace-nowrap ${
-                        i === stageIndex ? "text-gray-900 font-medium" : "text-gray-400"
-                      }`}
+                      className={`text-xs whitespace-nowrap ${i === stageIndex ? "text-gray-900 font-medium" : "text-gray-400"
+                        }`}
                     >
                       {stage}
                     </span>
