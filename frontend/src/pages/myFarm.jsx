@@ -83,7 +83,7 @@ const MyFarms = () => {
                       </span>
                       <span className="flex items-center gap-1">
                         <PawPrint size={14} className="text-amber-600" />
-                        {farm.livestock?.length || 0} animals
+                        {farm.livestock?.length || 0} Batch of livestock 
                       </span>
                     </div>
 

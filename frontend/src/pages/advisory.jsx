@@ -22,7 +22,7 @@ const Advisory = () => {
 
   useEffect(() => {
     fetchWeather("Port harcourt", "metric");
-    console.log("Weather data fetched:", weatherData);
+    console.log(weatherData);
   }, [fetchWeather]);
 
     const cityName = weatherData?.city?.name;

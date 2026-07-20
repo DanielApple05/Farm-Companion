@@ -15,7 +15,7 @@ const severityStyles = {
 const normalizeWeatherCondition = (description = "") => {
   const desc = description.toLowerCase();
   if (desc.includes("heavy rain") || desc.includes("thunderstorm")) return "heavyRain";
-  if (desc.includes("rain") || desc.includes("drizzle")) return "rainySeason";
+  if (desc.includes("rain") || desc.includes("moderate rain")) return "rainySeason";
   if (desc.includes("clear") && desc.includes("hot")) return "heatWave";
   return null;
 };
@@ -42,10 +42,8 @@ const DailyTips = () => {
 
         const weatherDescription = weatherData?.list?.[0]?.weather?.[0]?.description;
         const weather = normalizeWeatherCondition(weatherDescription);
-
         setTips(getDailyTips({ weather, crops }, 3));
       } catch (error) {
-        console.error(error);
         setTips(getDailyTips({}, 3)); // fall back to general tips if crops fail to load
       } finally {
         setLoading(false);

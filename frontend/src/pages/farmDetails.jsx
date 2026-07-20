@@ -136,7 +136,7 @@ const FarmDetail = () => {
                     0
                   )}
                 </p>
-                <p className="text-xs text-gray-500">Animals</p>
+                <p className="text-xs text-gray-500">Livestock</p>
               </div>
             </div>
             <div className="bg-white rounded-xl border border-gray-100 p-4 flex items-center gap-3">
