@@ -13,15 +13,16 @@ const AddLivestockModal = ({ farmId, onClose, onAdded }) => {
   const [selectedFarmId, setSelectedFarmId] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const [isSuccess, setIsSuccess] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
   const [farmOptions, setFarmOptions] = useState([]);
 
   // Placeholder — wire up real submit logic later
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const finalFarmId = farmId || selectedFarmId;
     try {
       setLoading(true);
-      const response = await createLivestock({ type, breed, headcount, farmId });
+      const response = await createLivestock({ type, breed, headcount, farmId: finalFarmId });
       setIsSuccess(true);
       setMessage("Livestock added successfully!");
       onAdded(response.data);
@@ -30,7 +31,6 @@ const AddLivestockModal = ({ farmId, onClose, onAdded }) => {
       }, 1200);
     } catch (error) {
       setMessage(error.response?.data?.message || "Failed to add livestock");
-      console.log(error.response?.data);
     } finally {
       setLoading(false);
     }
@@ -77,7 +77,7 @@ const AddLivestockModal = ({ farmId, onClose, onAdded }) => {
             <label className="text-sm text-gray-700 font-medium">Type</label>
             <div className="grid grid-cols-4 gap-2 mt-1">
               {livestockTypes.map((t) => (
-                <button
+                <div
                   key={t._id}
                   onClick={() => setType(t.specie)}
                   className={`flex flex-col items-center gap-1 py-2 rounded-lg border text-xs transition-colors ${type === t.specie
@@ -87,7 +87,7 @@ const AddLivestockModal = ({ farmId, onClose, onAdded }) => {
                 >
                   <PawPrint size={16} />
                   {t.specie}
-                </button>
+                </div>
               ))}
             </div>
           </div>
@@ -121,7 +121,7 @@ const AddLivestockModal = ({ farmId, onClose, onAdded }) => {
           </div>
 
           {/* Farm select */}
-          { !farmId && (<div>
+          {!farmId && (<div>
             <label className="text-sm text-gray-700 font-medium">Farm</label>
             <select
               value={farmId}

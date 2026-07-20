@@ -12,8 +12,8 @@ const createLivestock = async (req, res) => {
   const { type, breed, headcount, farmId } = req.body;
 
   try {
-    if (!type || !headcount || !farmId) {
-      return res.status(400).json({ message: "type, headcount, and farmId are required" });
+    if (!type || !headcount || !farmId ) {
+      return res.status(400).json({ message: "All feilds Are Required!" });
     }
 
     // Confirm the farm exists AND belongs to the logged-in user before attaching livestock to it
@@ -172,8 +172,8 @@ const deleteLivestock = async (req, res) => {
       return res.status(404).json({ message: "Livestock not found" });
     }
 
-    if (livestock.farm.owner.toString() !== req.user.id) {
-      return res.status(403).json({ message: "Not authorized to delete this livestock group" });
+     if (!isOwnerMatch(livestock.farm.owner, req.user.id)) {
+      return res.status(403).json({ message: "Not authorized to delete this livestock" });
     }
 
     await Livestock.findByIdAndDelete(req.params.id);
@@ -181,7 +181,6 @@ const deleteLivestock = async (req, res) => {
 
     res.json({ message: "Livestock deleted" });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "Server error" });
   }
 };

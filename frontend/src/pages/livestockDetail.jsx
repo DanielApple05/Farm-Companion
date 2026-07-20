@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, MapPin, PawPrint, Loader2, Syringe, Droplet, MessageCircle, PlusCircle } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
-import { getLivestockById } from "../api/livestock";
+import { getLivestockById, deleteLivestock } from "../api/livestock";
 import AddLivestockModal from "../components/addLivestockModal";
 import AddVaccinationModal from "../components/addVacinationModal";
+import DeleteButton from "../components/deleteButton";
 
 const statusStyles = {
   Healthy: "bg-green-50 text-green-700",
@@ -15,11 +16,22 @@ const statusStyles = {
 
 const LivestockDetail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [livestock, setLivestock] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [vaccinationModalOpen, setVaccinationModalOpen] = useState(false);
+
+  const handleDelete = async () => {
+    try {
+      await deleteLivestock(id);
+      navigate(livestock.farm?._id ? `/farms/${livestock.farm._id}` : "/livestock");
+    } catch (error) {
+      setMessage(error.response?.data?.message || "Failed to delete liveStock");
+      console.log(error.response?.data)
+    }
+  };
 
   useEffect(() => {
     const fetchLivestock = async () => {
@@ -108,9 +120,12 @@ const LivestockDetail = () => {
                   </p>
                 </div>
               </div>
-              <span className={`text-xs px-2 py-1 rounded-md ${statusStyles[livestock.status]}`}>
-                {livestock.status}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className={`text-xs px-2 py-1 rounded-md ${statusStyles[livestock.status]}`}>
+                  {livestock.status}
+                </span>
+                <DeleteButton onDelete={handleDelete} label="Delete Livestock" />
+              </div>
             </div>
 
             <div className="flex items-center gap-6 mt-4 pt-4 border-t border-gray-100 text-sm text-gray-600">
@@ -150,9 +165,8 @@ const LivestockDetail = () => {
                 return (
                   <div key={i} className="flex items-center gap-3 bg-gray-50 rounded-lg p-3">
                     <div
-                      className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
-                        v.completedOn ? "bg-green-50" : isOverdue ? "bg-red-50" : "bg-amber-50"
-                      }`}
+                      className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${v.completedOn ? "bg-green-50" : isOverdue ? "bg-red-50" : "bg-amber-50"
+                        }`}
                     >
                       {v.completedOn ? (
                         <Droplet size={14} className="text-green-600" />
@@ -170,9 +184,8 @@ const LivestockDetail = () => {
                     </div>
                     {!v.completedOn && (
                       <span
-                        className={`text-xs px-2 py-1 rounded-md ${
-                          isOverdue ? "bg-red-50 text-red-700" : "bg-gray-100 text-gray-500"
-                        }`}
+                        className={`text-xs px-2 py-1 rounded-md ${isOverdue ? "bg-red-50 text-red-700" : "bg-gray-100 text-gray-500"
+                          }`}
                       >
                         {isOverdue ? "Overdue" : "Scheduled"}
                       </span>

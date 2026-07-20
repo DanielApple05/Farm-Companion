@@ -5,7 +5,6 @@ import Sidebar from "../components/sidebar";
 import Header from "../components/header";
 import { getCropById, deleteCrop } from "../api/crops";
 import DeleteButton from "../components/deleteButton";
-// import { calculateCropStage } from "../utils";
 
 const statusStyles = {
   Healthy: "bg-green-50 text-green-700",

@@ -13,7 +13,7 @@ const createCrop = async (req, res) => {
 
   try {
     if (!cropName || !farmId || !plantedOn) {
-      return res.status(400).json({ message: "cropName, farmId, and plantedOn are required" });
+      return res.status(400).json({ message: "All feilds Are Required!" });
     }
 
     const farm = await Farm.findOne({ _id: farmId, owner: req.user.id });

@@ -11,7 +11,6 @@ import FarmFinances from "../components/farmFinances";
 import DeleteButton from "../components/deleteButton";
 
 
-
 const statusStyles = {
   Healthy: "bg-green-50 text-green-700",
   Flagged: "bg-amber-50 text-amber-700",
@@ -47,7 +46,6 @@ const FarmDetail = () => {
       navigate("/farms");
     } catch (error) {
       // setMessage(error.response?.data?.message || "Failed to delete farm");
-      console.log(error.response?.data)
     }
   };
 
@@ -216,13 +214,13 @@ const FarmDetail = () => {
             )}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {farm.livestock?.map((l) => (
-                <div key={l._id} className="flex items-center justify-between bg-gray-50 rounded-lg p-3">
+                 <Link to={`/livestock/${l._id}`} key={l._id} className="flex items-center justify-between bg-gray-50 rounded-lg p-3">
                   <div>
                     <p className="text-sm font-medium text-gray-900">{l.type}</p>
                     <p className="text-xs text-gray-500">{l.headcount} heads · {l.breed}</p>
                   </div>
                   <span className={`text-xs px-2 py-1 rounded-md ${statusStyles[l.status]}`}>{l.status}</span>
-                </div>
+                </Link>
               ))}
             </div>
           </div>
