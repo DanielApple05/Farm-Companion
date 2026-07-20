@@ -29,7 +29,7 @@ const DeleteButton = ({ onDelete, label = "Delete", confirmLabel = "Confirm dele
       type="button"
       onClick={handleClick}
       disabled={loading}
-      className={`flex items-center gap-1 text-sm px-3 py-1.5 rounded-lg border transition-colors ${
+      className={`flex items-center gap-1 text-sm px-3 py-1.5 rounded-lg border cursor-pointer transition-colors ${
         confirming
           ? "border-red-400 bg-red-50 text-red-700 font-medium"
           : "border-gray-200 text-gray-500 hover:border-red-300 hover:text-red-600"

@@ -5,9 +5,10 @@ import AddEquipmentModal from "../components/addEquipmentModal";
 import AddCropModal from "../components/AddCropModal";
 import AddLivestockModal from "../components/addLivestockModal";
 import { useState, useEffect } from "react";
-import { getFarmById } from "../api/farm";
+import { getFarmById, deleteFarm } from "../api/farm";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import FarmFinances from "../components/farmFinances";
+import DeleteButton from "../components/deleteButton";
 
 
 
@@ -42,10 +43,10 @@ const FarmDetail = () => {
 
   const handleDelete = async () => {
     try {
-      await deleteCrop(id);
-      navigate(crop.farm?._id ? `/farms/${crop.farm._id}` : "/crops");
+      await deleteFarm(id);
+      navigate("/farms");
     } catch (error) {
-      setMessage(error.response?.data?.message || "Failed to delete crop");
+      // setMessage(error.response?.data?.message || "Failed to delete farm");
       console.log(error.response?.data)
     }
   };
@@ -98,9 +99,12 @@ const FarmDetail = () => {
                   {farm.location}
                 </p>
               </div>
-              <button className="text-sm px-4 py-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">
-                Edit Farm
-              </button>
+              <div className="flex items-center gap-2">
+                <button className="text-sm px-4 py-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">
+                  Edit Farm
+                </button>
+                <DeleteButton onDelete={handleDelete} label="Delete Farm" />
+              </div>
             </div>
             {/* 
             <div className="flex items-center gap-6 mt-4 pt-4 border-t border-gray-100 text-sm text-gray-600">
@@ -262,7 +266,7 @@ const FarmDetail = () => {
           </div>
           <FarmFinances farmId={farm._id} />
         </div>
-      </div>
+      </div >
     </>
   );
 };

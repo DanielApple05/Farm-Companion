@@ -8,7 +8,7 @@ import FarmCardSkeleton from "../components/farmSkeleton";
 import { Link } from "react-router-dom";
 
 const MyFarms = () => {
-  
+
   const [farmModalOpen, setFarmModalOpen] = useState(false);
   const [farms, setFarms] = useState([]);
   const [message, setMessage] = useState("");
@@ -48,10 +48,14 @@ const MyFarms = () => {
               className="flex items-center gap-2 bg-green-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
               <PlusCircle size={16} />
               Add Farm
-            </button> 
+            </button>
           </div>
           {
-            farmModalOpen && <AddFarmModal onClose={() => setFarmModalOpen(false)} />
+            farmModalOpen &&
+            <AddFarmModal
+              onAdded={(newItem) =>
+                setFarms([...farms, newItem])}
+              onClose={() => setFarmModalOpen(false)} />
           }
           {/* Farms list */}
           <div className="grid grid-cols-2 xl:grid-cols-3 gap-4 w-full">
@@ -85,7 +89,7 @@ const MyFarms = () => {
 
                     <Link to={`/farms/${farm._id}`} className="text-sm text-green-600 flex items-center gap-1 mt-auto">
                       View details <ChevronRight size={14} />
-                    </Link> 
+                    </Link>
                   </div>)
                 ))}
           </div>

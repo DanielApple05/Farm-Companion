@@ -5,13 +5,14 @@ import { addFarm } from "../api/farm";
 // Dummy: pretend this came from the user's profile, captured at signup/login
 const detectedLocation = "Port Harcourt, Rivers State";
 
-const AddFarmModal = ({ onClose }) => {
+const AddFarmModal = ({ onClose, onAdded }) => {
   const [type, setType] = useState("crop"); // "crop" | "livestock"
   const [name, setName] = useState("");
   const [location, setLocation] = useState(detectedLocation);
   const [firstEntry, setFirstEntry] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
 
   // Placeholder — wire up real submit logic later
   const handleSubmit = async (e) => {
@@ -19,11 +20,13 @@ const AddFarmModal = ({ onClose }) => {
 
     try {
       setLoading(true)
-      const res = await addFarm({ name, location, type })
-      
-      if (!res) {
-        setMessage({ message: res.data.message || "failed to add farm" })
-      }
+      const res = await addFarm({ name, location, type });
+      setIsSuccess(true);
+      setMessage("Farm added successfully!");
+      onAdded?.(res.data);
+      setTimeout(() => {
+        onClose();
+      }, 1200);
 
     } catch (error) {
       setMessage(error.response?.data?.message || error.message || "Can't add farm");
@@ -46,12 +49,17 @@ const AddFarmModal = ({ onClose }) => {
         </div>
 
         {/* Farm type toggle */}
-         <form onSubmit={handleSubmit} className="space-y-3">
+        <form onSubmit={handleSubmit} className="space-y-3">
           {message && (
-          <div className="w-full bg-red-50 border border-red-200 text-red-500 text-sm rounded-xl px-4 py-3 mb-4">
-            {message}
-          </div>
-        )}
+            <div
+              className={`w-full border text-sm rounded-xl px-4 py-3 mb-4 ${isSuccess
+                ? "bg-green-50 border-green-200 text-green-600"
+                : "bg-red-50 border-red-200 text-red-500"
+                }`}
+            >
+              {message}
+            </div>
+          )}
           <div className="grid grid-cols-2 gap-2 bg-gray-50 rounded-lg p-1">
             <button
               onClick={() => setType("crop")}
