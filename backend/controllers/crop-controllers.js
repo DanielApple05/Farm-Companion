@@ -1,5 +1,6 @@
 const Crop = require("../models/Crop");
 const Farm = require("../models/Farm");
+const { getTipsForCrop } = require("../services/tipEngine");
 
 const isOwnerMatch = (ownerId, userId) => {
   if (!ownerId || !userId) return false;
@@ -68,12 +69,22 @@ const getCropById = async (req, res) => {
       return res.status(404).json({ message: "Crop not found" });
     }
 
-    // Ownership check — the crop's farm must belong to the logged-in user
+    const result = getTipsForCrop(crop);
+
+    console.log(result);
+
+    // Ownership check
     if (!isOwnerMatch(crop.farm.owner, req.user.id)) {
-      return res.status(403).json({ message: "Not authorized to view this crop" });
+      return res
+        .status(403)
+        .json({ message: "Not authorized to view this crop" });
     }
 
-    res.json(crop);
+    res.json({
+      crop,
+      growth: result.growth,
+      tips: result.tips,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });

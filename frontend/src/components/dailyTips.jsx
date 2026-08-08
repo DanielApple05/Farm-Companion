@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Lightbulb, AlertTriangle, Info } from "lucide-react";
 import { getCrops } from "../api/crops";
 import { useWeather } from "../api/weather";
-import { getDailyTips } from "../farm-utils/tipEngine";
 
 const severityStyles = {
   warning: { icon: AlertTriangle, bg: "bg-red-50", text: "text-red-600" },
