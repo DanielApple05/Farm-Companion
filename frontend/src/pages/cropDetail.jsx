@@ -300,11 +300,11 @@ const CropDetail = () => {
             )}
           </div>
 
-          {/* Farm Tip */}
+          {/* Crop Tip */}
           {tips.length > 0 && (
             <div className="bg-white rounded-xl border border-gray-100 p-5">
               <h2 className="font-medium text-gray-900 mb-3">
-                Farm Tip
+                Crop Tip
               </h2>
 
               <h3 className="text-sm font-semibold text-gray-900">
