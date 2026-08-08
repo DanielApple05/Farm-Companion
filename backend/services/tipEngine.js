@@ -1,6 +1,6 @@
 // import { generalFarmTips } from "../knowledge/general";
 const { maizeTips } = require("../knowledge/crops/maize.js");
-const cassavaTips = require("../knowledge/crops/cassava.js");
+const { cassavaTips } = require("../knowledge/crops/cassava.js");
 const { calculateCropStage } = require("../utils/cropMaturity.js");
 
 const getTipsForCrop = (crop) => {
