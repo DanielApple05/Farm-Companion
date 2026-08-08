@@ -2,7 +2,7 @@ import { Search, Sprout, CloudSun, Loader2, AlertCircle } from "lucide-react";
 import { getUserName, getInitials } from "../helpers";
 import { useEffect } from "react";
 import { useWeather } from "../api/weather";
-import { getWeatherIcon } from "./WeatherIcon";
+import { getWeatherIcon } from "./weatherIcon";
 
 const user = {
   role: "Smallholder Farmer",

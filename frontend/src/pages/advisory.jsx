@@ -3,7 +3,7 @@ import Sidebar from "../components/sidebar";
 import Header from "../components/header";
 import { useEffect, useState } from "react";
 import { useWeather } from "../api/weather";
-import { getWeatherIcon } from "../components/WeatherIcon";
+import { getWeatherIcon } from "../components/weatherIcon";
 import AdvisorySkeleton from "../components/advisorySkeleton";
 
 const plantingWindows = [
