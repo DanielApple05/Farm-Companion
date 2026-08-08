@@ -1,6 +1,6 @@
 import { PawPrint, MapPin, PlusCircle, ChevronRight, Syringe } from "lucide-react";
 import Sidebar from "../components/sidebar";
-import Header from "../components/Header";
+import Header from "../components/header";
 import AddLivestockModal from "../components/addLivestockModal";
 import { useEffect, useState } from "react";
 import { getLivestock } from "../api/livestock";

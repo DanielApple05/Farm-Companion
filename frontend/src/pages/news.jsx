@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Newspaper, ExternalLink, Lightbulb, Loader2 } from "lucide-react";
-import Sidebar from "../components/Sidebar";
-import Header from "../components/Header";
+import Sidebar from "../components/sidebar";
+import Header from "../components/header";
 import { getAgricultureNews } from "../api/news";
 // import WeeklyTip  from "../components/weeklyTip";
 // import MonthlyTip from "../components/monthlyTip";

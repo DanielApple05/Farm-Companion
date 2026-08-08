@@ -1,7 +1,7 @@
 import { MapPin, Sprout, PawPrint, PlusCircle, ChevronRight } from "lucide-react";
-import Sidebar from "../components/Sidebar";
-import Header from "../components/Header";
-import AddFarmModal from "../components/AddFarmModal";
+import Sidebar from "../components/sidebar";
+import Header from "../components/header";
+import AddFarmModal from "../components/addFarmModal";
 import { useState, useEffect } from "react";
 import { getFarms } from "../api/farm";
 import FarmCardSkeleton from "../components/farmSkeleton";

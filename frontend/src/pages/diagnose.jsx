@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { Camera, Upload, ChevronDown, Bug, MessageCircle, Send, X, Loader2 } from "lucide-react";
-import Sidebar from "../components/Sidebar";
-import Header from "../components/Header";
+import Sidebar from "../components/sidebar";
+import Header from "../components/header";
 import { diagnoseCrop } from "../api/diagnose";
 import { getCrops } from "../api/crops";
 

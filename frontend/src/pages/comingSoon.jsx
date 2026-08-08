@@ -1,6 +1,6 @@
 import { Construction } from "lucide-react";
-import Sidebar from "../components/Sidebar";
-import Header from "../components/Header";
+import Sidebar from "../components/sidebar";
+import Header from "../components/header";
 
 // Reusable — pass a title/message so this same page can cover News & Tips,
 // Market Prices, Community, or anything else not built yet.

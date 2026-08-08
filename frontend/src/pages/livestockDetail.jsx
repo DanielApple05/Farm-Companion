@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, MapPin, PawPrint, Loader2, Syringe, Droplet, MessageCircle, PlusCircle } from "lucide-react";
-import Sidebar from "../components/Sidebar";
-import Header from "../components/Header";
+import Sidebar from "../components/sidebar";
+import Header from "../components/header";
 import { getLivestockById, deleteLivestock } from "../api/livestock";
 import AddLivestockModal from "../components/addLivestockModal";
 import AddVaccinationModal from "../components/addVacinationModal";

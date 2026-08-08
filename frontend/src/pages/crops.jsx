@@ -1,7 +1,7 @@
 import { Leaf, MapPin, Calendar, PlusCircle, ChevronRight, AlertTriangle } from "lucide-react";
-import Sidebar from "../components/Sidebar";
-import Header from "../components/Header";
-import AddCropModal from "../components/AddCropModal";
+import Sidebar from "../components/sidebar";
+import Header from "../components/header";
+import AddCropModal from "../components/addCropModal";
 import { useEffect, useState } from "react";
 import { getCrops } from "../api/crops";
 import CropsLoading from "../components/cropLoadingGrid";

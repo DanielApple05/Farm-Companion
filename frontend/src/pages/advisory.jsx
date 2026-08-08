@@ -1,10 +1,10 @@
 import { CloudSun, Droplets, Wind, Calendar, Sprout, AlertTriangle } from "lucide-react";
-import Sidebar from "../components/Sidebar";
-import Header from "../components/Header";
+import Sidebar from "../components/sidebar";
+import Header from "../components/header";
 import { useEffect, useState } from "react";
 import { useWeather } from "../api/weather";
 import { getWeatherIcon } from "../components/WeatherIcon";
-import AdvisorySkeleton from "../components/AdvisorySkeleton";
+import AdvisorySkeleton from "../components/advisorySkeleton";
 
 const plantingWindows = [
   { crop: "Okra", status: "Good time to plant", window: "Now – 2 weeks" },

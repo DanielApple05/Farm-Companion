@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Send, Sprout, User } from "lucide-react";
-import Sidebar from "../components/Sidebar";
-import Header from "../components/Header";
+import Sidebar from "../components/sidebar";
+import Header from "../components/header";
 
 // ---- Dummy conversation (swap for real Claude API messages later) ----
 const initialMessages = [

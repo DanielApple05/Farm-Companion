@@ -1,8 +1,8 @@
 import { MapPin, Sprout, PawPrint, Wrench, PlusCircle, ChevronRight, AlertTriangle, Ruler } from "lucide-react";
-import Sidebar from "../components/Sidebar";
-import Header from "../components/Header";
+import Sidebar from "../components/sidebar";
+import Header from "../components/header";
 import AddEquipmentModal from "../components/addEquipmentModal";
-import AddCropModal from "../components/AddCropModal";
+import AddCropModal from "../components/addCropModal";
 import AddLivestockModal from "../components/addLivestockModal";
 import { useState, useEffect } from "react";
 import { getFarmById, deleteFarm } from "../api/farm";

@@ -9,9 +9,9 @@ import {
   ChevronRight,
   Bug
 } from "lucide-react";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../components/sidebar";
 import Header from "../components/header";
-import Hero from "../components/Hero";
+import Hero from "../components/hero";
 import DailyTips from "../components/dailyTips";
 import { Link } from "react-router-dom";
 
