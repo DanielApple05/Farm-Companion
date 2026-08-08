@@ -1,5 +1,6 @@
 // import { generalFarmTips } from "../knowledge/general";
 const { maizeTips } = require("../knowledge/crops/maize.js");
+const cassavaTips = require("../knowledge/crops/cassava.js");
 const { calculateCropStage } = require("../utils/cropMaturity.js");
 
 const getTipsForCrop = (crop) => {
@@ -13,16 +14,20 @@ const getTipsForCrop = (crop) => {
   if (crop.name.toLowerCase() === "maize") {
     recommendations = maizeTips;
   }
- 
-const tips = recommendations.filter(
-  (tip) => {
-    const cropMatches =
-      tip.crops?.includes(crop.name.toLowerCase()) ||
-      tip.crop?.toLowerCase() === crop.name.toLowerCase();
 
-    return cropMatches && tip.stage === growth.stage;
+  if (crop.name.toLowerCase() === "cassava") {
+    recommendations = cassavaTips;
   }
-);
+
+  const tips = recommendations.filter(
+    (tip) => {
+      const cropMatches =
+        tip.crops?.includes(crop.name.toLowerCase()) ||
+        tip.crop?.toLowerCase() === crop.name.toLowerCase();
+
+      return cropMatches && tip.stage === growth.stage;
+    }
+  );
 
   return {
     growth,

@@ -1,4 +1,4 @@
-export const cassavaTipsPart1 = [
+export const cassavaTips = [
   {
     id: "cassava-001",
 
