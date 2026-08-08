@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { X, PawPrint, Hash, Camera } from "lucide-react";
-import { createLivestock } from "../api/liveStock";
+import { createLivestock } from "../api/livestock";
 import { getFarms } from "../api/farm";
 
 
