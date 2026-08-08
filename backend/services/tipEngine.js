@@ -13,12 +13,16 @@ const getTipsForCrop = (crop) => {
   if (crop.name.toLowerCase() === "maize") {
     recommendations = maizeTips;
   }
+ 
+const tips = recommendations.filter(
+  (tip) => {
+    const cropMatches =
+      tip.crops?.includes(crop.name.toLowerCase()) ||
+      tip.crop?.toLowerCase() === crop.name.toLowerCase();
 
-  const tips = recommendations.filter(
-    (tip) =>
-      tip.crops?.includes(crop.name.toLowerCase()) &&
-      tip.stage === growth.stage
-  );
+    return cropMatches && tip.stage === growth.stage;
+  }
+);
 
   return {
     growth,
