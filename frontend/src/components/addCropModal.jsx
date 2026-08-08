@@ -13,10 +13,9 @@ const AddCropModal = ({ farmId, onClose, onAdded }) => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [farmOptions, setFarmOptions] = useState([]);
 
-  // Placeholder — wire up real submit logic later
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const finalFarmId = farmId || selectedFarmId;
+    const finalFarmId = farmId || selectedFarmId; 
 
     try {
       setLoading(true)
