@@ -1,6 +1,7 @@
 const Crop = require("../models/Crop");
 const Farm = require("../models/Farm");
 const { getTipsForCrop } = require("../services/tipEngine");
+const { getWeather } = require("../services/weatherService");
 
 const isOwnerMatch = (ownerId, userId) => {
   if (!ownerId || !userId) return false;
@@ -69,17 +70,19 @@ const getCropById = async (req, res) => {
       return res.status(404).json({ message: "Crop not found" });
     }
 
-    // Ownership check
     if (!isOwnerMatch(crop.farm.owner, req.user.id)) {
       return res
         .status(403)
         .json({ message: "Not authorized to view this crop" });
     }
 
-    // Get weather for the farm location
+    console.log("Crop found:", crop.name);
+    console.log("Farm location:", crop.farm.location);
+
     const weatherData = await getWeather(crop.farm.location);
 
-    // Give both crop and weather data to the tip engine
+    console.log("Weather data received:", weatherData);
+
     const result = getTipsForCrop(crop, weatherData);
 
     console.log("Tip engine result:", result);
@@ -92,8 +95,11 @@ const getCropById = async (req, res) => {
       weatherTips: result.weatherTips,
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
+    console.error("GET CROP BY ID ERROR:", error);
+    res.status(500).json({
+      message: "Server error",
+      error: error.message,
+    });
   }
 };
 
