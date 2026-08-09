@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
   MapPin,
@@ -9,6 +9,7 @@ import {
   Loader2,
   Bug,
   Scale,
+  CloudRain,
 } from "lucide-react";
 
 import Sidebar from "../components/sidebar";
@@ -33,9 +34,7 @@ const CropDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [crop, setCrop] = useState(null);
-  const [growth, setGrowth] = useState(null);
-  const [tips, setTips] = useState([]);
+  const [cropData, setCropData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -44,8 +43,8 @@ const CropDetail = () => {
       await deleteCrop(id);
 
       navigate(
-        crop?.farm?._id
-          ? `/farms/${crop.farm._id}`
+        cropData?.crop?.farm?._id
+          ? `/farms/${cropData.crop.farm._id}`
           : "/crops"
       );
     } catch (error) {
@@ -65,11 +64,7 @@ const CropDetail = () => {
 
         const response = await getCropById(id);
 
-        const { crop, growth, tips } = response.data;
-
-        setCrop(crop);
-        setGrowth(growth);
-        setTips(tips || []);
+        setCropData(response.data);
       } catch (error) {
         const apiMessage =
           error?.response?.data?.message ||
@@ -77,9 +72,7 @@ const CropDetail = () => {
           "Failed to load crop";
 
         setMessage(apiMessage);
-        setCrop(null);
-        setGrowth(null);
-        setTips([]);
+        setCropData(null);
       } finally {
         setLoading(false);
       }
@@ -107,7 +100,7 @@ const CropDetail = () => {
     );
   }
 
-  if (!crop) {
+  if (!cropData) {
     return (
       <>
         <Header />
@@ -131,9 +124,23 @@ const CropDetail = () => {
     );
   }
 
-  const stageIndex = stageOrder.indexOf(
-    growth?.stage || crop.stage
-  );
+  // Backend response structure:
+  //
+  // {
+  //   crop: {...},
+  //   growth: {...},
+  //   weatherCondition: "...",
+  //   cropTips: [...],
+  //   weatherTips: [...]
+  // }
+
+  const crop = cropData.crop;
+  const growth = cropData.growth;
+
+  const cropTips = cropData.cropTips || [];
+  const weatherTips = cropData.weatherTips || [];
+
+  const stageIndex = stageOrder.indexOf(growth?.stage);
 
   const diagnosisLogs = [...(crop.diagnosisLogs || [])].sort(
     (a, b) =>
@@ -170,6 +177,7 @@ const CropDetail = () => {
             <div className="flex items-start justify-between">
 
               <div className="flex items-center gap-3">
+
                 <div className="w-11 h-11 rounded-lg bg-green-50 flex items-center justify-center">
                   <Leaf
                     size={20}
@@ -178,6 +186,7 @@ const CropDetail = () => {
                 </div>
 
                 <div>
+
                   <h1 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
                     {crop.name}
 
@@ -197,13 +206,16 @@ const CropDetail = () => {
                     {crop.farm?.location &&
                       ` · ${crop.farm.location}`}
                   </p>
+
                 </div>
               </div>
 
               <div className="flex items-center gap-2">
+
                 <span
                   className={`text-xs px-2 py-1 rounded-md ${
-                    statusStyles[crop.status]
+                    statusStyles[crop.status] ||
+                    "bg-gray-50 text-gray-600"
                   }`}
                 >
                   {crop.status}
@@ -213,6 +225,7 @@ const CropDetail = () => {
                   onDelete={handleDelete}
                   label="Delete Crop"
                 />
+
               </div>
             </div>
 
@@ -241,21 +254,26 @@ const CropDetail = () => {
                   {crop.yield.unit}
                 </span>
               )}
+
             </div>
           </div>
 
           {/* Growth stage tracker */}
           <div className="bg-white rounded-xl border border-gray-100 p-5">
+
             <h2 className="font-medium text-gray-900 mb-4">
               Growth Stage
             </h2>
 
             <div className="flex items-center">
+
               {stageOrder.map((stage, i) => (
+
                 <div
                   key={stage}
                   className="flex items-center flex-1 last:flex-none"
                 >
+
                   <div className="flex flex-col items-center gap-1">
 
                     <div
@@ -275,6 +293,7 @@ const CropDetail = () => {
                     >
                       {stage}
                     </span>
+
                   </div>
 
                   {i < stageOrder.length - 1 && (
@@ -286,39 +305,148 @@ const CropDetail = () => {
                       }`}
                     />
                   )}
+
                 </div>
+
               ))}
+
             </div>
 
             {/* Growth information */}
-            {growth && (
-              <div className="mt-4 text-xs text-gray-500">
-                {growth.percentComplete}% complete ·{" "}
-                {growth.daysElapsed} of{" "}
-                {growth.totalDays} days
-              </div>
-            )}
+            <div className="mt-5 pt-4 border-t border-gray-100 flex gap-6 text-xs text-gray-500">
+
+              <span>
+                {growth?.daysElapsed} days elapsed
+              </span>
+
+              <span>
+                {growth?.percentComplete}% complete
+              </span>
+
+              {growth?.isOverdue && (
+                <span className="text-red-500 font-medium">
+                  Crop is overdue
+                </span>
+              )}
+
+            </div>
           </div>
 
-          {/* Crop Tip */}
-          {tips.length > 0 && (
+          {/* Crop Tips */}
+          {cropTips.length > 0 && (
             <div className="bg-white rounded-xl border border-gray-100 p-5">
-              <h2 className="font-medium text-gray-900 mb-3">
-                Crop Tip
-              </h2>
 
-              <h3 className="text-sm font-semibold text-gray-900">
-                {tips[0].title}
-              </h3>
+              <div className="flex items-center gap-2 mb-4">
+                <Leaf
+                  size={16}
+                  className="text-green-600"
+                />
 
-              <p className="text-sm text-gray-600 leading-relaxed mt-2">
-                {tips[0].body}
-              </p>
+                <h2 className="font-medium text-gray-900">
+                  Crop Tips
+                </h2>
+              </div>
+
+              <div className="space-y-3">
+
+                {cropTips.map((tip) => (
+
+                  <div
+                    key={tip.id}
+                    className="bg-green-50 rounded-lg p-4"
+                  >
+
+                    <div className="flex items-start justify-between gap-3">
+
+                      <h3 className="text-sm font-medium text-gray-900">
+                        {tip.title}
+                      </h3>
+
+                      {tip.severity && (
+                        <span className="text-xs text-green-700 capitalize">
+                          {tip.severity}
+                        </span>
+                      )}
+
+                    </div>
+
+                    <p className="text-xs text-gray-600 leading-relaxed mt-1">
+                      {tip.body}
+                    </p>
+
+                  </div>
+
+                ))}
+
+              </div>
             </div>
           )}
 
+          {/* Weather Tips */}
+          {weatherTips.length > 0 && (
+            <div className="bg-white rounded-xl border border-gray-100 p-5">
+
+              <div className="flex items-center gap-2 mb-4">
+
+                <CloudRain
+                  size={16}
+                  className="text-blue-500"
+                />
+
+                <h2 className="font-medium text-gray-900">
+                  Weather Tips
+                </h2>
+
+              </div>
+
+              <div className="space-y-3">
+
+                {weatherTips.map((tip) => (
+
+                  <div
+                    key={tip.id}
+                    className="bg-blue-50 rounded-lg p-4"
+                  >
+
+                    <div className="flex items-start justify-between gap-3">
+
+                      <h3 className="text-sm font-medium text-gray-900">
+                        {tip.title}
+                      </h3>
+
+                      {tip.severity && (
+                        <span className="text-xs text-blue-700 capitalize">
+                          {tip.severity}
+                        </span>
+                      )}
+
+                    </div>
+
+                    <p className="text-xs text-gray-600 leading-relaxed mt-1">
+                      {tip.body}
+                    </p>
+
+                  </div>
+
+                ))}
+
+              </div>
+            </div>
+          )}
+
+          {/* No tips message */}
+          {cropTips.length === 0 &&
+            weatherTips.length === 0 && (
+              <div className="bg-white rounded-xl border border-gray-100 p-5">
+                <p className="text-sm text-gray-400">
+                  No tips available for this crop right now.
+                </p>
+              </div>
+            )}
+
           {/* Diagnosis history */}
           <div className="bg-white rounded-xl border border-gray-100 p-5">
+
             <h2 className="font-medium text-gray-900 mb-4">
               Diagnosis History
             </h2>
@@ -330,29 +458,37 @@ const CropDetail = () => {
             )}
 
             <div className="space-y-3">
+
               {diagnosisLogs.map((log) => (
+
                 <div
                   key={log._id}
                   className="bg-gray-50 rounded-lg p-4"
                 >
+
                   <div className="flex items-center justify-between mb-2">
 
                     <div className="flex items-center gap-2">
+
                       <div className="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center">
+
                         <Bug
                           size={14}
                           className="text-amber-600"
                         />
+
                       </div>
 
                       <p className="text-sm font-medium text-gray-900">
                         {log.disease}
                       </p>
+
                     </div>
 
                     <span className="text-xs bg-amber-50 text-amber-700 px-2 py-1 rounded-md">
                       {log.confidence}% match
                     </span>
+
                   </div>
 
                   {log.explanation && (
@@ -366,8 +502,11 @@ const CropDetail = () => {
                       log.createdAt
                     ).toLocaleDateString()}
                   </p>
+
                 </div>
+
               ))}
+
             </div>
           </div>
 

@@ -14,7 +14,6 @@ const Header = () => {
 
   useEffect(() => {
     fetchWeather("Port harcourt", "metric");
-    console.log("Weather data fetched:", weatherData);
   }, [fetchWeather]);
 
   const cityName = weatherData?.city?.name;
