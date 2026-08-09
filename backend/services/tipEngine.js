@@ -35,10 +35,10 @@ const getTipsForCrop = (crop) => {
   };
 };
 
-const daysBetween = (date1, date2) =>
-  Math.floor((date2 - date1) / (1000 * 60 * 60 * 24));
+// const daysBetween = (date1, date2) =>
+//   Math.floor((date2 - date1) / (1000 * 60 * 60 * 24));
 
-const severityRank = { warning: 3, important: 2, info: 1 };
+// const severityRank = { warning: 3, important: 2, info: 1 };
 
 // context = { weather: "heavyRain" | "drySpell" | ..., crops: [{ name, plantedOn, stage }] }
 // export const getRelevantTips = (context = {}) => {
