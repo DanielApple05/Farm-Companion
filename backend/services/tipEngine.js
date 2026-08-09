@@ -2,38 +2,59 @@
 const { maizeTips } = require("../knowledge/crops/maize.js");
 const { cassavaTips } = require("../knowledge/crops/cassava.js");
 const { calculateCropStage } = require("../utils/cropMaturity.js");
+const { getWeatherCondition } = require("../utils/weatherCondition.js");
 
-const getTipsForCrop = (crop) => {
+const getTipsForCrop = (crop, weatherData) => {
+  const cropName = crop.name.toLowerCase();
+
   const growth = calculateCropStage(
     crop.name,
     crop.plantedOn
   );
 
+  const weatherCondition = getWeatherCondition(weatherData);
+
   let recommendations = [];
 
-  if (crop.name.toLowerCase() === "maize") {
+  if (cropName === "maize") {
     recommendations = maizeTips;
   }
 
-  if (crop.name.toLowerCase() === "cassava") {
+  if (cropName === "cassava") {
     recommendations = cassavaTips;
   }
 
-  const tips = recommendations.filter(
-    (tip) => {
-      const cropMatches =
-        tip.crops?.includes(crop.name.toLowerCase()) ||
-        tip.crop?.toLowerCase() === crop.name.toLowerCase();
+  const matchingTips = recommendations.filter((tip) => {
+    const cropMatches =
+      tip.crops?.includes(cropName) ||
+      tip.crop?.toLowerCase() === cropName;
 
-      return cropMatches && tip.stage === growth.stage;
-    }
+    const stageMatches = tip.stage === growth.stage;
+
+    return cropMatches && stageMatches;
+  });
+
+  const cropTips = matchingTips.filter(
+    (tip) => tip.trigger?.type !== "weather"
   );
+
+  const weatherTips = matchingTips.filter((tip) => {
+    if (tip.trigger?.type !== "weather") {
+      return false;
+    }
+
+    return tip.trigger.value === weatherCondition;
+  });
 
   return {
     growth,
-    tips,
+    weatherCondition,
+    cropTips,
+    weatherTips,
   };
 };
+
+module.exports = { getTipsForCrop };
 
 // const daysBetween = (date1, date2) =>
 //   Math.floor((date2 - date1) / (1000 * 60 * 60 * 24));
