@@ -1,4 +1,4 @@
-import { CloudSun, Droplets, Wind, Calendar, Sprout, AlertTriangle } from "lucide-react";
+import { Calendar, Sprout, AlertTriangle } from "lucide-react";
 import Sidebar from "../components/sidebar";
 import Header from "../components/header";
 import { useEffect, useState } from "react";
