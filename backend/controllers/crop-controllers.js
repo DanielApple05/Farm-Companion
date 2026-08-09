@@ -69,10 +69,6 @@ const getCropById = async (req, res) => {
       return res.status(404).json({ message: "Crop not found" });
     }
 
-    const result = getTipsForCrop(crop);
-
-    console.log(result);
-
     // Ownership check
     if (!isOwnerMatch(crop.farm.owner, req.user.id)) {
       return res
@@ -80,10 +76,20 @@ const getCropById = async (req, res) => {
         .json({ message: "Not authorized to view this crop" });
     }
 
+    // Get weather for the farm location
+    const weatherData = await getWeather(crop.farm.location);
+
+    // Give both crop and weather data to the tip engine
+    const result = getTipsForCrop(crop, weatherData);
+
+    console.log("Tip engine result:", result);
+
     res.json({
       crop,
       growth: result.growth,
-      tips: result.tips,
+      weatherCondition: result.weatherCondition,
+      cropTips: result.cropTips,
+      weatherTips: result.weatherTips,
     });
   } catch (error) {
     console.error(error);
