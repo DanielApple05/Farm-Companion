@@ -1,6 +1,6 @@
 const Livestock = require("../models/Livestock");
 const Farm = require("../models/Farm");
-const { supportedLivestock } = require("../knowledge/livestock/availableStocks");
+const { animals } = require("../knowledge/livestock/stages");
 
 const isOwnerMatch = (ownerId, userId) => {
   if (!ownerId || !userId) return false;
@@ -10,10 +10,10 @@ const isOwnerMatch = (ownerId, userId) => {
 // POST /api/livestock
 // Creates a livestock group, links it to its parent farm, and confirms the farm belongs to the logged-in user
 const createLivestock = async (req, res) => {
-  const { type, breed, headcount, farmId } = req.body;
+  const { type, stage, breed, headcount, farmId } = req.body;
 
   try {
-    if (!type || !headcount || !farmId) {
+    if (!type || !stage || !headcount || !farmId) {
       return res.status(400).json({ message: "All feilds Are Required!" });
     }
 
@@ -25,6 +25,7 @@ const createLivestock = async (req, res) => {
 
     const livestock = await Livestock.create({
       type,
+      stage,
       breed,
       headcount,
       farm: farmId,
@@ -41,16 +42,20 @@ const createLivestock = async (req, res) => {
   }
 };
 
-// GET /api/supported-livestock
-// Returns a list of supported livestock types for the frontend to display in a dropdown
-const getSupportedLivestock = async (req, res) => {
+//Livestock supported types endpoint
+const getSupportedLivestock = (req, res) => {
   res.json(
-    supportedLivestock.map((livestock) => ({
-      id: livestock.id,
-      specie: livestock.specie,
+    animals.map((animal) => ({
+      id: animal.id,
+      type: animal.type,
+      name: animal.type,
+      stages: animal.stages,
     })),
   );
 };
+
+// Backward-compatible alias so any other code can still refer to the stage catalog function name.
+const getLivestockStages = getSupportedLivestock;
 
 // GET /api/livestock
 // Returns all livestock groups across every farm owned by the logged-in user
@@ -233,4 +238,5 @@ module.exports = {
   addHealthLog,
   deleteLivestock,
   getSupportedLivestock,
+  getLivestockStages,
 };
