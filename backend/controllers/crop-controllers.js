@@ -160,7 +160,7 @@ const deleteCrop = async (req, res) => {
   }
 };
 
-const getSupportedCrops = (req, res) => {
+const getSupportedCrops = async (req, res) => {
   res.json(
     supportedCrops.map((crop) => ({
       id: crop.id,

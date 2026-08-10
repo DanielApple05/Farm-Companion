@@ -1,4 +1,4 @@
-const supportedCrops = [
+export const supportedCrops = [
   {
     id: "maize",
     name: "Maize",
@@ -8,5 +8,3 @@ const supportedCrops = [
     name: "Cassava",
   },
 ];
-
-module.exports = { supportedCrops };

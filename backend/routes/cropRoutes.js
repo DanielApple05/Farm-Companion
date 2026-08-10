@@ -12,9 +12,9 @@ const {
  
 router.post("/", protect, createCrop);
 router.get("/", protect, getCrops);
+router.get("/supported", protect, getSupportedCrops);
 router.get("/:id", protect, getCropById);
 router.put("/:id", protect, updateCrop);
 router.delete("/:id", protect, deleteCrop);
-router.get("/supported", protect, getSupportedCrops);
  
 module.exports = router;
