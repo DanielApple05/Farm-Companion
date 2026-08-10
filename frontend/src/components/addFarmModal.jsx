@@ -1,146 +1,207 @@
 import { useState } from "react";
-import { X, MapPin, Sprout, PawPrint, Camera } from "lucide-react";
+import { X, MapPin, Camera, Loader2 } from "lucide-react";
 import { addFarm } from "../api/farm";
 
-// Dummy: pretend this came from the user's profile, captured at signup/login
+// Temporary default.
+// Later this can come from the user's profile/location service.
 const detectedLocation = "Port Harcourt, Rivers State";
 
 const AddFarmModal = ({ onClose, onAdded }) => {
-  const [type, setType] = useState("crop"); // "crop" | "livestock"
   const [name, setName] = useState("");
   const [location, setLocation] = useState(detectedLocation);
-  const [firstEntry, setFirstEntry] = useState("");
+
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
 
-  // Placeholder — wire up real submit logic later
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
+
+    if (!name.trim() || !location.trim()) {
+      setMessage("Farm name and location are required.");
+      setIsSuccess(false);
+      return;
+    }
 
     try {
-      setLoading(true)
-      const res = await addFarm({ name, location, type });
+      setLoading(true);
+      setMessage("");
+      setIsSuccess(false);
+
+      const response = await addFarm({
+        name: name.trim(),
+        location: location.trim(),
+      });
+
       setIsSuccess(true);
-      setMessage("Farm added successfully!");
-      onAdded?.(res.data);
+      setMessage("Farm created successfully!");
+
+      onAdded?.(response.data);
+
       setTimeout(() => {
         onClose();
-      }, 1200);
-
+      }, 1000);
     } catch (error) {
-      setMessage(error.response?.data?.message || error.message || "Can't add farm");
-
+      setIsSuccess(false);
+      setMessage(
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to create farm"
+      );
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl w-full max-w-md p-6 space-y-5">
+
         {/* Header */}
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-gray-900">Add Farm</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
-            <X
-              size={20} />
+          <div>
+            <h2 className="text-lg font-semibold text-gray-900">
+              Add Farm
+            </h2>
+
+            <p className="text-xs text-gray-400 mt-1">
+              Create your farm and add crops or livestock afterwards.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600"
+          >
+            <X size={20} />
           </button>
         </div>
 
-        {/* Farm type toggle */}
-        <form onSubmit={handleSubmit} className="space-y-3">
+        <form onSubmit={handleSubmit} className="space-y-4">
+
+          {/* Message */}
           {message && (
             <div
-              className={`w-full border text-sm rounded-xl px-4 py-3 mb-4 ${isSuccess
-                ? "bg-green-50 border-green-200 text-green-600"
-                : "bg-red-50 border-red-200 text-red-500"
-                }`}
+              className={`w-full border text-sm rounded-xl px-4 py-3 ${
+                isSuccess
+                  ? "bg-green-50 border-green-200 text-green-600"
+                  : "bg-red-50 border-red-200 text-red-500"
+              }`}
             >
               {message}
             </div>
           )}
-          <div className="grid grid-cols-2 gap-2 bg-gray-50 rounded-lg p-1">
-            <button
-              onClick={() => setType("crop")}
-              className={`flex items-center justify-center gap-2 text-sm py-2 rounded-md transition-colors ${type === "crop" ? "bg-white shadow text-green-700 font-medium" : "text-gray-500"
-                }`}
-            >
-              <Sprout size={16} />
-              Crop
-            </button>
-            <button
-              onClick={() => setType("livestock")}
-              className={`flex items-center justify-center gap-2 text-sm py-2 rounded-md transition-colors ${type === "livestock" ? "bg-white shadow text-amber-700 font-medium" : "text-gray-500"
-                }`}
-            >
-              <PawPrint size={16} />
-              Livestock
-            </button>
-          </div>
 
           {/* Farm name */}
           <div>
-            <label className="text-sm text-gray-700 font-medium">Farm name</label>
+            <label className="text-sm text-gray-700 font-medium">
+              Farm name
+            </label>
+
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. Rumuokoro Farm"
-              className="w-full mt-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-200"
+              placeholder="e.g. AgriFarm"
+              disabled={loading}
+              className="w-full mt-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-200 disabled:bg-gray-50"
             />
           </div>
 
-          {/* Location — auto-filled, still editable */}
+          {/* Location */}
           <div>
-            <label className="text-sm text-gray-700 font-medium">Location</label>
+            <label className="text-sm text-gray-700 font-medium">
+              Location
+            </label>
+
             <div className="relative mt-1">
-              <MapPin size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <MapPin
+                size={16}
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+              />
+
               <input
                 type="text"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-200"
+                disabled={loading}
+                className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-200 disabled:bg-gray-50"
               />
             </div>
-            <p className="text-xs text-gray-400 mt-1">Detected from your account — edit if this farm is elsewhere.</p>
+
+            <p className="text-xs text-gray-400 mt-1">
+              You can change this if the farm is located elsewhere.
+            </p>
           </div>
 
-          {/* First entry — label + placeholder swap based on farmType */}
-          <div>
-            <label className="text-sm text-gray-700 font-medium">
-              {type === "crop" ? "First crop to add" : "First livestock group to add"}
-            </label>
-            <input
-              type="text"
-              value={firstEntry}
-              onChange={(e) => setFirstEntry(e.target.value)}
-              placeholder={type === "crop" ? "e.g. Maize" : "e.g. Goats"}
-              className="w-full mt-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-200"
-            />
+          {/* What happens next */}
+          <div className="rounded-xl bg-gray-50 border border-gray-100 p-4">
+            <p className="text-sm font-medium text-gray-800">
+              What's next?
+            </p>
+
+            <div className="mt-3 space-y-2 text-xs text-gray-500">
+              <div className="flex items-center gap-2">
+                <span className="w-5 h-5 rounded-full bg-green-100 text-green-600 flex items-center justify-center font-medium">
+                  1
+                </span>
+                Create your farm
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span className="w-5 h-5 rounded-full bg-green-100 text-green-600 flex items-center justify-center font-medium">
+                  2
+                </span>
+                Add supported crops
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span className="w-5 h-5 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center font-medium">
+                  3
+                </span>
+                Add livestock and select their stage
+              </div>
+            </div>
           </div>
 
           {/* Optional photo */}
-          <button className="w-full flex items-center justify-center gap-2 text-sm text-gray-500 border-2 border-dashed border-gray-200 rounded-lg py-3 hover:border-green-300 hover:text-green-600 transition-colors">
+          <button
+            type="button"
+            disabled={loading}
+            className="w-full flex items-center justify-center gap-2 text-sm text-gray-500 border-2 border-dashed border-gray-200 rounded-lg py-3 hover:border-green-300 hover:text-green-600 transition-colors disabled:opacity-50"
+          >
             <Camera size={16} />
             Add a photo (optional)
           </button>
 
           {/* Actions */}
           <div className="flex gap-3 pt-2">
-            <div
+
+            <button
+              type="button"
               onClick={onClose}
-              className="flex-1 text-sm py-2.5 rounded-lg border text-center border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors"
+              disabled={loading}
+              className="flex-1 text-sm py-2.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors disabled:opacity-50"
             >
               Cancel
-            </div>
-            <button
-              type='Submit'
-              disabled={!name || !location || loading}
-              className="flex-1 text-sm py-2.5 rounded-lg bg-green-600 disabled:bg-gray-200 disabled:text-gray-400 text-white hover:bg-green-700 transition-colors"
-            >
-              Create Farm
             </button>
+
+            <button
+              type="submit"
+              disabled={!name.trim() || !location.trim() || loading}
+              className="flex-1 flex items-center justify-center gap-2 text-sm py-2.5 rounded-lg bg-green-600 disabled:bg-gray-200 disabled:text-gray-400 text-white hover:bg-green-700 transition-colors"
+            >
+              {loading ? (
+                <>
+                  <Loader2 size={15} className="animate-spin" />
+                  Creating...
+                </>
+              ) : (
+                "Create Farm"
+              )}
+            </button>
+
           </div>
         </form>
       </div>
