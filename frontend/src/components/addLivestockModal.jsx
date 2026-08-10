@@ -4,9 +4,6 @@ import { createLivestock } from "../api/livestock";
 import { getFarms } from "../api/farm";
 import { getSupportedLivestock } from "../api/livestock";
 
-
-// const livestockTypes = [{ id: 1, specie: "Poultry" }, { id: 2, specie: "Goats" }, { id: 3, specie: "Cattle" }, { id: 4, specie: "Sheep" }];
-
 const AddLivestockModal = ({ farmId, onClose, onAdded }) => {
   const [type, setType] = useState("");
   const [breed, setBreed] = useState("");
@@ -17,6 +14,7 @@ const AddLivestockModal = ({ farmId, onClose, onAdded }) => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [farmOptions, setFarmOptions] = useState([]);
   const [supportedLivestock, setSupportedLivestock] = useState([]);
+  const [loadingLivestock, setLoadingLivestock] = useState(false);
 
   // Placeholder — wire up real submit logic later
   const handleSubmit = async (e) => {
@@ -55,6 +53,7 @@ const AddLivestockModal = ({ farmId, onClose, onAdded }) => {
 
   useEffect(() => {
     const fetchSupportedLivestock = async () => {
+      setLoadingLivestock(true);
       try {
         const response = await getSupportedLivestock();
         setSupportedLivestock(response.data);
@@ -62,6 +61,8 @@ const AddLivestockModal = ({ farmId, onClose, onAdded }) => {
         setMessage(
           error?.response?.data?.message || "Failed to fetch supported livestock"
         );
+      } finally {
+        setLoadingLivestock(false);
       }
     };
 
@@ -92,21 +93,36 @@ const AddLivestockModal = ({ farmId, onClose, onAdded }) => {
           )}
           <div>
             <label className="text-sm text-gray-700 font-medium">Type</label>
-            <div className="grid grid-cols-4 gap-2 mt-1">
-              {supportedLivestock.map((t) => (
-                <div
-                  key={t._id}
-                  onClick={() => setType(t.specie)}
-                  className={`flex flex-col items-center gap-1 py-2 rounded-lg border text-xs transition-colors ${type === t.specie
-                    ? "border-amber-400 bg-amber-50 text-amber-700 font-medium"
-                    : "border-gray-200 text-gray-500 hover:border-gray-300"
-                    }`}
-                >
-                  <PawPrint size={16} />
-                  {t.specie}
-                </div>
-              ))}
-            </div>
+
+            {loadingLivestock ? (
+              <div className="xl:flex justify-between grid grid-cols-4 gap-2 mt-1">
+                {Array.from({ length: 4 }).map((_, index) => (
+                  <div
+                    key={index}
+                    className="flex  flex-col items-center gap-2 py-1 rounded-lg border border-gray-100 animate-pulse"
+                  >
+                    <div className="w-4 h-2 rounded-full bg-gray-200" />
+                    <div className="h-2.5 w-12 rounded bg-gray-200" />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-4 gap-2 mt-1">
+                {supportedLivestock.map((t) => (
+                  <div
+                    key={t.id}
+                    onClick={() => setType(t.id)}
+                    className={`flex flex-col items-center gap-1 py-2 rounded-lg border text-xs transition-colors ${type === t.id
+                        ? "border-amber-400 bg-amber-50 text-amber-700 font-medium"
+                        : "border-gray-200 text-gray-500 hover:border-gray-300"
+                      }`}
+                  >
+                    <PawPrint size={16} />
+                    {t.name}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Breed */}
