@@ -37,7 +37,7 @@ const Chat = () => {
       <div className="flex min-h-screen">
         <Sidebar />
         <MobileNav />
-        <div className="w-full p-6 mt-20 bg-gray-50 flex flex-col" style={{ height: "calc(100vh - 5rem)" }}>
+        <div className="w-full p-6 xl:mt-20 mt-28 bg-gray-50 flex flex-col" style={{ height: "calc(100vh - 5rem)" }}>
           {/* Page header */}
           <div className="mb-4">
             <h1 className="text-2xl font-semibold text-gray-900">Ask AI Assistant</h1>

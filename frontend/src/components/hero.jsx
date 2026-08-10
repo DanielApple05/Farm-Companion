@@ -146,7 +146,7 @@ const Hero = ({
             </p>
 
             {/* Stats */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 pt-2">
+            <div className="grid grid-cols-2 gap-2 sm:gap-3 pt-2">
 
               {stats.map(
                 ({ label, value, loading, icon: Icon, tint }) => (

@@ -70,7 +70,7 @@ const Dashboard = () => {
       <div className="flex min-h-screen">
         <Sidebar />
         <MobileNav />
-        <main className="w-full mt-20 bg-gray-50 overflow-y-auto">
+        <main className="w-full xl:mt-20 mt-28 bg-gray-50 overflow-y-auto">
           <div className="space-y-6 pb-10">
 
             {/* Hero */}
@@ -130,26 +130,26 @@ const Dashboard = () => {
             {/* Advisory preview */}
             <section className="px-6">
               <div className="bg-white border border-gray-100 rounded-xl p-5">
-               
-                  <div className="flex justify-between items-start gap-3">
-                    <div className="w-9 h-9 rounded-lg bg-green-50 flex items-center justify-center">
-                      <Lightbulb
-                        size={18}
-                        className="text-green-600"
-                      />
-                    </div>
 
-                    <div>
-                      <h2 className="font-semibold text-gray-900">
-                        Farm Advisory
-                      </h2>
-
-                      <p className="text-xs text-gray-500 mt-1">
-                        Recommendations based on your crops,
-                        livestock and current farm conditions.
-                      </p>
-                    </div>
+                <div className="xl:grid flex justify-between items-start gap-3">
+                  <div className="w-9 h-9 rounded-lg bg-green-50 flex items-center justify-center">
+                    <Lightbulb
+                      size={18}
+                      className="text-green-600"
+                    />
                   </div>
+
+                  <div>
+                    <h2 className="font-semibold text-gray-900">
+                      Farm Advisory
+                    </h2>
+
+                    <p className="text-xs text-gray-500 mt-1">
+                      Recommendations based on your crops,
+                      livestock and current farm conditions.
+                    </p>
+                  </div>
+                </div>
 
 
                 <div className="grid grid-cols-2 gap-3 mt-4">
@@ -296,9 +296,8 @@ const Dashboard = () => {
                         </div>
 
                         <span
-                          className={`text-xs px-2 py-1 rounded-md shrink-0 ${
-                            riskStyles[diagnosis.risk]
-                          }`}
+                          className={`text-xs px-2 py-1 rounded-md shrink-0 ${riskStyles[diagnosis.risk]
+                            }`}
                         >
                           {diagnosis.risk} Risk
                         </span>

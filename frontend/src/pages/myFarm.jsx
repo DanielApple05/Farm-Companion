@@ -54,7 +54,7 @@ const MyFarms = () => {
       <div className="flex min-h-screen">
         <Sidebar />
          <MobileNav />
-        <main className="w-full bg-gray-50 p-4 sm:p-6 mt-24 sm:pt-28 xl:pt-26 space-y-6">
+        <main className="w-full bg-gray-50 p-4 sm:p-6 xl:mt-20 mt-28 space-y-6">
 
           {/* Page header */}
           <div className="flex items-center justify-between gap-4">
