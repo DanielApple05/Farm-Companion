@@ -77,16 +77,9 @@ const getCropById = async (req, res) => {
         .json({ message: "Not authorized to view this crop" });
     }
 
-    console.log("Crop found:", crop.name);
-    console.log("Farm location:", crop.farm.location);
-
     const weatherData = await getWeather(crop.farm.location);
 
-    console.log("Weather data received:", weatherData);
-
     const result = getTipsForCrop(crop, weatherData);
-
-    console.log("Tip engine result:", result);
 
     res.json({
       crop,

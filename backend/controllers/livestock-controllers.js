@@ -1,6 +1,7 @@
 const Livestock = require("../models/Livestock");
 const Farm = require("../models/Farm");
 const { animals } = require("../knowledge/livestock/stages");
+const { getTipsForLivestock } = require("../services/tipEngine");
 
 const isOwnerMatch = (ownerId, userId) => {
   if (!ownerId || !userId) return false;
@@ -83,6 +84,7 @@ const getLivestockById = async (req, res) => {
       "name location owner",
     );
 
+
     if (!livestock) {
       return res.status(404).json({ message: "Livestock not found" });
     }
@@ -93,7 +95,12 @@ const getLivestockById = async (req, res) => {
         .json({ message: "Not authorized to view this livestock" });
     }
 
-    res.json(livestock);
+    const result = getTipsForLivestock(livestock);
+
+    res.json({
+      livestock,
+      livestockTips: result,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });

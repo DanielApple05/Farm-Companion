@@ -1,6 +1,12 @@
 // import { generalFarmTips } from "../knowledge/general";
 const { maizeTips } = require("../knowledge/crops/maize.js");
 const { cassavaTips } = require("../knowledge/crops/cassava.js");
+
+const { poultryTips } = require("../knowledge/livestock/poultry.js");
+const { goatTips } = require("../knowledge/livestock/goats.js");
+const { sheepTips } = require("../knowledge/livestock/sheep.js");
+const { cattleTips } = require("../knowledge/livestock/cattle.js");
+
 const { calculateCropStage } = require("../utils/cropMaturity.js");
 const { getWeatherCondition } = require("../utils/weatherCondition.js");
 
@@ -54,7 +60,52 @@ const getTipsForCrop = (crop, weatherData) => {
   };
 };
 
-module.exports = { getTipsForCrop };
+
+// LIVESTOCK TIPS
+
+const getTipsForLivestock = (livestock) => {
+  const livestockType = livestock.type.toLowerCase();
+
+  let recommendations = [];
+
+  if (livestockType === "poultry") {
+    recommendations = poultryTips;
+  }
+
+  if (livestockType === "goats") {
+    recommendations = goatTips;
+  }
+
+  if (livestockType === "sheep") {
+    recommendations = sheepTips;
+  }
+
+  if (livestockType === "cattle") {
+    recommendations = cattleTips;
+  }
+
+  const matchingTips = recommendations.filter((tip) => {
+    return (
+      tip.type?.toLowerCase() === livestockType &&
+      tip.stage?.toLowerCase() === livestock.stage?.toLowerCase()
+    );
+  });
+
+  return {
+    type: livestock.type,
+    stage: livestock.stage,
+    livestockTips: matchingTips.flatMap(
+      (tip) => tip.tips || []
+    ),
+  };
+};
+
+
+module.exports = {
+  getTipsForCrop,
+  getTipsForLivestock,
+};
+
 
 // const daysBetween = (date1, date2) =>
 //   Math.floor((date2 - date1) / (1000 * 60 * 60 * 24));
@@ -122,8 +173,4 @@ module.exports = { getTipsForCrop };
 //   return rotated.slice(0, count);
 // };
 
-module.exports = {
-  getTipsForCrop,
-  // getRelevantTips,
-  // getDailyTips,
-};
+
