@@ -2,6 +2,7 @@ const Crop = require("../models/Crop");
 const Farm = require("../models/Farm");
 const { getTipsForCrop } = require("../services/tipEngine");
 const { getWeather } = require("../services/weatherService");
+const { supportedCrops } = require("../knowledge/crops/availableCrops");
 
 const isOwnerMatch = (ownerId, userId) => {
   if (!ownerId || !userId) return false;
@@ -159,4 +160,13 @@ const deleteCrop = async (req, res) => {
   }
 };
 
-module.exports = { createCrop, getCrops, getCropById, updateCrop, deleteCrop };
+const getSupportedCrops = (req, res) => {
+  res.json(
+    supportedCrops.map((crop) => ({
+      id: crop.id,
+      name: crop.name,
+    }))
+  );
+};
+
+module.exports = { createCrop, getCrops, getCropById, updateCrop, deleteCrop, getSupportedCrops };
