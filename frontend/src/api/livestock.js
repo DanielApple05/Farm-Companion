@@ -1,6 +1,7 @@
 import API from "./axios";
 
 export const createLivestock = (data) => API.post('/livestock', data);
+export const getSupportedLivestock = (data) => API.get('/livestock/supported', data);
 export const getLivestock = (data) => API.get('/livestock', data);
 export const getLivestockById = (id) => API.get(`/livestock/${id}`);
 export const deleteLivestock = (id) => API.delete(`/livestock/${id}`);

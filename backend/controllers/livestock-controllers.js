@@ -1,5 +1,6 @@
 const Livestock = require("../models/Livestock");
 const Farm = require("../models/Farm");
+const { supportedLivestock } = require("../knowledge/livestock/availableStocks");
 
 const isOwnerMatch = (ownerId, userId) => {
   if (!ownerId || !userId) return false;
@@ -12,7 +13,7 @@ const createLivestock = async (req, res) => {
   const { type, breed, headcount, farmId } = req.body;
 
   try {
-    if (!type || !headcount || !farmId ) {
+    if (!type || !headcount || !farmId) {
       return res.status(400).json({ message: "All feilds Are Required!" });
     }
 
@@ -40,6 +41,17 @@ const createLivestock = async (req, res) => {
   }
 };
 
+// GET /api/supported-livestock
+// Returns a list of supported livestock types for the frontend to display in a dropdown
+const getSupportedLivestock = async (req, res) => {
+  res.json(
+    supportedLivestock.map((livestock) => ({
+      id: livestock.id,
+      specie: livestock.specie,
+    })),
+  );
+};
+
 // GET /api/livestock
 // Returns all livestock groups across every farm owned by the logged-in user
 const getLivestock = async (req, res) => {
@@ -61,14 +73,19 @@ const getLivestock = async (req, res) => {
 // GET /api/livestock/:id
 const getLivestockById = async (req, res) => {
   try {
-    const livestock = await Livestock.findById(req.params.id).populate("farm", "name location owner");
+    const livestock = await Livestock.findById(req.params.id).populate(
+      "farm",
+      "name location owner",
+    );
 
     if (!livestock) {
       return res.status(404).json({ message: "Livestock not found" });
     }
 
-     if (!isOwnerMatch(livestock.farm.owner, req.user.id)) {
-      return res.status(403).json({ message: "Not authorized to view this livestock" });
+    if (!isOwnerMatch(livestock.farm.owner, req.user.id)) {
+      return res
+        .status(403)
+        .json({ message: "Not authorized to view this livestock" });
     }
 
     res.json(livestock);
@@ -81,14 +98,19 @@ const getLivestockById = async (req, res) => {
 // PUT /api/livestock/:id
 const updateLivestock = async (req, res) => {
   try {
-    const livestock = await Livestock.findById(req.params.id).populate("farm", "owner");
+    const livestock = await Livestock.findById(req.params.id).populate(
+      "farm",
+      "owner",
+    );
 
     if (!livestock) {
       return res.status(404).json({ message: "Livestock not found" });
     }
 
     if (livestock.farm.owner.toString() !== req.user.id) {
-      return res.status(403).json({ message: "Not authorized to update this livestock group" });
+      return res
+        .status(403)
+        .json({ message: "Not authorized to update this livestock group" });
     }
 
     const { breed, headcount, status } = req.body;
@@ -109,14 +131,19 @@ const updateLivestock = async (req, res) => {
 // Adds a scheduled vaccination entry to a livestock group
 const addVaccination = async (req, res) => {
   try {
-    const livestock = await Livestock.findById(req.params.id).populate("farm", "owner");
+    const livestock = await Livestock.findById(req.params.id).populate(
+      "farm",
+      "owner",
+    );
 
     if (!livestock) {
       return res.status(404).json({ message: "Livestock not found" });
     }
 
-      if (!isOwnerMatch(livestock.farm.owner, req.user.id)) {
-      return res.status(403).json({ message: "Not authorized to view this livestock" });
+    if (!isOwnerMatch(livestock.farm.owner, req.user.id)) {
+      return res
+        .status(403)
+        .json({ message: "Not authorized to view this livestock" });
     }
 
     const { name, dueDate } = req.body;
@@ -138,14 +165,19 @@ const addVaccination = async (req, res) => {
 // Adds a symptom/health entry, e.g. from the "Log symptom" flow
 const addHealthLog = async (req, res) => {
   try {
-    const livestock = await Livestock.findById(req.params.id).populate("farm", "owner");
+    const livestock = await Livestock.findById(req.params.id).populate(
+      "farm",
+      "owner",
+    );
 
     if (!livestock) {
       return res.status(404).json({ message: "Livestock not found" });
     }
 
     if (livestock.farm.owner.toString() !== req.user.id) {
-      return res.status(403).json({ message: "Not authorized to update this livestock group" });
+      return res
+        .status(403)
+        .json({ message: "Not authorized to update this livestock group" });
     }
 
     const { note, aiResponse } = req.body;
@@ -166,18 +198,25 @@ const addHealthLog = async (req, res) => {
 // DELETE /api/livestock/:id
 const deleteLivestock = async (req, res) => {
   try {
-    const livestock = await Livestock.findById(req.params.id).populate("farm", "owner");
+    const livestock = await Livestock.findById(req.params.id).populate(
+      "farm",
+      "owner",
+    );
 
     if (!livestock) {
       return res.status(404).json({ message: "Livestock not found" });
     }
 
-     if (!isOwnerMatch(livestock.farm.owner, req.user.id)) {
-      return res.status(403).json({ message: "Not authorized to delete this livestock" });
+    if (!isOwnerMatch(livestock.farm.owner, req.user.id)) {
+      return res
+        .status(403)
+        .json({ message: "Not authorized to delete this livestock" });
     }
 
     await Livestock.findByIdAndDelete(req.params.id);
-    await Farm.findByIdAndUpdate(livestock.farm._id, { $pull: { livestock: livestock._id } });
+    await Farm.findByIdAndUpdate(livestock.farm._id, {
+      $pull: { livestock: livestock._id },
+    });
 
     res.json({ message: "Livestock deleted" });
   } catch (error) {
@@ -193,4 +232,5 @@ module.exports = {
   addVaccination,
   addHealthLog,
   deleteLivestock,
+  getSupportedLivestock,
 };

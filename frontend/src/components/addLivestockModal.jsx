@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { X, PawPrint, Hash, Camera } from "lucide-react";
 import { createLivestock } from "../api/livestock";
 import { getFarms } from "../api/farm";
+import { getSupportedLivestock } from "../api/livestock";
 
 
-const livestockTypes = [{ id: 1, specie: "Poultry" }, { id: 2, specie: "Goats" }, { id: 3, specie: "Cattle" }, { id: 4, specie: "Sheep" }];
+// const livestockTypes = [{ id: 1, specie: "Poultry" }, { id: 2, specie: "Goats" }, { id: 3, specie: "Cattle" }, { id: 4, specie: "Sheep" }];
 
 const AddLivestockModal = ({ farmId, onClose, onAdded }) => {
   const [type, setType] = useState("");
@@ -15,6 +16,7 @@ const AddLivestockModal = ({ farmId, onClose, onAdded }) => {
   const [message, setMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
   const [farmOptions, setFarmOptions] = useState([]);
+  const [supportedLivestock, setSupportedLivestock] = useState([]);
 
   // Placeholder — wire up real submit logic later
   const handleSubmit = async (e) => {
@@ -51,6 +53,21 @@ const AddLivestockModal = ({ farmId, onClose, onAdded }) => {
     fetchFarm();
   }, [farmId]);
 
+  useEffect(() => {
+    const fetchSupportedLivestock = async () => {
+      try {
+        const response = await getSupportedLivestock();
+        setSupportedLivestock(response.data);
+      } catch (error) {
+        setMessage(
+          error?.response?.data?.message || "Failed to fetch supported livestock"
+        );
+      }
+    };
+
+    fetchSupportedLivestock();
+  }, []);
+
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl w-full max-w-md p-6 space-y-5">
@@ -76,7 +93,7 @@ const AddLivestockModal = ({ farmId, onClose, onAdded }) => {
           <div>
             <label className="text-sm text-gray-700 font-medium">Type</label>
             <div className="grid grid-cols-4 gap-2 mt-1">
-              {livestockTypes.map((t) => (
+              {supportedLivestock.map((t) => (
                 <div
                   key={t._id}
                   onClick={() => setType(t.specie)}
