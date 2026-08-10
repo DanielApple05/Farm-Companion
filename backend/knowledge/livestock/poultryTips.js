@@ -1,4 +1,4 @@
-const poultryTips = [
+export const poultryTips = [
   {
     type: "Poultry",
     stage: "Chick",
@@ -40,5 +40,3 @@ const poultryTips = [
     ]
   }
 ];
-
-module.exports = { poultryTips };
