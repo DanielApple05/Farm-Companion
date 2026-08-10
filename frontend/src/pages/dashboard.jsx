@@ -90,7 +90,7 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid xl:grid-cols-3 grid-cols-2 gap-4">
                 {quickActions.map(
                   ({ label, icon: Icon, path, description }) => (
                     <Link
@@ -130,8 +130,8 @@ const Dashboard = () => {
             {/* Advisory preview */}
             <section className="px-6">
               <div className="bg-white border border-gray-100 rounded-xl p-5">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-start gap-3">
+               
+                  <div className="flex justify-between items-start gap-3">
                     <div className="w-9 h-9 rounded-lg bg-green-50 flex items-center justify-center">
                       <Lightbulb
                         size={18}
@@ -151,14 +151,6 @@ const Dashboard = () => {
                     </div>
                   </div>
 
-                  <Link
-                    to="/advisory"
-                    className="text-sm text-green-600 flex items-center gap-1 hover:text-green-700"
-                  >
-                    View advisory
-                    <ChevronRight size={14} />
-                  </Link>
-                </div>
 
                 <div className="grid grid-cols-2 gap-3 mt-4">
 
