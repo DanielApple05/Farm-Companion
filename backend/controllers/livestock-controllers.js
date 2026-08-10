@@ -55,9 +55,6 @@ const getSupportedLivestock = (req, res) => {
   );
 };
 
-// Backward-compatible alias so any other code can still refer to the stage catalog function name.
-const getLivestockStages = getSupportedLivestock;
-
 // GET /api/livestock
 // Returns all livestock groups across every farm owned by the logged-in user
 const getLivestock = async (req, res) => {
@@ -245,5 +242,4 @@ module.exports = {
   addHealthLog,
   deleteLivestock,
   getSupportedLivestock,
-  getLivestockStages,
 };

@@ -35,6 +35,7 @@ const LivestockDetail = () => {
   const navigate = useNavigate();
 
   const [livestock, setLivestock] = useState(null);
+  const [livestockTips, setLivestockTips] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [vaccinationModalOpen, setVaccinationModalOpen] =
@@ -66,7 +67,8 @@ const LivestockDetail = () => {
 
         const response = await getLivestockById(id);
 
-        setLivestock(response.data);
+        setLivestock(response.data.livestock || null);
+        setLivestockTips(response.data.livestockTips?.livestockTips || response.data.livestockTips || []);
       } catch (error) {
         setMessage(
           error.response?.data?.message ||
@@ -137,22 +139,6 @@ const LivestockDetail = () => {
       new Date(b.createdAt) -
       new Date(a.createdAt)
   );
-
-  /*
-   * Supports both:
-   *
-   * livestock.livestockTips
-   *
-   * and
-   *
-   * livestock.tips
-   *
-   * so the UI doesn't break while the backend is being connected.
-   */
-  const livestockTips =
-    livestock.livestockTips ||
-    livestock.tips ||
-    [];
 
   return (
     <>

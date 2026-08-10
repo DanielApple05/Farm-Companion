@@ -1,4 +1,4 @@
-export const sheepTips = [
+const sheepTips = [
   {
     type: "Sheep",
     stage: "Lamb",
@@ -59,4 +59,6 @@ export const sheepTips = [
       "Make sure lambs are feeding properly."
     ]
   }
-];  
+];
+
+module.exports = { sheepTips };

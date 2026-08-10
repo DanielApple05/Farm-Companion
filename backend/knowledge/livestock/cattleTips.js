@@ -1,4 +1,4 @@
-export const cattleTips = [
+const cattleTips = [
   {
     type: "Cattle",
     stage: "Calf",
@@ -60,3 +60,5 @@ export const cattleTips = [
     ]
   }
 ];
+
+module.exports = { cattleTips };

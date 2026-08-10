@@ -2,10 +2,10 @@
 const { maizeTips } = require("../knowledge/crops/maize.js");
 const { cassavaTips } = require("../knowledge/crops/cassava.js");
 
-const { poultryTips } = require("../knowledge/livestock/poultry.js");
-const { goatTips } = require("../knowledge/livestock/goats.js");
-const { sheepTips } = require("../knowledge/livestock/sheep.js");
-const { cattleTips } = require("../knowledge/livestock/cattle.js");
+const { poultryTips } = require("../knowledge/livestock/poultryTips.js");
+const { goatTips } = require("../knowledge/livestock/goatTips.js");
+const { sheepTips } = require("../knowledge/livestock/sheepTips.js");
+const { cattleTips } = require("../knowledge/livestock/cattleTips.js");
 
 const { calculateCropStage } = require("../utils/cropMaturity.js");
 const { getWeatherCondition } = require("../utils/weatherCondition.js");

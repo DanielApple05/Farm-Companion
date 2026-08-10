@@ -1,4 +1,4 @@
-export const goatTips = [
+const goatTips = [
   {
     type: "Goats",
     stage: "Kid",
@@ -60,3 +60,5 @@ export const goatTips = [
     ]
   }
 ];
+
+module.exports = { goatTips };
