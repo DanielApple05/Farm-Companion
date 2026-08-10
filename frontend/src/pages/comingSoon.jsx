@@ -1,6 +1,7 @@
 import { Construction } from "lucide-react";
 import Sidebar from "../components/sidebar";
 import Header from "../components/header";
+import MobileNav from "../components/mobileNav";
 
 // Reusable — pass a title/message so this same page can cover News & Tips,
 // Market Prices, Community, or anything else not built yet.
@@ -10,6 +11,7 @@ const ComingSoon = ({ title = "Community", message = "This feature is on the way
       <Header />
       <div className="flex min-h-screen">
         <Sidebar />
+        <MobileNav />
         <div className="w-full p-6 mt-20 bg-gray-50 flex items-center justify-center">
           <div className="text-center max-w-sm">
             <div className="w-16 h-16 rounded-2xl bg-green-50 flex items-center justify-center mx-auto mb-4">

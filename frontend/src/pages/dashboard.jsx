@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 
 import Sidebar from "../components/sidebar";
+import MobileNav from "../components/mobileNav";
 import Header from "../components/header";
 import Hero from "../components/hero";
 import DailyTips from "../components/dailyTips";
@@ -68,7 +69,7 @@ const Dashboard = () => {
 
       <div className="flex min-h-screen">
         <Sidebar />
-
+        <MobileNav />
         <main className="w-full mt-20 bg-gray-50 overflow-y-auto">
           <div className="space-y-6 pb-10">
 

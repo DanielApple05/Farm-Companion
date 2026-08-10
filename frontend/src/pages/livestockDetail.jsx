@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 
 import Sidebar from "../components/sidebar";
+import MobileNav from "../components/mobileNav";
 import Header from "../components/header";
 import {
   getLivestockById,
@@ -55,8 +56,6 @@ const LivestockDetail = () => {
         error.response?.data?.message ||
           "Failed to delete livestock"
       );
-
-      console.error(error.response?.data);
     }
   };
 
@@ -68,14 +67,18 @@ const LivestockDetail = () => {
         const response = await getLivestockById(id);
 
         setLivestock(response.data.livestock || null);
-        setLivestockTips(response.data.livestockTips?.livestockTips || response.data.livestockTips || []);
+
+        const tips =
+          response.data.livestockTips?.livestockTips ||
+          response.data.livestockTips ||
+          [];
+
+        setLivestockTips(Array.isArray(tips) ? tips : []);
       } catch (error) {
         setMessage(
           error.response?.data?.message ||
             "Failed to load livestock"
         );
-
-        console.error(error);
       } finally {
         setLoading(false);
       }
@@ -91,14 +94,16 @@ const LivestockDetail = () => {
 
         <div className="flex min-h-screen">
           <Sidebar />
-
-          <div className="w-full p-6 mt-20 bg-gray-50 flex items-center gap-2 text-gray-500">
-            <Loader2
-              size={16}
-              className="animate-spin"
-            />
-            Loading livestock...
-          </div>
+          <MobileNav />
+          <main className="w-full pt-24 px-4 sm:px-6 pb-24 xl:pb-6 bg-gray-50 flex items-center justify-center">
+            <div className="flex items-center gap-2 text-gray-500 text-sm">
+              <Loader2
+                size={16}
+                className="animate-spin"
+              />
+              Loading livestock...
+            </div>
+          </main>
         </div>
       </>
     );
@@ -111,14 +116,13 @@ const LivestockDetail = () => {
 
         <div className="flex min-h-screen">
           <Sidebar />
-
-          <div className="w-full p-6 mt-20 bg-gray-50">
+          <main className="w-full pt-24 px-4 sm:px-6 pb-24 xl:pb-6 bg-gray-50">
             {message && (
               <div className="bg-red-50 border border-red-200 text-red-500 text-sm rounded-xl px-4 py-3">
                 {message}
               </div>
             )}
-          </div>
+          </main>
         </div>
       </>
     );
@@ -146,60 +150,65 @@ const LivestockDetail = () => {
 
       <div className="flex min-h-screen">
         <Sidebar />
+        <MobileNav />
+        <main className="w-full px-4 sm:px-6  pb-24 xl:pb-6 bg-gray-50 space-y-4 sm:space-y-6 xl:mt-20 mt-24 ">
 
-        <div className="w-full p-6 space-y-6 mt-20 bg-gray-50">
-
-          {/* Back link */}
+          {/* Back */}
           <Link
             to={
               livestock.farm?._id
                 ? `/farms/${livestock.farm._id}`
                 : "/livestock"
             }
-            className="text-sm text-gray-500 flex items-center gap-1 hover:text-gray-700"
+            className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700"
           >
             <ArrowLeft size={14} />
-
-            {livestock.farm?.name
-              ? `Back to ${livestock.farm.name}`
-              : "Back to livestock"}
+            <span className="truncate">
+              {livestock.farm?.name
+                ? `Back to ${livestock.farm.name}`
+                : "Back to livestock"}
+            </span>
           </Link>
 
-          {/* Livestock Header */}
-          <div className="bg-white rounded-xl border border-gray-100 p-5">
+          {/* Livestock header */}
+          <section className="bg-white rounded-2xl border border-gray-100 p-4 sm:p-5">
 
-            <div className="flex items-start justify-between">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-start gap-3 min-w-0">
 
-                <div className="w-11 h-11 rounded-lg bg-amber-50 flex items-center justify-center">
+                <div className="w-11 h-11 rounded-xl bg-amber-50 flex items-center justify-center shrink-0">
                   <PawPrint
                     size={20}
                     className="text-amber-600"
                   />
                 </div>
 
-                <div>
-                  <h1 className="text-xl font-semibold text-gray-900">
+                <div className="min-w-0">
+                  <h1 className="text-xl font-semibold text-gray-900 truncate">
                     {livestock.type}
                   </h1>
 
-                  <p className="text-sm text-gray-500 flex items-center gap-1 mt-1">
-                    <MapPin size={12} />
+                  <p className="text-sm text-gray-500 flex items-start gap-1 mt-1">
+                    <MapPin
+                      size={12}
+                      className="mt-0.5 shrink-0"
+                    />
 
-                    {livestock.farm?.name}
+                    <span className="truncate">
+                      {livestock.farm?.name}
 
-                    {livestock.farm?.location &&
-                      ` · ${livestock.farm.location}`}
+                      {livestock.farm?.location &&
+                        ` · ${livestock.farm.location}`}
+                    </span>
                   </p>
                 </div>
 
               </div>
 
-              <div className="flex items-center gap-2">
-
+              <div className="flex items-center justify-between sm:justify-end gap-2">
                 <span
-                  className={`text-xs px-2 py-1 rounded-md ${
+                  className={`text-xs px-2.5 py-1.5 rounded-md ${
                     statusStyles[livestock.status] ||
                     "bg-gray-50 text-gray-600"
                   }`}
@@ -211,14 +220,14 @@ const LivestockDetail = () => {
                   onDelete={handleDelete}
                   label="Delete Livestock"
                 />
-
               </div>
+
             </div>
 
-            {/* Livestock information */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-5 pt-4 border-t border-gray-100">
+            {/* Information */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mt-5 pt-4 border-t border-gray-100">
 
-              <div>
+              <div className="bg-gray-50 sm:bg-transparent rounded-lg p-3 sm:p-0">
                 <p className="text-xs text-gray-400">
                   Stage
                 </p>
@@ -228,7 +237,7 @@ const LivestockDetail = () => {
                 </p>
               </div>
 
-              <div>
+              <div className="bg-gray-50 sm:bg-transparent rounded-lg p-3 sm:p-0">
                 <p className="text-xs text-gray-400">
                   Headcount
                 </p>
@@ -238,17 +247,17 @@ const LivestockDetail = () => {
                 </p>
               </div>
 
-              <div>
+              <div className="bg-gray-50 sm:bg-transparent rounded-lg p-3 sm:p-0">
                 <p className="text-xs text-gray-400">
                   Breed
                 </p>
 
-                <p className="text-sm font-medium text-gray-900 mt-1">
+                <p className="text-sm font-medium text-gray-900 mt-1 truncate">
                   {livestock.breed || "Not specified"}
                 </p>
               </div>
 
-              <div>
+              <div className="bg-gray-50 sm:bg-transparent rounded-lg p-3 sm:p-0">
                 <p className="text-xs text-gray-400">
                   Status
                 </p>
@@ -260,16 +269,16 @@ const LivestockDetail = () => {
               </div>
 
             </div>
-          </div>
+          </section>
 
           {/* Farm Advice */}
-          <div className="bg-white rounded-xl border border-gray-100 p-5">
+          <section className="bg-white rounded-2xl border border-gray-100 p-4 sm:p-5">
 
-            <div className="flex items-start justify-between mb-4">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between mb-4">
 
               <div>
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center shrink-0">
                     <Lightbulb
                       size={16}
                       className="text-green-600"
@@ -282,20 +291,27 @@ const LivestockDetail = () => {
                 </div>
 
                 <p className="text-xs text-gray-400 mt-2">
-                  Tips based on your {livestock.type?.toLowerCase()}s
-                  current stage.
+                  Tips based on your{" "}
+                  {livestock.type?.toLowerCase()}s current stage.
                 </p>
               </div>
 
-              <div className="flex items-center gap-1 text-xs text-green-600 bg-green-50 px-2 py-1 rounded-md">
-                <Sparkles size={12} />
-                {livestock.stage}
-              </div>
+              {livestock.stage && (
+                <div className="self-start flex items-center gap-1 text-xs text-green-600 bg-green-50 px-2 py-1 rounded-md">
+                  <Sparkles size={12} />
+                  {livestock.stage}
+                </div>
+              )}
 
             </div>
 
             {livestockTips.length === 0 ? (
-              <div className="bg-gray-50 rounded-lg p-4 text-center">
+              <div className="bg-gray-50 rounded-xl p-5 text-center">
+                <Lightbulb
+                  size={20}
+                  className="mx-auto text-gray-300 mb-2"
+                />
+
                 <p className="text-xs text-gray-400">
                   No advice available for this stage yet.
                 </p>
@@ -306,7 +322,7 @@ const LivestockDetail = () => {
                 {livestockTips.map((tip, index) => (
                   <div
                     key={index}
-                    className="flex gap-3 bg-gray-50 rounded-lg p-3"
+                    className="flex items-start gap-3 bg-gray-50 rounded-xl p-3"
                   >
                     <div className="w-6 h-6 shrink-0 rounded-full bg-green-100 flex items-center justify-center">
                       <span className="text-xs text-green-700 font-medium">
@@ -323,21 +339,20 @@ const LivestockDetail = () => {
               </div>
             )}
 
-            {/* AI advisory */}
             <button
               type="button"
-              className="w-full mt-4 flex items-center justify-center gap-2 text-sm py-2.5 rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors"
+              className="w-full mt-4 flex items-center justify-center gap-2 text-sm py-2.5 rounded-xl bg-green-600 text-white hover:bg-green-700 active:bg-green-800 transition-colors"
             >
               <Sparkles size={15} />
               Get AI advice
             </button>
 
-          </div>
+          </section>
 
           {/* Upcoming Care */}
-          <div className="bg-white rounded-xl border border-gray-100 p-5">
+          <section className="bg-white rounded-2xl border border-gray-100 p-4 sm:p-5">
 
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
 
               <div>
                 <h2 className="font-medium text-gray-900">
@@ -353,7 +368,7 @@ const LivestockDetail = () => {
                 onClick={() =>
                   setVaccinationModalOpen(true)
                 }
-                className="flex items-center gap-1 text-sm text-green-600"
+                className="self-start sm:self-auto inline-flex items-center gap-1 text-sm text-green-600 hover:text-green-700"
               >
                 <PlusCircle size={14} />
                 Schedule
@@ -373,94 +388,99 @@ const LivestockDetail = () => {
               />
             )}
 
-            {vaccinations.length === 0 && (
-              <p className="text-xs text-gray-400">
-                No scheduled vaccinations yet.
-              </p>
-            )}
+            {vaccinations.length === 0 ? (
+              <div className="bg-gray-50 rounded-xl p-4 text-center">
+                <Syringe
+                  size={20}
+                  className="mx-auto text-gray-300 mb-2"
+                />
 
-            <div className="space-y-3">
+                <p className="text-xs text-gray-400">
+                  No scheduled vaccinations yet.
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-2">
 
-              {vaccinations.map((v, i) => {
+                {vaccinations.map((v, i) => {
 
-                const isOverdue =
-                  new Date(v.dueDate) <
-                    new Date() &&
-                  !v.completedOn;
+                  const isOverdue =
+                    new Date(v.dueDate) < new Date() &&
+                    !v.completedOn;
 
-                return (
-                  <div
-                    key={i}
-                    className="flex items-center gap-3 bg-gray-50 rounded-lg p-3"
-                  >
-
+                  return (
                     <div
-                      className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
-                        v.completedOn
-                          ? "bg-green-50"
-                          : isOverdue
-                          ? "bg-red-50"
-                          : "bg-amber-50"
-                      }`}
+                      key={i}
+                      className="flex items-start gap-3 bg-gray-50 rounded-xl p-3"
                     >
-                      {v.completedOn ? (
-                        <Droplet
-                          size={14}
-                          className="text-green-600"
-                        />
-                      ) : (
-                        <Syringe
-                          size={14}
-                          className={
-                            isOverdue
-                              ? "text-red-600"
-                              : "text-amber-600"
-                          }
-                        />
-                      )}
-                    </div>
 
-                    <div className="flex-1">
-
-                      <p className="text-sm font-medium text-gray-900">
-                        {v.name}
-                      </p>
-
-                      <p className="text-xs text-gray-500">
-                        {v.completedOn
-                          ? `Completed ${new Date(
-                              v.completedOn
-                            ).toLocaleDateString()}`
-                          : `Due ${new Date(
-                              v.dueDate
-                            ).toLocaleDateString()}`}
-                      </p>
-
-                    </div>
-
-                    {!v.completedOn && (
-                      <span
-                        className={`text-xs px-2 py-1 rounded-md ${
-                          isOverdue
-                            ? "bg-red-50 text-red-700"
-                            : "bg-gray-100 text-gray-500"
+                      <div
+                        className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
+                          v.completedOn
+                            ? "bg-green-50"
+                            : isOverdue
+                            ? "bg-red-50"
+                            : "bg-amber-50"
                         }`}
                       >
-                        {isOverdue
-                          ? "Overdue"
-                          : "Scheduled"}
-                      </span>
-                    )}
+                        {v.completedOn ? (
+                          <Droplet
+                            size={14}
+                            className="text-green-600"
+                          />
+                        ) : (
+                          <Syringe
+                            size={14}
+                            className={
+                              isOverdue
+                                ? "text-red-600"
+                                : "text-amber-600"
+                            }
+                          />
+                        )}
+                      </div>
 
-                  </div>
-                );
-              })}
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-900 truncate">
+                          {v.name}
+                        </p>
 
-            </div>
-          </div>
+                        <p className="text-xs text-gray-500 mt-0.5">
+                          {v.completedOn
+                            ? `Completed ${new Date(
+                                v.completedOn
+                              ).toLocaleDateString()}`
+                            : `Due ${new Date(
+                                v.dueDate
+                              ).toLocaleDateString()}`}
+                        </p>
+                      </div>
+
+                      {!v.completedOn && (
+                        <span
+                          className={`shrink-0 text-[11px] px-2 py-1 rounded-md ${
+                            isOverdue
+                              ? "bg-red-50 text-red-700"
+                              : "bg-gray-100 text-gray-500"
+                          }`}
+                        >
+                          {isOverdue
+                            ? "Overdue"
+                            : "Scheduled"}
+                        </span>
+                      )}
+
+                    </div>
+                  );
+                })}
+
+              </div>
+            )}
+
+          </section>
 
           {/* Health Log */}
-          <div className="bg-white rounded-xl border border-gray-100 p-5">
+          <section className="bg-white rounded-2xl border border-gray-100 p-4 sm:p-5">
 
             <div className="mb-4">
               <h2 className="font-medium text-gray-900">
@@ -472,70 +492,77 @@ const LivestockDetail = () => {
               </p>
             </div>
 
-            {healthLogs.length === 0 && (
-              <p className="text-xs text-gray-400">
-                No health entries logged yet.
-              </p>
-            )}
+            {healthLogs.length === 0 ? (
+              <div className="bg-gray-50 rounded-xl p-5 text-center">
+                <Activity
+                  size={20}
+                  className="mx-auto text-gray-300 mb-2"
+                />
 
-            <div className="space-y-3">
+                <p className="text-xs text-gray-400">
+                  No health entries logged yet.
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-3">
 
-              {healthLogs.map((log, i) => (
+                {healthLogs.map((log, i) => (
 
-                <div
-                  key={i}
-                  className="bg-gray-50 rounded-lg p-4"
-                >
+                  <div
+                    key={i}
+                    className="bg-gray-50 rounded-xl p-3 sm:p-4"
+                  >
 
-                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between mb-2">
 
-                    <p className="text-sm font-medium text-gray-900">
-                      {log.note}
-                    </p>
+                      <p className="text-sm font-medium text-gray-900">
+                        {log.note}
+                      </p>
 
-                    <span className="text-xs text-gray-400">
-                      {new Date(
-                        log.createdAt
-                      ).toLocaleDateString()}
-                    </span>
+                      <span className="text-xs text-gray-400">
+                        {new Date(
+                          log.createdAt
+                        ).toLocaleDateString()}
+                      </span>
+
+                    </div>
+
+                    {log.aiResponse ? (
+                      <div className="bg-white rounded-lg p-3 border border-gray-100">
+                        <div className="flex items-center gap-1 text-xs text-green-600 mb-1">
+                          <Sparkles size={12} />
+                          AI observation
+                        </div>
+
+                        <p className="text-xs text-gray-600 leading-relaxed">
+                          {log.aiResponse}
+                        </p>
+                      </div>
+                    ) : (
+                      <button className="text-xs text-green-600 flex items-center gap-1 mt-1">
+                        <MessageCircle size={12} />
+                        Ask AI about this
+                      </button>
+                    )}
 
                   </div>
 
-                  {log.aiResponse ? (
-                    <div className="bg-white rounded-lg p-3 border border-gray-100">
-                      <div className="flex items-center gap-1 text-xs text-green-600 mb-1">
-                        <Sparkles size={12} />
-                        AI observation
-                      </div>
+                ))}
 
-                      <p className="text-xs text-gray-600 leading-relaxed">
-                        {log.aiResponse}
-                      </p>
-                    </div>
-                  ) : (
-                    <button className="text-xs text-green-600 flex items-center gap-1 mt-1">
-                      <MessageCircle size={12} />
-                      Ask AI about this
-                    </button>
-                  )}
-
-                </div>
-
-              ))}
-
-            </div>
+              </div>
+            )}
 
             <button
               type="button"
-              className="w-full mt-4 flex items-center justify-center gap-2 text-sm py-2.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors"
+              className="w-full mt-4 flex items-center justify-center gap-2 text-sm py-2.5 rounded-xl border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors"
             >
               <PlusCircle size={14} />
               Log a new symptom
             </button>
 
-          </div>
+          </section>
 
-        </div>
+        </main>
       </div>
     </>
   );

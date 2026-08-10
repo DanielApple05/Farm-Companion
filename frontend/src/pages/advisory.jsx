@@ -18,6 +18,7 @@ import {
 } from "../api/livestock";
 import AdvisorySkeleton from "../components/advisorySkeleton";
 import WeatherCard from "../components/weatherCard";
+import MobileNav from "../components/mobileNav";
 
 const Advisory = () => {
   const {
@@ -40,11 +41,9 @@ const Advisory = () => {
       try {
         setTipsLoading(true);
 
-        /*
-         * -------------------------
-         * CROP WARNINGS
-         * -------------------------
-         */
+        // -------------------------
+        // CROP WARNINGS
+        // -------------------------
 
         const cropsResponse = await getCrops();
         const crops = cropsResponse.data || [];
@@ -58,8 +57,8 @@ const Advisory = () => {
             const data = response.data;
 
             const allTips = [
-              ...(data.cropTips || []),
-              ...(data.weatherTips || []),
+              ...(Array.isArray(data.cropTips) ? data.cropTips : []),
+              ...(Array.isArray(data.weatherTips) ? data.weatherTips : []),
             ];
 
             const warningTips = allTips.filter(
@@ -82,11 +81,9 @@ const Advisory = () => {
 
         setCropWarnings(warnings);
 
-        /*
-         * -------------------------
-         * LIVESTOCK WARNINGS
-         * -------------------------
-         */
+        // -------------------------
+        // LIVESTOCK WARNINGS
+        // -------------------------
 
         const livestockResponse = await getLivestock();
         const livestock = livestockResponse.data || [];
@@ -100,14 +97,19 @@ const Advisory = () => {
         const animalWarnings = livestockDetails
           .map((response) => {
             const payload = response.data || {};
-            const livestockPayload = payload.livestock || payload;
+            const livestockPayload =
+              payload.livestock || payload;
 
-            const tipsPayload = payload.livestockTips || {};
-            const allTips = Array.isArray(tipsPayload.livestockTips)
+            const tipsPayload =
+              payload.livestockTips || {};
+
+            const allTips = Array.isArray(
+              tipsPayload.livestockTips
+            )
               ? tipsPayload.livestockTips
               : Array.isArray(tipsPayload)
-                ? tipsPayload
-                : [];
+              ? tipsPayload
+              : [];
 
             if (allTips.length === 0) {
               return null;
@@ -123,7 +125,6 @@ const Advisory = () => {
           .slice(0, 3);
 
         setLivestockWarnings(animalWarnings);
-
       } catch (error) {
         console.error(
           "Failed to load advisories:",
@@ -152,11 +153,11 @@ const Advisory = () => {
         <div className="flex min-h-screen">
           <Sidebar />
 
-          <div className="w-full p-6 mt-20 bg-gray-50">
+          <main className="w-full mt-20 bg-gray-50 p-4 lg:p-6">
             <div className="bg-red-50 border border-red-200 text-red-600 rounded-xl p-4 text-sm">
               Failed to load weather information.
             </div>
-          </div>
+          </main>
         </div>
       </>
     );
@@ -171,27 +172,41 @@ const Advisory = () => {
 
       <div className="flex min-h-screen">
         <Sidebar />
-
-        <div className="w-full p-6 space-y-6 mt-20 bg-gray-50">
-
-          {/* Header */}
+        <MobileNav />
+        <main
+          className="
+            w-full
+            mt-26
+            bg-gray-50
+            p-4
+            lg:p-6
+            space-y-5
+            lg:space-y-6
+            pb-28
+            lg:pb-6
+            xl:mt-20
+          "
+        >
+          {/* Page Header */}
           <div>
-            <h1 className="text-2xl font-semibold text-gray-900">
+            <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">
               Advisory
             </h1>
 
-            <p className="text-gray-500 text-sm mt-1">
+            <p className="text-gray-500 text-xs sm:text-sm mt-1">
               Farm conditions, weather insights and important alerts.
             </p>
           </div>
 
           {/* Weather */}
-          <WeatherCard weatherData={weatherData} />
+          <section className="w-full">
+            <WeatherCard weatherData={weatherData} />
+          </section>
 
-          {/* Advisory summary */}
-          <div className="bg-white rounded-xl border border-gray-100 p-5">
-            <div className="flex items-center justify-between">
-              <div>
+          {/* Farm Overview */}
+          <section className="bg-white rounded-2xl border border-gray-100 p-4 sm:p-5">
+            <div className="flex items-center justify-between gap-3">
+              <div className="min-w-0">
                 <h2 className="font-medium text-gray-900">
                   Farm Overview
                 </h2>
@@ -202,83 +217,103 @@ const Advisory = () => {
               </div>
 
               <div
-                className={`w-10 h-10 rounded-lg flex items-center justify-center ${totalWarnings > 0
-                  ? "bg-amber-50"
-                  : "bg-green-50"
-                  }`}
+                className={`
+                  shrink-0
+                  w-9 h-9
+                  sm:w-10 sm:h-10
+                  rounded-xl
+                  flex
+                  items-center
+                  justify-center
+                  ${
+                    totalWarnings > 0
+                      ? "bg-amber-50"
+                      : "bg-green-50"
+                  }
+                `}
               >
                 {totalWarnings > 0 ? (
                   <AlertTriangle
-                    size={18}
+                    size={17}
                     className="text-amber-600"
                   />
                 ) : (
                   <CheckCircle2
-                    size={18}
+                    size={17}
                     className="text-green-600"
                   />
                 )}
               </div>
             </div>
 
+            {/* Summary cards */}
             <div className="grid grid-cols-2 gap-3 mt-4">
-
-              <div className="bg-gray-50 rounded-lg p-3">
+              <div className="bg-gray-50 rounded-xl p-3 sm:p-4">
                 <div className="flex items-center gap-2">
-                  <Sprout
-                    size={15}
-                    className="text-green-600"
-                  />
+                  <div className="w-7 h-7 rounded-lg bg-green-50 flex items-center justify-center">
+                    <Sprout
+                      size={14}
+                      className="text-green-600"
+                    />
+                  </div>
 
                   <span className="text-xs text-gray-500">
                     Crop alerts
                   </span>
                 </div>
 
-                <p className="text-xl font-semibold text-gray-900 mt-1">
+                <p className="text-lg sm:text-xl font-semibold text-gray-900 mt-2">
                   {cropWarnings.length}
                 </p>
               </div>
 
-              <div className="bg-gray-50 rounded-lg p-3">
+              <div className="bg-gray-50 rounded-xl p-3 sm:p-4">
                 <div className="flex items-center gap-2">
-                  <PawPrint
-                    size={15}
-                    className="text-amber-600"
-                  />
+                  <div className="w-7 h-7 rounded-lg bg-amber-50 flex items-center justify-center">
+                    <PawPrint
+                      size={14}
+                      className="text-amber-600"
+                    />
+                  </div>
 
                   <span className="text-xs text-gray-500">
                     Livestock alerts
                   </span>
                 </div>
 
-                <p className="text-xl font-semibold text-gray-900 mt-1">
+                <p className="text-lg sm:text-xl font-semibold text-gray-900 mt-2">
                   {livestockWarnings.length}
                 </p>
               </div>
-
             </div>
-          </div>
+          </section>
 
-          {/* Crop warnings */}
-          <div className="bg-white rounded-xl border border-gray-100 p-5">
-
+          {/* Crop Warnings */}
+          <section className="bg-white rounded-2xl border border-gray-100 p-4 sm:p-5">
             <div className="flex items-center gap-2 mb-4">
-              <Sprout
-                size={17}
-                className="text-green-600"
-              />
+              <div className="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center">
+                <Sprout
+                  size={16}
+                  className="text-green-600"
+                />
+              </div>
 
-              <h2 className="font-medium text-gray-900">
-                Crop Warnings
-              </h2>
+              <div>
+                <h2 className="font-medium text-gray-900">
+                  Crop Warnings
+                </h2>
+
+                <p className="text-xs text-gray-400">
+                  Things that may need your attention.
+                </p>
+              </div>
             </div>
 
             {cropWarnings.length === 0 ? (
-              <div className="flex items-center gap-3 bg-green-50 rounded-lg p-4">
+              <div className="flex items-start gap-3 bg-green-50 rounded-xl p-4">
                 <CheckCircle2
                   size={18}
-                  className="text-green-600"
+                  className="text-green-600 shrink-0 mt-0.5"
                 />
 
                 <div>
@@ -286,49 +321,50 @@ const Advisory = () => {
                     No crop warnings
                   </p>
 
-                  <p className="text-xs text-green-600 mt-0.5">
+                  <p className="text-xs text-green-600 mt-1 leading-relaxed">
                     Your crops currently have no important warnings.
                   </p>
                 </div>
               </div>
             ) : (
               <div className="space-y-4">
-
                 {cropWarnings.map((item) => (
                   <div
                     key={item.id}
-                    className="flex items-start gap-3"
+                    className="rounded-xl border border-gray-100 overflow-hidden"
                   >
-
-                    <div className="w-9 h-9 rounded-lg bg-amber-50 flex items-center justify-center shrink-0">
-                      <AlertTriangle
-                        size={15}
-                        className="text-amber-600"
-                      />
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-
-                      <div className="flex items-center justify-between gap-3">
-
-                        <div>
-                          <p className="text-sm font-medium text-gray-900">
-                            {item.crop?.name}
-                          </p>
-
-                          <p className="text-xs text-gray-400 mt-0.5">
-                            {item.growth?.stage}
-                          </p>
+                    {/* Crop header */}
+                    <div className="p-3 sm:p-4">
+                      <div className="flex items-start gap-3">
+                        <div className="w-9 h-9 rounded-lg bg-amber-50 flex items-center justify-center shrink-0">
+                          <AlertTriangle
+                            size={15}
+                            className="text-amber-600"
+                          />
                         </div>
 
-                        <span className="text-xs px-2 py-1 rounded-md bg-amber-50 text-amber-700">
-                          Warning
-                        </span>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="min-w-0">
+                              <p className="text-sm font-medium text-gray-900 truncate">
+                                {item.crop?.name}
+                              </p>
 
+                              <p className="text-xs text-gray-400 mt-0.5">
+                                {item.growth?.stage ||
+                                  "Current growth stage"}
+                              </p>
+                            </div>
+
+                            <span className="shrink-0 text-[10px] sm:text-xs px-2 py-1 rounded-md bg-amber-50 text-amber-700">
+                              Warning
+                            </span>
+                          </div>
+                        </div>
                       </div>
 
-                      <div className="mt-2 space-y-2">
-
+                      {/* Tips */}
+                      <div className="mt-3 space-y-2">
                         {item.tips.map((tip, index) => (
                           <div
                             key={tip.id || index}
@@ -343,36 +379,40 @@ const Advisory = () => {
                             </p>
                           </div>
                         ))}
-
                       </div>
-
                     </div>
                   </div>
                 ))}
-
               </div>
             )}
-          </div>
+          </section>
 
-          {/* Livestock warnings */}
-          <div className="bg-white rounded-xl border border-gray-100 p-5">
-
+          {/* Livestock Warnings */}
+          <section className="bg-white rounded-2xl border border-gray-100 p-4 sm:p-5">
             <div className="flex items-center gap-2 mb-4">
-              <PawPrint
-                size={17}
-                className="text-amber-600"
-              />
+              <div className="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center">
+                <PawPrint
+                  size={16}
+                  className="text-amber-600"
+                />
+              </div>
 
-              <h2 className="font-medium text-gray-900">
-                Livestock Warnings
-              </h2>
+              <div>
+                <h2 className="font-medium text-gray-900">
+                  Livestock Warnings
+                </h2>
+
+                <p className="text-xs text-gray-400">
+                  Health and care information for your animals.
+                </p>
+              </div>
             </div>
 
             {livestockWarnings.length === 0 ? (
-              <div className="flex items-center gap-3 bg-green-50 rounded-lg p-4">
+              <div className="flex items-start gap-3 bg-green-50 rounded-xl p-4">
                 <CheckCircle2
                   size={18}
-                  className="text-green-600"
+                  className="text-green-600 shrink-0 mt-0.5"
                 />
 
                 <div>
@@ -380,55 +420,64 @@ const Advisory = () => {
                     No livestock warnings
                   </p>
 
-                  <p className="text-xs text-green-600 mt-0.5">
+                  <p className="text-xs text-green-600 mt-1 leading-relaxed">
                     Your livestock currently have no important warnings.
                   </p>
                 </div>
               </div>
             ) : (
               <div className="space-y-4">
-
                 {livestockWarnings.map((item) => (
                   <div
                     key={item.id}
-                    className="flex items-start gap-3"
+                    className="rounded-xl border border-gray-100 overflow-hidden"
                   >
-
-                    <div className="w-9 h-9 rounded-lg bg-amber-50 flex items-center justify-center shrink-0">
-                      <AlertTriangle
-                        size={15}
-                        className="text-amber-600"
-                      />
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-
-                      <div className="flex items-center justify-between gap-3">
-
-                        <div>
-                          <p className="text-sm font-medium text-gray-900">
-                            {item.livestock?.type}
-                          </p>
-
-                          <p className="text-xs text-gray-400 mt-0.5">
-                            {item.livestock?.stage}
-                            {item.livestock?.headcount
-                              ? ` · ${item.livestock.headcount} heads`
-                              : ""}
-                          </p>
+                    <div className="p-3 sm:p-4">
+                      {/* Livestock header */}
+                      <div className="flex items-start gap-3">
+                        <div className="w-9 h-9 rounded-lg bg-amber-50 flex items-center justify-center shrink-0">
+                          <AlertTriangle
+                            size={15}
+                            className="text-amber-600"
+                          />
                         </div>
 
-                        <span className="text-xs px-2 py-1 rounded-md bg-amber-50 text-amber-700">
-                          Warning
-                        </span>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="min-w-0">
+                              <p className="text-sm font-medium text-gray-900 truncate">
+                                {item.livestock?.type}
+                              </p>
 
+                              <p className="text-xs text-gray-400 mt-0.5">
+                                {item.livestock?.stage ||
+                                  "Current stage"}
+
+                                {item.livestock?.headcount
+                                  ? ` · ${item.livestock.headcount} heads`
+                                  : ""}
+                              </p>
+                            </div>
+
+                            <span className="shrink-0 text-[10px] sm:text-xs px-2 py-1 rounded-md bg-amber-50 text-amber-700">
+                              Warning
+                            </span>
+                          </div>
+                        </div>
                       </div>
 
-                      <div className="mt-2 space-y-2">
-
+                      {/* Advice */}
+                      <div className="mt-3 space-y-2">
                         {item.tips.map((tip, index) => {
-                          const body = typeof tip === "string" ? tip : tip.body;
-                          const title = typeof tip === "string" ? "Livestock advice" : tip.title;
+                          const body =
+                            typeof tip === "string"
+                              ? tip
+                              : tip.body;
+
+                          const title =
+                            typeof tip === "string"
+                              ? "Livestock advice"
+                              : tip.title;
 
                           return (
                             <div
@@ -445,18 +494,14 @@ const Advisory = () => {
                             </div>
                           );
                         })}
-
                       </div>
-
                     </div>
                   </div>
                 ))}
-
               </div>
             )}
-          </div>
-
-        </div>
+          </section>
+        </main>
       </div>
     </>
   );

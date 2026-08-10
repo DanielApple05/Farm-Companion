@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Send, Sprout, User } from "lucide-react";
 import Sidebar from "../components/sidebar";
 import Header from "../components/header";
+import MobileNav from "../components/mobileNav";
 
 // ---- Dummy conversation (swap for real Claude API messages later) ----
 const initialMessages = [
@@ -35,6 +36,7 @@ const Chat = () => {
       <Header />
       <div className="flex min-h-screen">
         <Sidebar />
+        <MobileNav />
         <div className="w-full p-6 mt-20 bg-gray-50 flex flex-col" style={{ height: "calc(100vh - 5rem)" }}>
           {/* Page header */}
           <div className="mb-4">

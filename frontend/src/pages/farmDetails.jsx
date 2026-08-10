@@ -21,6 +21,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 
 import FarmFinances from "../components/farmFinances";
 import DeleteButton from "../components/deleteButton";
+import MobileNav from "../components/mobileNav";
 
 const statusStyles = {
   Healthy: "bg-green-50 text-green-700",
@@ -91,7 +92,7 @@ const FarmDetail = () => {
 
         <div className="flex min-h-screen">
           <Sidebar />
-
+           <MobileNav />
           <div className="flex-1 mt-20 p-6 bg-gray-50">
             <div className="animate-pulse space-y-6">
 
@@ -159,12 +160,12 @@ const FarmDetail = () => {
 
       <div className="flex min-h-screen">
         <Sidebar />
-
-        <div className="w-full p-6 space-y-6 mt-20 bg-gray-50">
+        <MobileNav />
+        <div className="w-full p-6 space-y-6 xl:mt-20 mt-24 bg-gray-50">
 
           {/* Farm header */}
-          <div className="bg-white rounded-xl border border-gray-100 p-5">
-            <div className="flex items-start justify-between gap-4">
+          <div className="bg-white rounded-xl border border-gray-100 p-5 ">
+            <div className="items-start justify-between gap-4 xl:flex grid">
 
               <div>
                 <h1 className="text-2xl font-semibold text-gray-900">
@@ -218,7 +219,7 @@ const FarmDetail = () => {
           </div>
 
           {/* Quick stats */}
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid xl:grid-cols-3 grid-cols-2 gap-4">
 
             {/* Crops */}
             <div className="bg-white rounded-xl border border-gray-100 p-4 flex items-center gap-3">

@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { getCrops } from "../api/crops";
 import CropsLoading from "../components/cropLoadingGrid";
 import { Link } from "react-router-dom";
+import MobileNav from "../components/mobileNav";
 
 const statusStyles = {
   Healthy: "bg-green-50 text-green-700",
@@ -39,7 +40,8 @@ const Crops = () => {
       <Header />
       <div className="flex min-h-screen">
         <Sidebar />
-        <div className="w-full p-6 space-y-6 mt-20 bg-gray-50">
+        <MobileNav />
+        <div className="w-full p-6 space-y-6 xl:mt-20 mt-24 bg-gray-50">
           {/* Page header */}
           <div className="flex items-center justify-between">
             <div>

@@ -3,6 +3,7 @@ import { Newspaper, ExternalLink, Lightbulb, Loader2 } from "lucide-react";
 import Sidebar from "../components/sidebar";
 import Header from "../components/header";
 import { getAgricultureNews } from "../api/news";
+import MobileNav from "../components/mobileNav";
 // import WeeklyTip  from "../components/weeklyTip";
 // import MonthlyTip from "../components/monthlyTip";
 
@@ -33,7 +34,8 @@ const News = () => {
       <Header />
       <div className="flex min-h-screen">
         <Sidebar />
-        <div className="w-full p-6 space-y-8 mt-20 bg-gray-50">
+        <MobileNav />
+        <div className="w-full p-6 space-y-8 xl:mt-20 mt-24 bg-gray-50">
           {/* Page header */}
           <div>
             <h1 className="text-2xl font-semibold text-gray-900">News & Tips</h1>
