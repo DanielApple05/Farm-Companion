@@ -134,7 +134,7 @@ const DiagnoseCrop = () => {
 
         <Sidebar />
         <MobileNav />
-        <main className="w-full min-w-0 pt-20 xl:ml-0 xl:mt-0 mt-10">
+        <main className="w-full min-w-0 pt-20 xl:ml-0 xl:mt-0 mt-10 mb-20">
 
           <div className="p-4 sm:p-6 space-y-5 sm:space-y-6">
 

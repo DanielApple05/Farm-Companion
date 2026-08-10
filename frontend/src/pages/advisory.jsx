@@ -177,6 +177,7 @@ const Advisory = () => {
           className="
             w-full
             mt-28
+            mb-20
             bg-gray-50
             p-4
             lg:p-6

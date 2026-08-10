@@ -35,7 +35,7 @@ const News = () => {
       <div className="flex min-h-screen">
         <Sidebar />
         <MobileNav />
-        <div className="w-full p-6 space-y-8 xl:mt-20 mt-28 bg-gray-50">
+        <div className="w-full p-6 space-y-8 xl:mt-20 mt-28 bg-gray-50 mb-20">
           {/* Page header */}
           <div>
             <h1 className="text-2xl font-semibold text-gray-900">News & Tips</h1>

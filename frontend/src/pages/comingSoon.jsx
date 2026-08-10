@@ -12,7 +12,7 @@ const ComingSoon = ({ title = "Community", message = "This feature is on the way
       <div className="flex min-h-screen">
         <Sidebar />
         <MobileNav />
-        <div className="w-full p-6 mt-20 bg-gray-50 flex items-center justify-center">
+        <div className="w-full p-6 mt-20 mb-20 bg-gray-50 flex items-center justify-center">
           <div className="text-center max-w-sm">
             <div className="w-16 h-16 rounded-2xl bg-green-50 flex items-center justify-center mx-auto mb-4">
               <Construction size={28} className="text-green-600" />

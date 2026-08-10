@@ -151,7 +151,7 @@ const LivestockDetail = () => {
       <div className="flex min-h-screen">
         <Sidebar />
         <MobileNav />
-        <main className="w-full px-4 sm:px-6  pb-24 xl:pb-6 bg-gray-50 space-y-4 sm:space-y-6 xl:mt-20 mt-28 ">
+        <main className="w-full px-4 sm:px-6  pb-24 xl:pb-6 bg-gray-50 space-y-4 sm:space-y-6 xl:mt-20 mt-28 mb-20 ">
 
           {/* Back */}
           <Link
