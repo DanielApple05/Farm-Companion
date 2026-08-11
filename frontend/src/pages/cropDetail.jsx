@@ -87,10 +87,18 @@ const CropDetail = () => {
     try {
       const response = await harvestCrop(crop._id, harvestData);
 
-      setCrop(response.data.crop);
+      setCropData((prev) => ({
+        ...prev,
+        crop: response.data.crop,
+      }));
+
+      setShowHarvestModal(false);
     } catch (error) {
       console.error("Failed to harvest crop:", error);
-      throw error;
+
+      setMessage(
+        error.response?.data?.message || "Failed to harvest crop"
+      );
     }
   };
 
@@ -157,23 +165,34 @@ const CropDetail = () => {
         <MobileNav />
         <main className="w-full min-w-0 px-4 sm:px-6 py-5 sm:py-6 space-y-5 sm:space-y-6 xl:mt-20 mt-28 mb-20 bg-gray-50">
 
-          {/* Back */}
-          <Link
-            to={
-              crop.farm?._id
-                ? `/farms/${crop.farm._id}`
-                : "/crops"
-            }
-            className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700"
-          >
-            <ArrowLeft size={14} />
+          <div className="flex items-center justify-between">
+            {/* Back */}
+            <Link
+              to={
+                crop.farm?._id
+                  ? `/farms/${crop.farm._id}`
+                  : "/crops"
+              }
+              className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700"
+            >
+              <ArrowLeft size={14} />
 
-            <span className="truncate max-w-[250px]">
-              {crop.farm?.name
-                ? `Back to ${crop.farm.name}`
-                : "Back to crops"}
-            </span>
-          </Link>
+              <span className="truncate max-w-[250px]">
+                {crop.farm?.name
+                  ? `Back to ${crop.farm.name}`
+                  : "Back to crops"}
+              </span>
+
+            </Link>
+
+            {/* Delete Crop */}
+
+            <DeleteButton
+              onDelete={handleDelete}
+              label="Delete Crop"
+            />
+
+          </div>
 
           {/* Crop Header */}
           <section className="bg-white rounded-xl border border-gray-100 p-4 sm:p-5">
@@ -235,23 +254,8 @@ const CropDetail = () => {
 
               </div>
 
-              {/* Actions */}
-              <div className="flex justify-end sm:hidden">
-                <DeleteButton
-                  onDelete={handleDelete}
-                  label="Delete Crop"
-                />
-              </div>
-
-              <div className="hidden sm:flex justify-end">
-                <DeleteButton
-                  onDelete={handleDelete}
-                  label="Delete Crop"
-                />
-              </div>
-
               {/* Metadata */}
-              <div className="flex flex-wrap gap-x-5 gap-y-2 pt-4 border-t border-gray-100 text-xs sm:text-sm text-gray-600">
+              <div className="flex flex-wrap justify-between gap-x-5 gap-y-2 pt-4 border-t border-gray-100 text-xs sm:text-sm text-gray-600">
 
                 <span className="flex items-center gap-1.5">
                   <Calendar
@@ -266,11 +270,12 @@ const CropDetail = () => {
                 </span>
 
                 {crop.harvestedOn && (
-                  <div>
+                  <div className="flex items-center gap-1.5">
                     <p>Harvested</p>
                     <p>
                       {crop.yield.amount} {crop.yield.unit}
                     </p>
+                    <span className="text-gray-400">on</span>
                     <p>
                       {new Date(crop.harvestedOn).toLocaleDateString()}
                     </p>
