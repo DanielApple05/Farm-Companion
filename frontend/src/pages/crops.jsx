@@ -41,7 +41,7 @@ const Crops = () => {
       <div className="flex min-h-screen">
         <Sidebar />
         <MobileNav />
-        <div className="w-full p-6 space-y-6 xl:mt-20 mt-28 mb-20 bg-gray-50">
+        <div className="w-full p-6 space-y-6 xl:mt-20 mt-28 xl:mb-0 mb-20 bg-gray-50">
           {/* Page header */}
           <div className="flex items-center justify-between">
             <div>
@@ -86,12 +86,20 @@ const Crops = () => {
                     <MapPin size={12} />
                     {crop.farm.name || crop.farm}
                   </p>
-                  <div className="flex items-center gap-4 text-sm text-gray-600">
-                    <span className="flex items-center gap-1">
-                      <Calendar size={14} />
-                      {new Date(crop.plantedOn).toLocaleDateString()}
-                    </span>
-                    <span>{crop.stage}</span>
+                  <div className="flex items-center justify-between text-xs text-gray-600">
+                    <div className="flex flex-col gap-2">
+                      <p>Planted on </p>
+                      <span className="flex items-center gap-1">
+                        <Calendar size={14} />
+                        {new Date(crop.plantedOn).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <span>{crop.stage}</span>
+                      {crop.harvestedOn ?
+                        <div className="flex items-center gap-1">
+                       <Calendar size={14} /> {new Date(crop.harvestedOn).toLocaleDateString()} </div> : null}
+                    </div>
                   </div>
                   <div className="flex items-center justify-between mt-auto">
                     <span className={`text-xs px-2 py-1 rounded-md ${statusStyles[crop.status]}`}>

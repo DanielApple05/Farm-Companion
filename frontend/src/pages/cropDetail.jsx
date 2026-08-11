@@ -163,7 +163,7 @@ const CropDetail = () => {
       <div className="flex min-h-screen">
         <Sidebar />
         <MobileNav />
-        <main className="w-full min-w-0 px-4 sm:px-6 py-5 sm:py-6 space-y-5 sm:space-y-6 xl:mt-20 mt-28 mb-20 bg-gray-50">
+        <main className="w-full min-w-0 px-4 sm:px-6 py-5 sm:py-6 space-y-5 sm:space-y-6 xl:mt-20 mt-28 xl:mb-0 mb-20 bg-gray-50">
 
           <div className="flex items-center justify-between">
             {/* Back */}
@@ -367,7 +367,11 @@ const CropDetail = () => {
                 </span>
               </div>
 
-              {growth?.isOverdue && (
+              { crop.harvestedOn ? (
+                <span className="text-green-500 font-medium">
+                  Crop is harvested
+                </span>
+              ) : growth?.isOverdue && (
                 <span className="text-red-500 font-medium">
                   Crop is overdue
                 </span>

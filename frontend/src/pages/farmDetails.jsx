@@ -161,7 +161,7 @@ const FarmDetail = () => {
       <div className="flex min-h-screen">
         <Sidebar />
         <MobileNav />
-        <div className="w-full p-6 space-y-6 xl:mt-20 mt-24 mb-20 bg-gray-50">
+        <div className="w-full p-6 space-y-6 xl:mt-20 mt-24 xl:mb-0 mb-20 bg-gray-50">
 
           {/* Farm header */}
           <div className="bg-white rounded-xl border border-gray-100 p-5 ">
