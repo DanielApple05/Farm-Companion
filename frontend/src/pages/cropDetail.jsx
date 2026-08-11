@@ -10,13 +10,15 @@ import {
   Bug,
   Scale,
   CloudRain,
+  Sprout,
 } from "lucide-react";
 
 import Sidebar from "../components/sidebar";
 import MobileNav from "../components/mobileNav";
 import Header from "../components/header";
-import { getCropById, deleteCrop } from "../api/crops";
+import { getCropById, deleteCrop, harvestCrop } from "../api/crops";
 import DeleteButton from "../components/deleteButton";
+import HarvestModal from "../components/harvestModal";
 
 const statusStyles = {
   Healthy: "bg-green-50 text-green-700",
@@ -38,6 +40,7 @@ const CropDetail = () => {
   const [cropData, setCropData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [showHarvestModal, setShowHarvestModal] = useState(false);
 
   const handleDelete = async () => {
     try {
@@ -79,6 +82,17 @@ const CropDetail = () => {
 
     if (id) fetchCrop();
   }, [id]);
+
+  const handleHarvest = async (harvestData) => {
+    try {
+      const response = await harvestCrop(crop._id, harvestData);
+
+      setCrop(response.data.crop);
+    } catch (error) {
+      console.error("Failed to harvest crop:", error);
+      throw error;
+    }
+  };
 
   if (loading) {
     return (
@@ -212,10 +226,9 @@ const CropDetail = () => {
 
                 {/* Status */}
                 <span
-                  className={`shrink-0 text-xs px-2 py-1 rounded-md ${
-                    statusStyles[crop.status] ||
+                  className={`shrink-0 text-xs px-2 py-1 rounded-md ${statusStyles[crop.status] ||
                     "bg-gray-50 text-gray-600"
-                  }`}
+                    }`}
                 >
                   {crop.status}
                 </span>
@@ -252,22 +265,30 @@ const CropDetail = () => {
                   ).toLocaleDateString()}
                 </span>
 
-                {crop.yield?.amount && (
-                  <span className="flex items-center gap-1.5">
-                    <Scale
-                      size={14}
-                      className="text-gray-400"
-                    />
-
-                    Yield: {crop.yield.amount}{" "}
-                    {crop.yield.unit}
-                  </span>
+                {crop.harvestedOn && (
+                  <div>
+                    <p>Harvested</p>
+                    <p>
+                      {crop.yield.amount} {crop.yield.unit}
+                    </p>
+                    <p>
+                      {new Date(crop.harvestedOn).toLocaleDateString()}
+                    </p>
+                  </div>
                 )}
-
               </div>
 
             </div>
           </section>
+
+          {/* Harvest Modal */}
+          {showHarvestModal && (
+            <HarvestModal
+              crop={crop}
+              onClose={() => setShowHarvestModal(false)}
+              onHarvest={handleHarvest}
+            />
+          )}
 
           {/* Growth Stage */}
           <section className="bg-white rounded-xl border border-gray-100 p-4 sm:p-5">
@@ -296,19 +317,17 @@ const CropDetail = () => {
                     <div className="flex flex-col items-center gap-1.5">
 
                       <div
-                        className={`w-3.5 h-3.5 rounded-full border-2 ${
-                          i <= stageIndex
-                            ? "bg-green-600 border-green-600"
-                            : "bg-white border-gray-200"
-                        }`}
+                        className={`w-3.5 h-3.5 rounded-full border-2 ${i <= stageIndex
+                          ? "bg-green-600 border-green-600"
+                          : "bg-white border-gray-200"
+                          }`}
                       />
 
                       <span
-                        className={`text-[11px] whitespace-nowrap ${
-                          i === stageIndex
-                            ? "text-gray-900 font-medium"
-                            : "text-gray-400"
-                        }`}
+                        className={`text-[11px] whitespace-nowrap ${i === stageIndex
+                          ? "text-gray-900 font-medium"
+                          : "text-gray-400"
+                          }`}
                       >
                         {stage}
                       </span>
@@ -317,11 +336,10 @@ const CropDetail = () => {
 
                     {i < stageOrder.length - 1 && (
                       <div
-                        className={`h-0.5 flex-1 mx-2 ${
-                          i < stageIndex
-                            ? "bg-green-600"
-                            : "bg-gray-200"
-                        }`}
+                        className={`h-0.5 flex-1 mx-2 ${i < stageIndex
+                          ? "bg-green-600"
+                          : "bg-gray-200"
+                          }`}
                       />
                     )}
 
@@ -333,15 +351,16 @@ const CropDetail = () => {
             </div>
 
             {/* Growth information */}
-            <div className="mt-4 pt-4 border-t border-gray-100 flex flex-wrap gap-x-5 gap-y-2 text-xs text-gray-500">
+            <div className="mt-4 pt-4 border-t border-gray-100 flex flex-wrap justify-between gap-x-5 gap-y-2 text-xs text-gray-500">
+              <div className=" flex gap-x-5">
+                <span>
+                  {growth?.daysElapsed || 0} days elapsed
+                </span>
 
-              <span>
-                {growth?.daysElapsed || 0} days elapsed
-              </span>
-
-              <span>
-                {growth?.percentComplete || 0}% complete
-              </span>
+                <span>
+                  {growth?.percentComplete || 0}% complete
+                </span>
+              </div>
 
               {growth?.isOverdue && (
                 <span className="text-red-500 font-medium">
@@ -349,6 +368,15 @@ const CropDetail = () => {
                 </span>
               )}
 
+              {crop.stage === "Harvested" && !crop.harvestedOn && (
+                <button
+                  onClick={() => setShowHarvestModal(true)}
+                  className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg"
+                >
+                  <Sprout size={16} />
+                  Harvest Crop
+                </button>
+              )}
             </div>
           </section>
 

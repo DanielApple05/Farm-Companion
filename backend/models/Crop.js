@@ -25,6 +25,23 @@ const cropSchema = new mongoose.Schema(
       enum: ["Healthy", "Flagged"],
       default: "Healthy",
     },
+    
+    yield: {
+      amount: {
+        type: Number,
+        min: 0,
+      },
+      unit: {
+        type: String,
+        enum: ["kg", "tons", "bags"],
+        default: "kg",
+      },
+    },
+
+    harvestedOn: {
+      type: Date,
+      default: null,
+    },
 
     photoUrl: {
       type: String,
@@ -41,18 +58,12 @@ const cropSchema = new mongoose.Schema(
         createdAt: { type: Date, default: Date.now },
       },
     ],
-
-    // Optional yield tracking, filled in after harvest
-    yield: {
-      amount: Number,
-      unit: { type: String, enum: ["kg", "tons", "bags"], default: "kg" },
-    },
   },
   {
     timestamps: true,
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-  }
+  },
 );
 
 // stage is calculated live from plantedOn + crop name — never stored,

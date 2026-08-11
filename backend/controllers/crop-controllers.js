@@ -162,4 +162,58 @@ const getSupportedCrops = async (req, res) => {
   );
 };
 
-module.exports = { createCrop, getCrops, getCropById, updateCrop, deleteCrop, getSupportedCrops };
+const harvestCrop = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { amount, unit } = req.body;
+
+    if (!amount || Number(amount) <= 0) {
+      return res.status(400).json({
+        message: "Harvest amount must be greater than 0",
+      });
+    }
+
+    if (!["kg", "tons", "bags"].includes(unit)) {
+      return res.status(400).json({
+        message: "Invalid harvest unit",
+      });
+    }
+
+    const crop = await Crop.findById(id);
+
+    if (!crop) {
+      return res.status(404).json({
+        message: "Crop not found",
+      });
+    }
+
+    // Don't allow the same crop to be harvested twice
+    if (crop.harvestedOn) {
+      return res.status(400).json({
+        message: "This crop has already been harvested",
+      });
+    }
+
+    crop.yield = {
+      amount: Number(amount),
+      unit,
+    };
+
+    crop.harvestedOn = new Date();
+
+    await crop.save();
+
+    return res.status(200).json({
+      message: "Crop harvested successfully",
+      crop,
+    });
+  } catch (error) {
+    console.error("Harvest crop error:", error);
+
+    return res.status(500).json({
+      message: "Failed to harvest crop",
+    });
+  }
+};
+
+module.exports = { createCrop, getCrops, getCropById, updateCrop, deleteCrop, getSupportedCrops, harvestCrop };
