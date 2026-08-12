@@ -113,6 +113,7 @@ const MobileNav = () => {
                 <NavLink
                   key={label}
                   to={path}
+                  reloadDocument
                   onClick={() => setMoreOpen(false)}
                   className={({ isActive }) =>
                     `flex flex-col items-center justify-center gap-2 py-4 rounded-xl border text-xs transition-colors ${isActive

@@ -71,8 +71,8 @@ const CropDetail = () => {
       } catch (error) {
         setMessage(
           error?.response?.data?.message ||
-            error?.message ||
-            "Failed to load crop"
+          error?.message ||
+          "Failed to load crop"
         );
 
         setCropData(null);
@@ -101,7 +101,7 @@ const CropDetail = () => {
 
       setMessage(
         error.response?.data?.message ||
-          "Failed to harvest crop"
+        "Failed to harvest crop"
       );
     }
   };
@@ -270,10 +270,9 @@ const CropDetail = () => {
 
               {/* Status */}
               <span
-                className={`shrink-0 text-[11px] sm:text-xs px-2.5 py-1 rounded-full font-medium ${
-                  statusStyles[crop.status] ||
+                className={`shrink-0 text-[11px] sm:text-xs px-2.5 py-1 rounded-full font-medium ${statusStyles[crop.status] ||
                   "bg-gray-50 text-gray-600 border border-gray-100"
-                }`}
+                  }`}
               >
                 {crop.status}
               </span>
@@ -383,19 +382,17 @@ const CropDetail = () => {
                     <div className="flex flex-col items-center min-w-[72px]">
 
                       <div
-                        className={`w-4 h-4 rounded-full border-2 transition-colors ${
-                          i <= stageIndex
+                        className={`w-4 h-4 rounded-full border-2 transition-colors ${i <= stageIndex
                             ? "bg-green-600 border-green-600"
                             : "bg-white border-gray-200"
-                        }`}
+                          }`}
                       />
 
                       <span
-                        className={`text-[11px] mt-2 whitespace-nowrap ${
-                          i === stageIndex
+                        className={`text-[11px] mt-2 whitespace-nowrap ${i === stageIndex
                             ? "text-gray-900 font-medium"
                             : "text-gray-400"
-                        }`}
+                          }`}
                       >
                         {stage}
                       </span>
@@ -404,14 +401,13 @@ const CropDetail = () => {
 
                     {i <
                       stageOrder.length - 1 && (
-                      <div
-                        className={`h-0.5 flex-1 mt-[7px] ${
-                          i < stageIndex
-                            ? "bg-green-600"
-                            : "bg-gray-200"
-                        }`}
-                      />
-                    )}
+                        <div
+                          className={`h-0.5 flex-1 mt-[7px] ${i < stageIndex
+                              ? "bg-green-600"
+                              : "bg-gray-200"
+                            }`}
+                        />
+                      )}
 
                   </div>
                 ))}
