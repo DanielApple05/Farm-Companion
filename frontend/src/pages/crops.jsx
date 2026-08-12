@@ -69,44 +69,97 @@ const Crops = () => {
               crops.map((crop) => (
                 <div
                   key={crop._id}
-                  className="bg-white rounded-xl border border-gray-100 p-5 flex flex-col gap-4 hover:border-green-300 transition-colors cursor-pointer"
+                  className="bg-white rounded-xl border border-gray-100 p-4 sm:p-5 flex flex-col gap-4 hover:border-green-300 transition-colors"
                 >
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-9 h-9 rounded-lg bg-green-50 flex items-center justify-center">
+                  {/* Header */}
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <div className="w-9 h-9 rounded-lg bg-green-50 flex items-center justify-center shrink-0">
                         <Leaf size={16} className="text-green-600" />
                       </div>
-                      <h2 className="font-medium text-gray-900">{crop.name}</h2>
+
+                      <h2 className="font-medium text-gray-900 truncate">
+                        {crop.name}
+                      </h2>
                     </div>
+
                     {crop.status === "Flagged" && (
-                      <AlertTriangle size={16} className="text-amber-500" />
+                      <AlertTriangle
+                        size={16}
+                        className="text-amber-500 shrink-0"
+                      />
                     )}
                   </div>
-                  <p className="text-xs text-gray-500 flex items-center gap-1">
-                    <MapPin size={12} />
-                    {crop.farm.name || crop.farm}
+
+                  {/* Farm */}
+                  <p className="text-xs text-gray-500 flex items-center gap-1 min-w-0">
+                    <MapPin size={12} className="shrink-0" />
+
+                    <span className="truncate">
+                      {crop.farm?.name || crop.farm}
+                    </span>
                   </p>
-                  <div className="flex items-center justify-between text-xs text-gray-600">
-                    <div className="flex flex-col gap-2">
-                      <p>Planted on </p>
-                      <span className="flex items-center gap-1">
-                        <Calendar size={14} />
-                        {new Date(crop.plantedOn).toLocaleDateString()}
-                      </span>
+
+                  {/* Crop information */}
+                  <div className="grid grid-cols-2 gap-3 text-xs">
+
+                    {/* Planted */}
+                    <div className="bg-gray-50 rounded-lg p-3">
+                      <p className="text-gray-400 mb-1">
+                        Planted
+                      </p>
+
+                      <div className="flex items-center gap-1.5 text-gray-700">
+                        <Calendar size={13} className="text-gray-400 shrink-0" />
+
+                        <span>
+                          {new Date(crop.plantedOn).toLocaleDateString()}
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex flex-col gap-2">
-                      <span>{crop.stage}</span>
-                      {crop.harvestedOn ?
-                        <div className="flex items-center gap-1">
-                       <Calendar size={14} /> {new Date(crop.harvestedOn).toLocaleDateString()} </div> : null}
+
+                    {/* Growth / Harvest */}
+                    <div className="bg-gray-50 rounded-lg p-3">
+                      <p className="text-gray-400 mb-1">
+                        {crop.harvestedOn ? "Harvested" : "Stage"}
+                      </p>
+
+                      {crop.harvestedOn ? (
+                        <div className="flex items-center gap-1.5 text-gray-700">
+                          <Calendar
+                            size={13}
+                            className="text-gray-400 shrink-0"
+                          />
+
+                          <span>
+                            {new Date(crop.harvestedOn).toLocaleDateString()}
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="font-medium text-gray-700">
+                          {crop.stage || "Not specified"}
+                        </span>
+                      )}
                     </div>
                   </div>
-                  <div className="flex items-center justify-between mt-auto">
-                    <span className={`text-xs px-2 py-1 rounded-md ${statusStyles[crop.status]}`}>
+
+                  {/* Footer */}
+                  <div className="flex items-center justify-between pt-1 mt-auto">
+
+                    <span
+                      className={`text-xs px-2 py-1 rounded-md ${statusStyles[crop.status] ||
+                        "bg-gray-50 text-gray-600"
+                        }`}
+                    >
                       {crop.status}
                     </span>
-                    <Link to={`/crops/${crop._id}`} className="text-sm text-green-600 flex items-center gap-1">
-                      View <ChevronRight size={14} />
+
+                    <Link
+                      to={`/crops/${crop._id}`}
+                      className="text-sm text-green-600 flex items-center gap-1 hover:text-green-700 transition-colors"
+                    >
+                      View
+                      <ChevronRight size={14} />
                     </Link>
                   </div>
                 </div>
