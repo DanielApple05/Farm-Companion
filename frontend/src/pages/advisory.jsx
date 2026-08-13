@@ -186,6 +186,7 @@ const Advisory = () => {
             pb-28
             lg:pb-6
             xl:mt-20
+            xl:mb-0
           "
         >
           {/* Page Header */}
