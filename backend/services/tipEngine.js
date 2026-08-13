@@ -14,10 +14,7 @@ const { getWeatherCondition } = require("../utils/weatherCondition.js");
 const getTipsForCrop = (crop, weatherData) => {
   const cropName = crop.name.toLowerCase();
 
-  const growth = calculateCropStage(
-    crop.name,
-    crop.plantedOn
-  );
+  const growth = calculateCropStage(crop.name, crop.plantedOn);
 
   const weatherCondition = getWeatherCondition(weatherData);
 
@@ -33,8 +30,7 @@ const getTipsForCrop = (crop, weatherData) => {
 
   const matchingTips = recommendations.filter((tip) => {
     const cropMatches =
-      tip.crops?.includes(cropName) ||
-      tip.crop?.toLowerCase() === cropName;
+      tip.crops?.includes(cropName) || tip.crop?.toLowerCase() === cropName;
 
     const stageMatches = tip.stage === growth.stage;
 
@@ -42,7 +38,7 @@ const getTipsForCrop = (crop, weatherData) => {
   });
 
   const cropTips = matchingTips.filter(
-    (tip) => tip.trigger?.type !== "weather"
+    (tip) => tip.trigger?.type !== "weather",
   );
 
   const weatherTips = matchingTips.filter((tip) => {
@@ -60,7 +56,6 @@ const getTipsForCrop = (crop, weatherData) => {
     weatherTips,
   };
 };
-
 
 // LIVESTOCK TIPS
 
@@ -95,23 +90,32 @@ const getTipsForLivestock = (livestock) => {
   return {
     type: livestock.type,
     stage: livestock.stage,
-    livestockTips: matchingTips.flatMap(
-      (tip) => tip.tips || []
-    ),
+    livestockTips: matchingTips.flatMap((tip) => tip.tips || []),
   };
 };
 
 // General Farm Management Tips
 
-const getGeneralFarmManagementTips = () => {
-  return generalFarmTips;
-};
+const getGeneralFarmManagementTips = (res) => {
+  const tipsPerDay = 4;
 
+  const today = Math.floor(Date.now() / (1000 * 60 * 60 * 24));
+
+  const startIndex = (today * tipsPerDay) % generalFarmTips.length;
+
+  const selectedTips = [];
+
+  for (let i = 0; i < tipsPerDay; i++) {
+    selectedTips.push(
+      generalFarmTips[(startIndex + i) % generalFarmTips.length],
+    );
+  }
+
+  res.status(200).json(selectedTips);
+};
 
 module.exports = {
   getTipsForCrop,
   getTipsForLivestock,
   getGeneralFarmManagementTips,
 };
-
-

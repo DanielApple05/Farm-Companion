@@ -1,7 +1,7 @@
-const { generalFarmTips }  = require("../knowledge/general/farm-management.js");
+const { generalFarmTips }  = require("../services/tipEngine.js");
 
 const getGeneralTips = (req, res) => {
-  res.status(200).json(generalFarmTips);
+  getGeneralFarmManagementTips(res);
 };
 
 module.exports = {
