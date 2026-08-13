@@ -1,4 +1,4 @@
-const { generalFarmTips }  = require("../services/tipEngine.js");
+const { getGeneralFarmManagementTips } = require("../services/tipEngine.js");
 
 const getGeneralTips = (req, res) => {
   try {
