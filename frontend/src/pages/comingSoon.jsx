@@ -5,14 +5,14 @@ import MobileNav from "../components/mobileNav";
 
 // Reusable — pass a title/message so this same page can cover News & Tips,
 // Market Prices, Community, or anything else not built yet.
-const ComingSoon = ({ title = "Community", message = "This feature is on the way. Check back soon!" }) => {
+const ComingSoon = ({ title = "Coming soon", message = "This feature is on the way. Check back soon!" }) => {
   return (
     <>
       <Header />
-      <div className="flex min-h-screen">
+      <div className="flex xl:mt-20 mt-24 xl:mb-0 mb-20">
         <Sidebar />
         <MobileNav />
-        <div className="w-full p-6 mt-20 mb-20 bg-gray-50 flex items-center justify-center">
+        <div className="w-full p-6 bg-gray-50 flex items-center justify-center">
           <div className="text-center max-w-sm">
             <div className="w-16 h-16 rounded-2xl bg-green-50 flex items-center justify-center mx-auto mb-4">
               <Construction size={28} className="text-green-600" />
