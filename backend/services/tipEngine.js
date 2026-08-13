@@ -96,22 +96,20 @@ const getTipsForLivestock = (livestock) => {
 
 // General Farm Management Tips
 
-const getGeneralFarmManagementTips = (res) => {
+const getGeneralFarmManagementTips = () => {
   const tipsPerDay = 4;
+
+  if (!generalFarmTips.length) {
+    return [];
+  }
 
   const today = Math.floor(Date.now() / (1000 * 60 * 60 * 24));
 
   const startIndex = (today * tipsPerDay) % generalFarmTips.length;
 
-  const selectedTips = [];
-
-  for (let i = 0; i < tipsPerDay; i++) {
-    selectedTips.push(
-      generalFarmTips[(startIndex + i) % generalFarmTips.length],
-    );
-  }
-
-  res.status(200).json(selectedTips);
+  return Array.from({ length: tipsPerDay }, (_, index) => {
+    return generalFarmTips[(startIndex + index) % generalFarmTips.length];
+  });
 };
 
 module.exports = {
