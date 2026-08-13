@@ -2,6 +2,11 @@ const axios = require("axios");
 const Crop = require("../models/Crop");
 const { explainDiagnosis } = require("../services/claudeService");
 
+const isOwnerMatch = (ownerId, userId) => {
+  if (!ownerId || !userId) return false;
+  return ownerId.toString() === userId.toString();
+};
+
 const diagnoseCrop = async (req, res) => {
   try {
     if (!req.file) {
@@ -26,10 +31,10 @@ const diagnoseCrop = async (req, res) => {
       });
     }
 
-    if (cropDoc.farm.owner.toString() !== req.user.id) {
-      return res.status(403).json({
-        message: "Not authorized to diagnose this crop",
-      });
+    if (!isOwnerMatch(cropDoc.farm.owner, req.user.id)) {
+      return res
+        .status(403)
+        .json({ message: "Not authorized to diagnose this crop" });
     }
 
     // Convert uploaded image to base64
