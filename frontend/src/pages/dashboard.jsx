@@ -14,7 +14,7 @@ import Sidebar from "../components/sidebar";
 import MobileNav from "../components/mobileNav";
 import Header from "../components/header";
 import Hero from "../components/hero";
-import DailyTips from "../components/dailyTips";
+import FarmKnowledgeDaily from "../components/farmKnowledge";
 
 import { Link } from "react-router-dom";
 
@@ -223,7 +223,7 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <DailyTips />
+              <FarmKnowledgeDaily />
             </section>
 
             {/* Recent Diagnosis */}

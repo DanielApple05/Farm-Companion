@@ -13,6 +13,7 @@ const diagnoseRoutes = require("./routes/diagnoseRoutes");
 const newsRoutes = require("./routes/newsRoutes");
 const expenseRoutes = require("./routes/expenseRoute");
 const saleRoutes = require("./routes/saleRoutes");
+const generalTipsRoutes = require("./routes/generalTipsRoutes");
 
 // Middleware
 app.use(cors());
@@ -27,6 +28,7 @@ app.use("/api/diagnose", diagnoseRoutes);
 app.use("/api/news", newsRoutes);
 app.use("/api/expenses", expenseRoutes);
 app.use("/api/sales", saleRoutes);
+app.use("/api/tips", generalTipsRoutes);
 
 // Health check
 app.get("/", (req, res) => {

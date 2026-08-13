@@ -15,7 +15,6 @@ import {
 import { useLogout } from "../utils";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 
-// ---- Nav config (swap `href` for real routes when wiring up React Router) ----
 const navItems = [
   { label: "Dashboard", icon: LayoutDashboard, path: "/" },
   { label: "My Farms", icon: Sprout, path: "/farms" },
@@ -57,10 +56,10 @@ const Sidebar = () => {
 
       {/* Bottom */}
       <div className="pt-4 border-t border-gray-100 space-y-1">
-        <a href="/profile" className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-50">
+        <Link to="/profile" className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-50">
           <User size={18} />
           Profile
-        </a>
+        </Link>
         <button 
         onClick={() => useLogout(navigate)}
         className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-50 cursor-pointer"
