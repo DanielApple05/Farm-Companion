@@ -63,6 +63,12 @@ const farmSchema = new mongoose.Schema(
         },
       },
     ],
+    history: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "FarmHistory",
+      },
+    ],
   },
   { timestamps: true },
 );

@@ -14,14 +14,13 @@ import News from './pages/news';
 import CropDetail from './pages/cropDetail';
 import LivestockDetail from './pages/livestockDetail';
 import ProtectedRoute from './components/protectRoutes';
+import FarmHistory from './pages/farmHistory';
 
 const App = () => {
   return (
     <Routes>
       {/* Public routes */}
       <Route path="/auth" element={<Auth />} />
-      <Route path="/news" element={<News />} />
-      <Route path="/comingSoon" element={<ComingSoon />} />
 
       {/* Protected routes */}
       <Route element={<ProtectedRoute />}>
@@ -35,6 +34,9 @@ const App = () => {
         <Route path="/diagnose" element={<Diagnose />} />
         <Route path="/advisory" element={<Advisory />} />
         <Route path="/askAIAssistant" element={<Chat />} />
+        <Route path="/news" element={<News />} />
+        <Route path="/comingSoon" element={<ComingSoon />} />
+        <Route path="/history" element={<FarmHistory />} />
       </Route>
     </Routes>
   );
