@@ -19,7 +19,16 @@ export const getUserEmail = () => {
 
 export const getInitials = () => {
   const user = getUser();
-  return user ? `${user.name.split(' ')[0][0]}${user.name.split(' ')[1][0]}` : null;
+
+  if (!user?.name) return null;
+
+  const names = user.name.trim().split(/\s+/);
+
+  if (names.length === 1) {
+    return names[0][0].toUpperCase();
+  }
+
+  return `${names[0][0]}${names[1][0]}`.toUpperCase();
 };
 
 export const getDay = () => {
