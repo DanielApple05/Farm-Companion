@@ -10,9 +10,6 @@ import {
 import { useNavigate } from "react-router-dom";
 import { getUserName } from "../helpers";
 import { getGreeting } from "../utils";
-import { getFarms } from "../api/farm";
-import { getCrops } from "../api/crops";
-import { getLivestock } from "../api/livestock";
 
 const Hero = ({
   eyebrow = "Built for smallholder farmers",
@@ -20,75 +17,15 @@ const Hero = ({
   subtitle = "Here's what's happening on your farms today.",
   primaryCta = { label: "View farms", path: "/farms" },
   imageUrl = "/images/dashboardHero.png",
+  farms,
+  crops,
+  livestock,
+  farmLoading,
+  cropLoading,
+  livestockLoading,
+  message
 }) => {
   const navigate = useNavigate();
-
-  const [farms, setFarms] = useState([]);
-  const [crops, setCrops] = useState([]);
-  const [livestock, setLivestock] = useState([]);
-
-  const [farmLoading, setFarmLoading] = useState(true);
-  const [cropLoading, setCropLoading] = useState(true);
-  const [livestockLoading, setLivestockLoading] = useState(true);
-
-  const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    const fetchFarms = async () => {
-      try {
-        setFarmLoading(true);
-
-        const response = await getFarms();
-        setFarms(response.data);
-      } catch (error) {
-        setMessage(
-          error?.response?.data?.message || "Failed to fetch farms"
-        );
-      } finally {
-        setFarmLoading(false);
-      }
-    };
-
-    fetchFarms();
-  }, []);
-
-  useEffect(() => {
-    const fetchCrops = async () => {
-      try {
-        setCropLoading(true);
-
-        const response = await getCrops();
-        setCrops(response.data);
-      } catch (error) {
-        setMessage(
-          error?.response?.data?.message || "Failed to fetch crops"
-        );
-      } finally {
-        setCropLoading(false);
-      }
-    };
-
-    fetchCrops();
-  }, []);
-
-  useEffect(() => {
-    const fetchLivestock = async () => {
-      try {
-        setLivestockLoading(true);
-
-        const response = await getLivestock();
-        setLivestock(response.data);
-      } catch (error) {
-        setMessage(
-          error?.response?.data?.message || "Failed to fetch livestock"
-        );
-      } finally {
-        setLivestockLoading(false);
-      }
-    };
-
-    fetchLivestock();
-  }, []);
 
   const stats = [
     {

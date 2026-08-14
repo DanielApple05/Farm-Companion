@@ -1,4 +1,4 @@
-
+import { useState, useEffect, useMemo } from "react";
 import {
   PlusCircle,
   Camera,
@@ -15,7 +15,9 @@ import MobileNav from "../components/mobileNav";
 import Header from "../components/header";
 import Hero from "../components/hero";
 import FarmKnowledgeDaily from "../components/farmKnowledge";
-
+import { getFarms } from "../api/farm";
+import { getCrops } from "../api/crops";
+import { getLivestock } from "../api/livestock";
 import { Link } from "react-router-dom";
 
 const quickActions = [
@@ -39,23 +41,6 @@ const quickActions = [
   },
 ];
 
-const recentDiagnoses = [
-  {
-    crop: "Maize",
-    issue: "Northern Leaf Blight",
-    risk: "Medium",
-    farm: "Rumuokoro Farm",
-    date: "May 10",
-  },
-  {
-    crop: "Tomato",
-    issue: "Early Blight",
-    risk: "Low",
-    farm: "Omuahia Farm",
-    date: "May 8",
-  },
-];
-
 const riskStyles = {
   Low: "bg-green-50 text-green-700",
   Medium: "bg-amber-50 text-amber-700",
@@ -63,10 +48,92 @@ const riskStyles = {
 };
 
 const Dashboard = () => {
+
+  const [farms, setFarms] = useState([]);
+  const [crops, setCrops] = useState([]);
+  const [livestock, setLivestock] = useState([]);
+
+  const [farmLoading, setFarmLoading] = useState(true);
+  const [cropLoading, setCropLoading] = useState(true);
+  const [livestockLoading, setLivestockLoading] = useState(true);
+
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    const fetchFarms = async () => {
+      try {
+        setFarmLoading(true);
+
+        const response = await getFarms();
+        setFarms(response.data);
+      } catch (error) {
+        setMessage(
+          error?.response?.data?.message || "Failed to fetch farms"
+        );
+      } finally {
+        setFarmLoading(false);
+      }
+    };
+
+    fetchFarms();
+  }, []);
+
+  useEffect(() => {
+    const fetchCrops = async () => {
+      try {
+        setCropLoading(true);
+
+        const response = await getCrops();
+        setCrops(response.data);
+      } catch (error) {
+        setMessage(
+          error?.response?.data?.message || "Failed to fetch crops"
+        );
+      } finally {
+        setCropLoading(false);
+      }
+    };
+
+    fetchCrops();
+  }, []);
+
+  useEffect(() => {
+    const fetchLivestock = async () => {
+      try {
+        setLivestockLoading(true);
+
+        const response = await getLivestock();
+        setLivestock(response.data);
+      } catch (error) {
+        setMessage(
+          error?.response?.data?.message || "Failed to fetch livestock"
+        );
+      } finally {
+        setLivestockLoading(false);
+      }
+    };
+    fetchLivestock();
+  }, []);
+
+  const recentDiagnoses = useMemo(() => {
+    return crops
+      .flatMap((crop) =>
+        (crop.diagnosisLogs || []).map((diagnosis) => ({
+          ...diagnosis,
+          cropName: crop.name,
+          cropId: crop._id,
+        }))
+      )
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt) - new Date(a.createdAt)
+      )
+      .slice(0, 3);
+  }, [crops]);
+
   return (
     <>
       <Header />
-
       <div className="flex min-h-screen">
         <Sidebar />
         <MobileNav />
@@ -74,7 +141,7 @@ const Dashboard = () => {
           <div className="space-y-6 pb-10">
 
             {/* Hero */}
-            <Hero />
+            <Hero farms={farms} crops={crops} livestock={livestock} cropLoading={cropLoading} farmLoading={farmLoading} livestockLoading={livestockLoading} message={message} />
 
             {/* Quick Actions */}
             <section className="px-6">
@@ -95,6 +162,7 @@ const Dashboard = () => {
                   ({ label, icon: Icon, path, description }) => (
                     <Link
                       to={path}
+                      reloadDocument
                       key={label}
                       className="group bg-white border border-gray-100 rounded-xl p-4 hover:border-green-300 hover:shadow-sm transition-all"
                     >
@@ -242,72 +310,43 @@ const Dashboard = () => {
                   </div>
 
                   <Link
-                    to="/diagnosis"
+                    to="/diagnose"
                     className="text-sm text-green-600 flex items-center gap-1 hover:text-green-700"
                   >
                     View all
                     <ChevronRight size={14} />
                   </Link>
                 </div>
+                {recentDiagnoses.map((diagnosis) => (
+                  <div
+                    key={diagnosis._id}
+                    className="flex items-center justify-between gap-4 p-3 rounded-xl bg-gray-50 border border-gray-100"
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-9 h-9 rounded-lg bg-amber-50 flex items-center justify-center shrink-0">
+                        <Bug size={16} className="text-amber-600" />
+                      </div>
 
-                {recentDiagnoses.length === 0 ? (
-                  <div className="py-8 text-center">
-                    <div className="w-10 h-10 mx-auto rounded-lg bg-gray-50 flex items-center justify-center">
-                      <Bug
-                        size={18}
-                        className="text-gray-400"
-                      />
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium text-gray-900 truncate">
+                          {diagnosis.disease}
+                        </p>
+
+                        <p className="text-xs text-gray-500 mt-0.5">
+                          {diagnosis.cropName}
+                          {" · "}
+                          {new Date(diagnosis.createdAt).toLocaleDateString()}
+                        </p>
+                      </div>
                     </div>
 
-                    <p className="text-sm text-gray-500 mt-3">
-                      No diagnoses yet.
-                    </p>
-
-                    <Link
-                      to="/diagnose"
-                      className="inline-flex items-center gap-1 text-xs text-green-600 mt-2"
-                    >
-                      Diagnose a crop
-                      <ChevronRight size={12} />
-                    </Link>
+                    <span className="shrink-0 text-[11px] bg-amber-50 text-amber-700 px-2 py-1 rounded-md">
+                      {diagnosis.confidence}% match
+                    </span>
                   </div>
-                ) : (
-                  <div className="space-y-3">
-                    {recentDiagnoses.map((diagnosis, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center gap-3"
-                      >
-                        <div className="w-9 h-9 rounded-lg bg-amber-50 flex items-center justify-center shrink-0">
-                          <Bug
-                            size={16}
-                            className="text-amber-600"
-                          />
-                        </div>
-
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-gray-900 truncate">
-                            {diagnosis.crop} — {diagnosis.issue}
-                          </p>
-
-                          <p className="text-xs text-gray-500 mt-0.5">
-                            {diagnosis.farm} · {diagnosis.date}
-                          </p>
-                        </div>
-
-                        <span
-                          className={`text-xs px-2 py-1 rounded-md shrink-0 ${riskStyles[diagnosis.risk]
-                            }`}
-                        >
-                          {diagnosis.risk} Risk
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                ))}
               </div>
             </section>
-
           </div>
         </main>
       </div>
