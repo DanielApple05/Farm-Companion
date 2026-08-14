@@ -19,6 +19,7 @@ import { getFarms } from "../api/farm";
 import { getCrops } from "../api/crops";
 import { getLivestock } from "../api/livestock";
 import { Link } from "react-router-dom";
+import { capitalizeFirst } from "../helpers";
 
 const quickActions = [
   {
@@ -329,11 +330,11 @@ const Dashboard = () => {
 
                       <div className="min-w-0">
                         <p className="text-sm font-medium text-gray-900 truncate">
-                          {diagnosis.disease}
+                          {capitalizeFirst(diagnosis.disease)}
                         </p>
 
                         <p className="text-xs text-gray-500 mt-0.5">
-                          {diagnosis.cropName}
+                          {capitalizeFirst(diagnosis.cropName)}
                           {" · "}
                           {new Date(diagnosis.createdAt).toLocaleDateString()}
                         </p>

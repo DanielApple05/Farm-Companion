@@ -54,7 +54,7 @@ const moreItems = [
   {
     label: "AI Assistant",
     icon: MessageCircle,
-    path: "/comingSoon",
+    path: "/askAIAssistant",
   },
   {
     label: "News & Tips",

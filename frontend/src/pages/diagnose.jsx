@@ -50,7 +50,7 @@ const DiagnoseCrop = () => {
       } catch (error) {
         setMessage(
           error?.response?.data?.message ||
-            "Failed to fetch crops"
+          "Failed to fetch crops"
         );
       } finally {
         setCropLoading(false);
@@ -84,7 +84,7 @@ const DiagnoseCrop = () => {
     } catch (error) {
       setDiagnoseError(
         error.response?.data?.message ||
-          "Diagnosis failed. Try again."
+        "Diagnosis failed. Try again."
       );
     } finally {
       setDiagnosing(false);
@@ -176,24 +176,20 @@ const DiagnoseCrop = () => {
                     <div className="relative mt-1.5">
                       <select
                         value={selectedCrop}
-                        onChange={(e) =>
-                          setSelectedCrop(e.target.value)
-                        }
+                        onChange={(e) => setSelectedCrop(e.target.value)}
                         disabled={cropLoading}
-                        className="w-full appearance-none border border-gray-200 rounded-xl px-3 py-3 pr-10 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-green-200"
+                        className="w-full appearance-none border border-gray-200 rounded-xl px-3 py-3 pr-10 text-sm text-gray-700 bg-white transition focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 disabled:bg-gray-50 disabled:text-gray-400"
                       >
                         <option value="">
-                          {cropLoading
-                            ? "Loading your crops..."
-                            : "Select a crop"}
+                          {cropLoading ? "Loading your crops..." : "Select a crop"}
                         </option>
 
                         {cropOptions.map((crop) => (
-                          <option
-                            key={crop._id}
-                            value={crop._id}
-                          >
-                            {crop.name}
+                          <option key={crop._id} value={crop._id}>
+                            {crop.name} — {crop.farm?.name || "Unknown farm"} —{" "}
+                            {crop.plantedOn
+                              ? new Date(crop.plantedOn).toLocaleDateString()
+                              : "Date unavailable"}
                           </option>
                         ))}
                       </select>
@@ -357,7 +353,7 @@ const DiagnoseCrop = () => {
 
                     {diagnosisResult.detectedCrop &&
                       diagnosisResult.detectedCrop.toLowerCase() !==
-                        diagnosisResult.selectedCrop?.toLowerCase() && (
+                      diagnosisResult.selectedCrop?.toLowerCase() && (
                         <div className="bg-amber-50 border border-amber-200 text-amber-700 text-sm rounded-xl px-3 py-3">
                           You selected{" "}
                           <strong>
