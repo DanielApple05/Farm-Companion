@@ -239,7 +239,7 @@ const AddLivestockModal = ({ farmId, onClose, onAdded }) => {
               value={breed}
               onChange={(e) => setBreed(e.target.value)}
               placeholder="e.g. Broiler, N'Dama, West African Dwarf"
-              className="w-full mt-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-200"
+              className="w-full mt-1 border border-gray-200 rounded-lg px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-green-200"
             />
           </div>
 
@@ -255,7 +255,7 @@ const AddLivestockModal = ({ farmId, onClose, onAdded }) => {
               value={headcount}
               onChange={(e) => setHeadcount(e.target.value)}
               placeholder="e.g. 25"
-              className="w-full mt-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-200"
+              className="w-full mt-1 border border-gray-200 rounded-lg px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-green-200"
             />
           </div>
 

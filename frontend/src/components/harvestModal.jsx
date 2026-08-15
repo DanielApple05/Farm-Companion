@@ -87,7 +87,7 @@ const HarvestModal = ({ crop, onClose, onHarvest }) => {
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="e.g. 120"
-                className="flex-1 border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-green-400"
+                className="flex-1 border border-gray-200 rounded-lg px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-green-400"
               />
 
               <select

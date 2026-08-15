@@ -65,7 +65,7 @@ const AddVaccinationModal = ({ livestockId, onClose, onAdded }) => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. PPR vaccination"
-                className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-200"
+                className="w-full pl-9 pr-3 py-2 text-base border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-200"
               />
             </div>
           </div>
@@ -79,7 +79,7 @@ const AddVaccinationModal = ({ livestockId, onClose, onAdded }) => {
                 type="date"
                 value={dueDate}
                 onChange={(e) => setDueDate(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-200"
+                className="w-full pl-9 pr-3 py-2 text-base border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-200"
               />
             </div>
           </div>

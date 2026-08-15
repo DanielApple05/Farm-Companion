@@ -105,7 +105,7 @@ const AddFarmModal = ({ onClose, onAdded }) => {
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g. AgriFarm"
               disabled={loading}
-              className="w-full mt-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-200 disabled:bg-gray-50"
+              className="w-full mt-1 border border-gray-200 rounded-lg px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-green-200 disabled:bg-gray-50"
             />
           </div>
 
@@ -126,7 +126,7 @@ const AddFarmModal = ({ onClose, onAdded }) => {
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
                 disabled={loading}
-                className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-200 disabled:bg-gray-50"
+                className="w-full pl-9 pr-3 py-2 text-base border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-200 disabled:bg-gray-50"
               />
             </div>
 
