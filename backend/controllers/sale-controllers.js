@@ -149,7 +149,9 @@ const getSales = async (req, res) => {
 
   try {
     if (!farmId) {
-      return res.status(400).json({ message: "farmId query param is required" });
+      return res
+        .status(400)
+        .json({ message: "farmId query param is required" });
     }
 
     const farm = await Farm.findOne({ _id: farmId, owner: req.user.id });
@@ -185,7 +187,9 @@ const updateSale = async (req, res) => {
       return res.status(404).json({ message: "Sale not found" });
     }
     if (sale.farm.owner.toString() !== req.user.id) {
-      return res.status(403).json({ message: "Not authorized to update this sale" });
+      return res
+        .status(403)
+        .json({ message: "Not authorized to update this sale" });
     }
 
     const { description, buyer, amount, amountPaid, date } = req.body;
@@ -212,7 +216,9 @@ const deleteSale = async (req, res) => {
       return res.status(404).json({ message: "Sale not found" });
     }
     if (sale.farm.owner.toString() !== req.user.id) {
-      return res.status(403).json({ message: "Not authorized to delete this sale" });
+      return res
+        .status(403)
+        .json({ message: "Not authorized to delete this sale" });
     }
 
     await Sale.findByIdAndDelete(req.params.id);
@@ -221,6 +227,6 @@ const deleteSale = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Server error" });
   }
-}; 
+};
 
 module.exports = { addSale, getSales, updateSale, deleteSale };
