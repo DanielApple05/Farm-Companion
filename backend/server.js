@@ -14,6 +14,7 @@ const newsRoutes = require("./routes/newsRoutes");
 const expenseRoutes = require("./routes/expenseRoute");
 const saleRoutes = require("./routes/saleRoutes");
 const generalTipsRoutes = require("./routes/generalTipsRoutes");
+const historyRoutes = require("./routes/historyRoutes");
 
 // Middleware
 app.use(cors());
@@ -29,6 +30,7 @@ app.use("/api/news", newsRoutes);
 app.use("/api/expenses", expenseRoutes);
 app.use("/api/sales", saleRoutes);
 app.use("/api/tips", generalTipsRoutes);
+app.use("api/history, historyRoutes");
 
 // Health check
 app.get("/", (req, res) => {
