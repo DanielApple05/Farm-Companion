@@ -1,8 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X, Syringe, Calendar } from "lucide-react";
 import { addVaccination } from "../api/livestock";
 
 const AddVaccinationModal = ({ livestockId, onClose, onAdded }) => {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
   const [name, setName] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [loading, setLoading] = useState(false);

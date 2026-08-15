@@ -1,10 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X, Wallet, Calendar } from "lucide-react";
 import { addExpense } from "../api/finances";
 
 const categoryOptions = ["Seeds", "Fertilizer", "Labor", "Equipment", "Veterinary", "Other"];
 
 const AddExpenseModal = ({ farmId, onClose, onAdded }) => {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [date, setDate] = useState("");

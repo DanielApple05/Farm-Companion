@@ -4,6 +4,12 @@ import { createLivestock, getSupportedLivestock } from "../api/livestock";
 import { getFarms } from "../api/farm";
 
 const AddLivestockModal = ({ farmId, onClose, onAdded }) => {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
   const [type, setType] = useState("");
   const [stage, setStage] = useState("");
   const [breed, setBreed] = useState("");

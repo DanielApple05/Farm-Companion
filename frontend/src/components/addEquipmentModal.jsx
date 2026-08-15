@@ -1,10 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X, Wrench, Hash } from "lucide-react";
 import { addEquipment } from "../api/equipment";
 
 const conditionOptions = ["Good", "Needs repair", "Broken"];
 
 const AddEquipmentModal = ({ farmId, onClose, onAdded }) => {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
   const [name, setName] = useState("");
   const [quantity, setQuantity] = useState("");
   const [condition, setCondition] = useState("Good");

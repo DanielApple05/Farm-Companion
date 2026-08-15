@@ -1,7 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X, Sprout, Loader2 } from "lucide-react";
 
 const HarvestModal = ({ crop, onClose, onHarvest }) => {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
   const [amount, setAmount] = useState("");
   const [unit, setUnit] = useState("kg");
   const [loading, setLoading] = useState(false);

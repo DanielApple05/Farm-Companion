@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X, MapPin, Camera, Loader2 } from "lucide-react";
 import { addFarm } from "../api/farm";
 
@@ -7,6 +7,12 @@ import { addFarm } from "../api/farm";
 const detectedLocation = "Port Harcourt, Rivers State";
 
 const AddFarmModal = ({ onClose, onAdded }) => {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
   const [name, setName] = useState("");
   const [location, setLocation] = useState(detectedLocation);
 

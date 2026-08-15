@@ -4,6 +4,12 @@ import { createCrop, getSupportedCrops } from "../api/crops";
 import { getFarms } from "../api/farm";
 
 const AddCropModal = ({ farmId, onClose, onAdded }) => {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
   const [cropName, setCropName] = useState("");
   const [selectedFarmId, setSelectedFarmId] = useState(farmId || "");
   const [plantedOn, setPlantedOn] = useState("");

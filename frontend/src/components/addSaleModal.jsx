@@ -1,8 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X, Tag, User, Calendar } from "lucide-react";
 import { addSale } from "../api/finances";
 
 const AddSaleModal = ({ farmId, onClose, onAdded }) => {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
   const [description, setDescription] = useState("");
   const [buyer, setBuyer] = useState("");
   const [amount, setAmount] = useState("");
