@@ -7,6 +7,7 @@ import {
   AlertTriangle,
   Calendar,
   Activity,
+  History
 } from "lucide-react";
 
 import Sidebar from "../components/sidebar";
@@ -16,6 +17,7 @@ import AddCropModal from "../components/addCropModal";
 import AddLivestockModal from "../components/addLivestockModal";
 
 import { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 import { getFarmById, deleteFarm } from "../api/farm";
 import { useParams, Link, useNavigate } from "react-router-dom";
 
@@ -92,7 +94,7 @@ const FarmDetail = () => {
 
         <div className="flex min-h-screen">
           <Sidebar />
-           <MobileNav />
+          <MobileNav />
           <div className="flex-1 mt-20 p-6 bg-gray-50">
             <div className="animate-pulse space-y-6">
 
@@ -165,30 +167,56 @@ const FarmDetail = () => {
 
           {/* Farm header */}
           <div className="bg-white rounded-xl border border-gray-100 p-5 ">
-            <div className="items-start justify-between gap-4 xl:flex grid">
+            <div className="bg-white rounded-xl border border-gray-100 p-5">
+              <div className="items-start justify-between gap-4 xl:flex grid">
 
-              <div>
-                <h1 className="text-2xl font-semibold text-gray-900">
-                  {farm.name}
-                </h1>
+                <div>
+                  <h1 className="text-2xl font-semibold text-gray-900">
+                    {farm.name}
+                  </h1>
 
-                <p className="text-sm text-gray-500 flex items-center gap-1 mt-1">
-                  <MapPin size={14} />
-                  {farm.location}
-                </p>
-              </div>
+                  <p className="text-sm text-gray-500 flex items-center gap-1 mt-1">
+                    <MapPin size={14} />
+                    {farm.location}
+                  </p>
+                </div>
 
-              <div className="flex items-center gap-2">
-                <button
-                  className="text-sm px-4 py-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors"
-                >
-                  Edit Farm
-                </button>
+                <div className="flex flex-wrap items-center gap-2">
 
-                <DeleteButton
-                  onDelete={handleDelete}
-                  label="Delete Farm"
-                />
+                  {/* Farm History */}
+                  {/* <Link
+                    to={`/farms/${farm._id}/*history`}
+                    
+                    className="inline-flex items-center gap-2 text-sm px-4 py-2 rounded-lg border border-green-200 bg-green-50 text-green-700 hover:bg-green-100 transition-colors"
+                  >
+                    <History size={15} />
+                    Farm History
+                  </Link> */}
+
+                  <button
+                    type="button"
+                    onClick={() => toast("Farm History is coming soon!")}
+                    className="inline-flex items-center gap-2 text-sm px-4 py-2 rounded-lg border border-gray-200 bg-gray-50 text-gray-500 hover:bg-gray-100 transition-colors"
+                  >
+                    <History size={15} />
+                    Farm History
+                  </button>
+
+                  {/* Edit */}
+                  <button
+                   onClick={() => toast("coming soon!")}
+                    className="text-sm px-4 py-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors"                  
+                  >
+                    Edit Farm
+                  </button>
+
+                  {/* Delete */}
+                  <DeleteButton
+                    onDelete={handleDelete}
+                    label="Delete Farm"
+                  />
+
+                </div>
               </div>
             </div>
 
@@ -196,26 +224,26 @@ const FarmDetail = () => {
             {(flaggedCrops.length > 0 ||
               livestockNeedsAttention.length > 0 ||
               brokenEquipment.length > 0) && (
-              <div className="mt-4 pt-4 border-t border-gray-100">
-                <div className="flex items-center gap-2 text-xs text-amber-700">
-                  <AlertTriangle size={14} />
+                <div className="mt-4 pt-4 border-t border-gray-100">
+                  <div className="flex items-center gap-2 text-xs text-amber-700">
+                    <AlertTriangle size={14} />
 
-                  <span className="font-medium">
-                    {flaggedCrops.length +
-                      livestockNeedsAttention.length +
-                      brokenEquipment.length}{" "}
-                    item
-                    {flaggedCrops.length +
-                      livestockNeedsAttention.length +
-                      brokenEquipment.length !==
-                    1
-                      ? "s"
-                      : ""}{" "}
-                    need attention
-                  </span>
+                    <span className="font-medium">
+                      {flaggedCrops.length +
+                        livestockNeedsAttention.length +
+                        brokenEquipment.length}{" "}
+                      item
+                      {flaggedCrops.length +
+                        livestockNeedsAttention.length +
+                        brokenEquipment.length !==
+                        1
+                        ? "s"
+                        : ""}{" "}
+                      need attention
+                    </span>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
           </div>
 
           {/* Quick stats */}
@@ -367,17 +395,16 @@ const FarmDetail = () => {
 
                           {crop.plantedOn
                             ? new Date(
-                                crop.plantedOn
-                              ).toLocaleDateString()
+                              crop.plantedOn
+                            ).toLocaleDateString()
                             : "No planting date"}
                         </p>
                       </div>
 
                       <span
-                        className={`text-xs px-2 py-1 rounded-md shrink-0 ${
-                          statusStyles[crop.status] ||
+                        className={`text-xs px-2 py-1 rounded-md shrink-0 ${statusStyles[crop.status] ||
                           "bg-gray-100 text-gray-500"
-                        }`}
+                          }`}
                       >
                         {crop.status || "Unknown"}
                       </span>
@@ -504,10 +531,9 @@ const FarmDetail = () => {
                       </div>
 
                       <span
-                        className={`text-xs px-2 py-1 rounded-md shrink-0 ${
-                          statusStyles[animal.status] ||
+                        className={`text-xs px-2 py-1 rounded-md shrink-0 ${statusStyles[animal.status] ||
                           "bg-gray-100 text-gray-500"
-                        }`}
+                          }`}
                       >
                         {animal.status || "Healthy"}
                       </span>
@@ -614,10 +640,9 @@ const FarmDetail = () => {
                     </div>
 
                     <span
-                      className={`text-xs px-2 py-1 rounded-md ${
-                        conditionStyles[item.condition] ||
+                      className={`text-xs px-2 py-1 rounded-md ${conditionStyles[item.condition] ||
                         "bg-gray-100 text-gray-500"
-                      }`}
+                        }`}
                     >
                       {item.condition}
                     </span>

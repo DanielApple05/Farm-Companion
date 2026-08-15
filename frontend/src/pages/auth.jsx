@@ -35,7 +35,7 @@ const Auth = () => {
         setIsLogin(true); // Switch to login view after successful registration
         setForm({ name: "", email: "", password: "" }); // Clear form fields
       } catch (error) {
-        setMessage( error.response?.data?.message || error.message || "An error occurred during registration." );
+        setMessage(error.response?.data?.message || error.message || "An error occurred during registration.");
       } finally {
         setLoading(false);
         setMessage(""); // Clear message after a short delay
@@ -65,8 +65,13 @@ const Auth = () => {
     : form.name && form.email && form.password;
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-sm bg-white rounded-2xl border border-gray-100 p-8 space-y-6">
+    <div className="min-h-screen bg-gray-50 flex relative items-center justify-center p-4 inset-0 bg-cover bg-center bg-no-repeat"
+      style={{
+        backgroundImage: "url('/images/authBackground.png')",
+      }}
+    >
+      <div className="absolute inset-0 bg-black/50" />
+      <div className=" absolute z-10 w-full max-w-sm bg-white rounded-2xl border border-gray-100 p-8 space-y-6">
         {/* Logo */}
         <div className="flex items-center justify-center gap-2">
           <Sprout size={24} className="text-green-600" />

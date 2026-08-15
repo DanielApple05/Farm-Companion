@@ -22,6 +22,7 @@ app.use(express.json({ limit: "10mb" }));
 
 // Use routes
 app.use("/api/auth", auth);
+app.use("/api/history", historyRoutes);
 app.use("/api/crop", cropRoutes);
 app.use("/api/farms", farmRoutes);
 app.use("/api/livestock", livestockRoutes);
@@ -30,7 +31,6 @@ app.use("/api/news", newsRoutes);
 app.use("/api/expenses", expenseRoutes);
 app.use("/api/sales", saleRoutes);
 app.use("/api/tips", generalTipsRoutes);
-app.use("api/history, historyRoutes");
 
 // Health check
 app.get("/", (req, res) => {
