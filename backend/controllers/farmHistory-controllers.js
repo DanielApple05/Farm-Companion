@@ -1,5 +1,5 @@
 const Farm = require("../models/Farm");
-const FarmHistory = require("../models/FarmHistory");
+const FarmHistory = require("../models/farmHistory");
 const { isOwnerMatch } = require("../utils/ownership");
 
 const getFarmHistory = async (req, res) => {
