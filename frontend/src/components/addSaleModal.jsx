@@ -127,21 +127,10 @@ const AddSaleModal = ({
 
       const response = await addSale({
         farmId,
-
-        // Only one of these gets an ID
-        cropId:
-          saleType === "crop"
-            ? selectedItemData._id
-            : null,
-
-        livestockId:
-          saleType === "livestock"
-            ? selectedItemData._id
-            : null,
-
-        quantitySold: quantityNumber,
+        itemType: saleType,
+        itemId: selectedItemData._id,
+        quantity: quantityNumber,
         unit,
-
         buyer,
         amount: Number(amount),
         amountPaid: Number(amountPaid) || 0,
