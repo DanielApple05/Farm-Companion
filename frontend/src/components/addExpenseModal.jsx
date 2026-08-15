@@ -109,7 +109,7 @@ const AddExpenseModal = ({ farmId, onClose, onAdded }) => {
                   key={option}
                   type="button"
                   onClick={() => setCategory(option)}
-                  className={`text-xs py-2 rounded-lg border transition-colors ${
+                  className={`text-xs py-2 text-center rounded-lg border transition-colors ${
                     category === option
                       ? "border-green-400 bg-green-50 text-green-700 font-medium"
                       : "border-gray-200 text-gray-500 hover:border-gray-300"
@@ -122,13 +122,13 @@ const AddExpenseModal = ({ farmId, onClose, onAdded }) => {
           </div>
 
           <div className="flex gap-3 pt-2">
-            <div
+            <button
               type="button"
               onClick={onClose}
               className="flex-1 text-sm py-2.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors"
             >
               Cancel
-            </div>
+            </button>
             <button
               type="submit"
               disabled={!description || !amount || !date || loading}

@@ -653,7 +653,7 @@ const FarmDetail = () => {
           </div>
 
           {/* Farm finances */}
-          <FarmFinances farmId={farm._id} />
+          <FarmFinances farmId={farm._id} crops={farm.crops} livestock={farm.livestock} />
 
         </div>
       </div>

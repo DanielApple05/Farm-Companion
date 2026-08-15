@@ -13,7 +13,7 @@ const categoryStyles = {
   Other: "bg-gray-100 text-gray-700",
 };
 
-const FarmFinances = ({ farmId }) => {
+const FarmFinances = ({ farmId, crops, livestock }) => {
   const [expenses, setExpenses] = useState([]);
   const [totalExpenses, setTotalExpenses] = useState(0);
 
@@ -196,6 +196,8 @@ const FarmFinances = ({ farmId }) => {
       {saleModalOpen && (
         <AddSaleModal
           farmId={farmId}
+          crops={crops || []}
+          livestock={ livestock || []}
           onClose={() => setSaleModalOpen(false)}
           onAdded={(newSale) => {
             setSales([newSale, ...sales]);
