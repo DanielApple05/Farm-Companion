@@ -141,27 +141,9 @@ const Advisory = () => {
     fetchAdvisories();
   }, []);
 
-  if (weatherLoading || tipsLoading) {
-    return <AdvisorySkeleton />;
-  }
-
-  if (weatherError) {
-    return (
-      <>
-        <Header />
-
-        <div className="flex min-h-screen">
-          <Sidebar />
-
-          <main className="w-full mt-20 bg-gray-50 p-4 lg:p-6">
-            <div className="bg-red-50 border border-red-200 text-red-600 rounded-xl p-4 text-sm">
-              Failed to load weather information.
-            </div>
-          </main>
-        </div>
-      </>
-    );
-  }
+  // if (weatherLoading || tipsLoading) {
+  //   return <AdvisorySkeleton />;
+  // }
 
   const totalWarnings =
     cropWarnings.length + livestockWarnings.length;
@@ -169,7 +151,6 @@ const Advisory = () => {
   return (
     <>
       <Header />
-
       <div className="flex min-h-screen">
         <Sidebar />
         <MobileNav />
@@ -202,7 +183,7 @@ const Advisory = () => {
 
           {/* Weather */}
           <section className="w-full">
-            <WeatherCard weatherData={weatherData} />
+            <WeatherCard weatherData={weatherData} weatherLoading={weatherLoading} weatherError={weatherError} />
           </section>
 
           {/* Farm Overview */}

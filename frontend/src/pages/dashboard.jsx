@@ -221,7 +221,7 @@ const Dashboard = () => {
                 </div>
 
 
-                <div className="grid grid-cols-2 gap-3 mt-4">
+                <div className="grid xl:grid-cols-2 grid-cols-1 gap-3 mt-4">
 
                   {/* Crops */}
                   <Link
@@ -310,19 +310,19 @@ const Dashboard = () => {
                     </p>
                   </div>
 
-                  <Link
+                  {/* <Link
                     to="/diagnose"
                     className="text-sm text-green-600 flex items-center gap-1 hover:text-green-700"
                   >
                     View all
                     <ChevronRight size={14} />
-                  </Link>
+                  </Link> */}
                 </div>
                 {recentDiagnoses.map((diagnosis) => (
                   <div
                     key={diagnosis._id}
-                    className="flex items-center justify-between gap-4 p-3 rounded-xl bg-gray-50 border border-gray-100"
-                  >
+                    className="flex items-center justify-between gap-4 p-3 mb-2 rounded-xl bg-gray-50 border border-gray-100"
+                   >
                     <div className="flex items-center gap-3 min-w-0">
                       <div className="w-9 h-9 rounded-lg bg-amber-50 flex items-center justify-center shrink-0">
                         <Bug size={16} className="text-amber-600" />
