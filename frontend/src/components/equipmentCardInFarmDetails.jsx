@@ -19,7 +19,7 @@ const EquipmentCardInFarmDetails = ({equipment, farmId, onClose, onAdded }) => {
 
         <div className="flex items-center justify-between mb-4">
 
-          <h2 className="font-medium text-gray-900 flex items-center gap-2">
+          <h2 className="font-medium text-xs text-gray-900 flex items-center gap-2">
             <Wrench
               size={16}
               className="text-gray-600"
@@ -30,7 +30,7 @@ const EquipmentCardInFarmDetails = ({equipment, farmId, onClose, onAdded }) => {
 
           <button
             onClick={() => setEquipModalOpen(true)}
-            className="flex items-center gap-1 text-sm text-green-600 hover:text-green-700"
+            className="flex items-center gap-1 text-xs text-green-600 hover:text-green-700"
           >
             <PlusCircle size={14} />
             Add Equipment

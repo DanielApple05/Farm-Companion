@@ -227,22 +227,21 @@ const CropDetail = () => {
             <div className="flex items-start justify-between gap-3">
 
               {/* Identity */}
-              <div className="flex items-start gap-3 min-w-0">
+              <div className=" grid items-start gap-3 min-w-0">
 
-                <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-green-50 flex items-center justify-center shrink-0">
+                <div className="w-24 h-11 sm:h-12 p-1 rounded-xl bg-green-50 flex items-center justify-between shrink-0">
                   <Leaf
                     size={20}
                     className="text-green-600"
                   />
+                  <h1 className="text-xl sm:text-2xl font-semibold text-gray-900 capitalize">
+                    {crop.name}
+                  </h1>
                 </div>
 
                 <div className="min-w-0">
 
                   <div className="flex items-center gap-2 flex-wrap">
-                    <h1 className="text-xl sm:text-2xl font-semibold text-gray-900 capitalize">
-                      {crop.name}
-                    </h1>
-
                     {crop.status === "Flagged" && (
                       <AlertTriangle
                         size={16}
@@ -383,15 +382,15 @@ const CropDetail = () => {
 
                       <div
                         className={`w-4 h-4 rounded-full border-2 transition-colors ${i <= stageIndex
-                            ? "bg-green-600 border-green-600"
-                            : "bg-white border-gray-200"
+                          ? "bg-green-600 border-green-600"
+                          : "bg-white border-gray-200"
                           }`}
                       />
 
                       <span
                         className={`text-[11px] mt-2 whitespace-nowrap ${i === stageIndex
-                            ? "text-gray-900 font-medium"
-                            : "text-gray-400"
+                          ? "text-gray-900 font-medium"
+                          : "text-gray-400"
                           }`}
                       >
                         {stage}
@@ -403,8 +402,8 @@ const CropDetail = () => {
                       stageOrder.length - 1 && (
                         <div
                           className={`h-0.5 flex-1 mt-[7px] ${i < stageIndex
-                              ? "bg-green-600"
-                              : "bg-gray-200"
+                            ? "bg-green-600"
+                            : "bg-gray-200"
                             }`}
                         />
                       )}
@@ -418,7 +417,7 @@ const CropDetail = () => {
             {/* Growth information */}
             <div className="mt-5 pt-4 border-t border-gray-100">
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="flex gap-3 justify-between">
 
                 <div>
                   <p className="text-xs text-gray-400">

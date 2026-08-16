@@ -105,7 +105,7 @@ const FarmDetail = () => {
         {loading ? <FarmDetailsSkeleton /> :
           <div className="w-full p-6 space-y-6 xl:mt-20 mt-24 xl:mb-0 mb-20 bg-gray-50">
             <div className="bg-white rounded-xl border border-gray-100 p-5 ">
-              <div className="bg-white rounded-xl border border-gray-100 p-5">
+              
                 <div className="items-start justify-between gap-4 xl:flex grid">
 
                   <div>
@@ -155,7 +155,6 @@ const FarmDetail = () => {
                     />
                   </div>
                 </div>
-              </div>
 
               {/* Farm attention summary */}
               {(flaggedCrops.length > 0 ||
