@@ -42,11 +42,22 @@ const AddSaleModal = ({
    * a different field.
    */
   const harvestedCrops = useMemo(() => {
-    return crops.filter(
-      (crop) =>
+    return (crops || []).filter((crop) => {
+      const isHarvested =
         crop.harvested === true ||
-        crop.growth === "Harvested"
-    );
+        Boolean(crop.harvestedOn) ||
+        crop.status === "Harvested" ||
+        crop.growth === "Harvested";
+
+      const availableAmount = Number(
+        crop.yield?.amount ??
+        crop.quantity ??
+        crop.harvest?.quantity ??
+        0
+      );
+
+      return isHarvested && availableAmount > 0;
+    });
   }, [crops]);
 
   /*
@@ -66,7 +77,6 @@ const AddSaleModal = ({
         (animal.availableForSale !== false);
     });
   }, [livestock]);
-  console.log("livetock fetched", livestock)
 
   const items =
     saleType === "crop"
@@ -80,6 +90,7 @@ const AddSaleModal = ({
   const availableQuantity =
     selectedItemData?.availableQuantity ??
     selectedItemData?.quantity ??
+    selectedItemData?.yield?.amount ??
     selectedItemData?.headcount ??
     selectedItemData?.harvest?.quantity ??
     0;

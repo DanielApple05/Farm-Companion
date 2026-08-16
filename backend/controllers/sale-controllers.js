@@ -1,5 +1,7 @@
 const Sale = require("../models/Sale");
 const Farm = require("../models/Farm");
+const Livestock = require("../models/Livestock");
+const Crop = require("../models/Crop");
 
 // POST /api/sales
 const addSale = async (req, res) => {
@@ -16,15 +18,19 @@ const addSale = async (req, res) => {
   } = req.body;
 
   try {
-    // Basic validation
+    const qty = Number(quantity);
+    const totalAmount = Number(amount);
+
     if (
       !farmId ||
       !itemType ||
       !itemId ||
-      !quantity ||
+      !Number.isFinite(qty) ||
+      qty <= 0 ||
       !unit ||
       !buyer ||
-      !amount
+      !Number.isFinite(totalAmount) ||
+      totalAmount < 0
     ) {
       return res.status(400).json({
         message:
@@ -32,14 +38,12 @@ const addSale = async (req, res) => {
       });
     }
 
-    // Validate item type
     if (!["crop", "livestock"].includes(itemType)) {
       return res.status(400).json({
         message: "itemType must be either crop or livestock",
       });
     }
 
-    // Make sure the farm belongs to the logged-in user
     const farm = await Farm.findOne({
       _id: farmId,
       owner: req.user.id,
@@ -52,10 +56,8 @@ const addSale = async (req, res) => {
     }
 
     let item;
-
-    // -------------------------
-    // CROP SALE
-    // -------------------------
+    let availableQuantity = 0;
+    let itemLabel = "item";
 
     if (itemType === "crop") {
       item = await Crop.findOne({
@@ -69,27 +71,27 @@ const addSale = async (req, res) => {
         });
       }
 
-      // Crop must be harvested
-      if (!item.harvest?.harvested) {
+      const isHarvested =
+        item.harvested === true ||
+        Boolean(item.harvestedOn) ||
+        item.status === "Harvested" ||
+        item.growth === "Harvested";
+
+      if (!isHarvested) {
         return res.status(400).json({
           message: "This crop has not been harvested yet",
         });
       }
 
-      // Check remaining quantity
-      const availableQuantity =
-        item.harvest.quantity - (item.harvest.quantitySold || 0);
+      availableQuantity = Number(item.yield?.amount ?? item.quantity ?? 0);
+      itemLabel = item.name;
 
-      if (quantity > availableQuantity) {
+      if (qty > availableQuantity) {
         return res.status(400).json({
-          message: `Only ${availableQuantity}${unit} of this crop is available for sale`,
+          message: `Only ${availableQuantity} ${unit} of this crop is available for sale`,
         });
       }
     }
-
-    // -------------------------
-    // LIVESTOCK SALE
-    // -------------------------
 
     if (itemType === "livestock") {
       item = await Livestock.findOne({
@@ -103,34 +105,32 @@ const addSale = async (req, res) => {
         });
       }
 
-      // Example availability check
+      availableQuantity = Number(item.headcount ?? item.quantity ?? 0);
+      itemLabel = item.type;
+
       if (item.availableForSale === false) {
         return res.status(400).json({
           message: "This livestock is not available for sale",
         });
       }
 
-      if (quantity > item.quantity) {
+      if (qty > availableQuantity) {
         return res.status(400).json({
-          message: `Only ${item.quantity} ${unit} available`,
+          message: `Only ${availableQuantity} ${unit} available`,
         });
       }
     }
 
-    // -------------------------
-    // CREATE SALE
-    // -------------------------
-
     const sale = await Sale.create({
       farm: farmId,
-      itemType,
-      item: itemId,
-      quantity,
-      unit,
+      description: `${qty} ${unit} of ${itemLabel} sold to ${buyer}`,
       buyer,
-      amount,
-      amountPaid: amountPaid || 0,
+      amount: totalAmount,
+      amountPaid: Number(amountPaid) || 0,
       date: date || new Date(),
+      ...(itemType === "crop" ? { crop: itemId } : { livestock: itemId }),
+      quantitySold: qty,
+      unit,
     });
 
     res.status(201).json(sale);
@@ -138,7 +138,7 @@ const addSale = async (req, res) => {
     console.error("Add sale error:", error);
 
     res.status(500).json({
-      message: "Server error",
+      message: error.message || "Server error",
     });
   }
 };
