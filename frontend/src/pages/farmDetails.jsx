@@ -55,6 +55,7 @@ const FarmDetail = () => {
     equipment: [],
   });
 
+
   const handleDelete = async () => {
     try {
       await deleteFarm(id);
@@ -134,6 +135,7 @@ const FarmDetail = () => {
   const crops = farm.crops || [];
   const livestock = farm.livestock || [];
   const equipment = farm.equipment || [];
+
 
   const totalLivestock = livestock.reduce(
     (sum, animal) => sum + Number(animal.headcount || 0),
@@ -653,7 +655,7 @@ const FarmDetail = () => {
           </div>
 
           {/* Farm finances */}
-          <FarmFinances farmId={farm._id} crops={farm.crops} livestock={farm.livestock} />
+          <FarmFinances farmId={farm._id} crops={crops} livestock={livestock} />
 
         </div>
       </div>

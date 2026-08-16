@@ -51,6 +51,7 @@ const FarmFinances = ({ farmId, crops, livestock }) => {
 
     if (farmId) fetchFinances();
   }, [farmId]);
+  
 
   const netPosition = totalSales - totalExpenses;
 
@@ -196,8 +197,8 @@ const FarmFinances = ({ farmId, crops, livestock }) => {
       {saleModalOpen && (
         <AddSaleModal
           farmId={farmId}
-          crops={crops || []}
-          livestock={ livestock || []}
+          crops={crops}
+          livestock={livestock}
           onClose={() => setSaleModalOpen(false)}
           onAdded={(newSale) => {
             setSales([newSale, ...sales]);

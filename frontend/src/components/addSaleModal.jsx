@@ -10,8 +10,8 @@ import { addSale } from "../api/finances";
 
 const AddSaleModal = ({
   farmId,
-  crops = [],
-  livestock = [],
+  crops,
+  livestock,
   onClose,
   onAdded,
 }) => {
@@ -45,21 +45,28 @@ const AddSaleModal = ({
     return crops.filter(
       (crop) =>
         crop.harvested === true ||
-        crop.status === "Harvested" ||
-        crop.harvest?.harvested === true
+        crop.growth === "Harvested"
     );
   }, [crops]);
 
   /*
    * Livestock available from the farm.
+   * The farm stores livestock counts as headcount, not quantity/availableLivestock.
    */
   const availableLivestock = useMemo(() => {
-    return livestock.filter(
-      (animal) =>
-        animal.availableForSale !== false &&
-        animal.quantity > 0
-    );
+    return (livestock || []).filter((animal) => {
+      const availableCount = Number(
+        animal.headcount ??
+        animal.quantity ??
+        animal.availableQuantity ??
+        0
+      );
+
+      return availableCount > 0 &&
+        (animal.availableForSale !== false);
+    });
   }, [livestock]);
+  console.log("livetock fetched", livestock)
 
   const items =
     saleType === "crop"
@@ -70,13 +77,10 @@ const AddSaleModal = ({
     (item) => item._id === selectedItem
   );
 
-  /*
-   * Change these depending on the exact structure
-   * of your Crop/Livestock models.
-   */
   const availableQuantity =
     selectedItemData?.availableQuantity ??
     selectedItemData?.quantity ??
+    selectedItemData?.headcount ??
     selectedItemData?.harvest?.quantity ??
     0;
 
@@ -150,7 +154,7 @@ const AddSaleModal = ({
 
       setMessage(
         error.response?.data?.message ||
-          "Failed to record sale"
+        "Failed to record sale"
       );
     } finally {
       setLoading(false);
@@ -198,11 +202,10 @@ const AddSaleModal = ({
           {/* Message */}
           {message && (
             <div
-              className={`rounded-xl border px-4 py-3 text-sm ${
-                isSuccess
+              className={`rounded-xl border px-4 py-3 text-sm ${isSuccess
                   ? "bg-green-50 border-green-200 text-green-600"
                   : "bg-red-50 border-red-200 text-red-500"
-              }`}
+                }`}
             >
               {message}
             </div>
@@ -220,11 +223,10 @@ const AddSaleModal = ({
                 onClick={() =>
                   handleSaleTypeChange("crop")
                 }
-                className={`flex items-center justify-center gap-2 rounded-xl border px-3 py-3 text-base ${
-                  saleType === "crop"
+                className={`flex items-center justify-center gap-2 rounded-xl border px-3 py-3 text-base ${saleType === "crop"
                     ? "border-green-500 bg-green-50 text-green-700"
                     : "border-gray-200 text-gray-600"
-                }`}
+                  }`}
               >
                 <Sprout size={17} />
                 Crops
@@ -235,11 +237,10 @@ const AddSaleModal = ({
                 onClick={() =>
                   handleSaleTypeChange("livestock")
                 }
-                className={`flex items-center justify-center gap-2 rounded-xl border px-3 py-3 text-base ${
-                  saleType === "livestock"
+                className={`flex items-center justify-center gap-2 rounded-xl border px-3 py-3 text-base ${saleType === "livestock"
                     ? "border-green-500 bg-green-50 text-green-700"
                     : "border-gray-200 text-gray-600"
-                }`}
+                  }`}
               >
                 <PawPrint size={17} />
                 Livestock
@@ -276,7 +277,7 @@ const AddSaleModal = ({
                   key={item._id}
                   value={item._id}
                 >
-                  {item.name}
+                  {item.name || item.breed }
                 </option>
               ))}
             </select>
