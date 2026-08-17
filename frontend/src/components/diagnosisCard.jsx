@@ -28,7 +28,7 @@ const DiagnosisCard = ({ recentDiagnoses, cropError, cropLoading }) => {
             />
 
             <p className="text-sm text-gray-500 mt-2">
-              No farm knowledge available today.
+              No farm available today.
             </p>
           </div>
         )
