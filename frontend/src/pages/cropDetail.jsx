@@ -12,14 +12,14 @@ import {
   RefreshCw,
 } from "lucide-react";
 
-import Sidebar from "../components/sidebar";
-import MobileNav from "../components/mobileNav";
+import Sidebar from "../components/navs/sidebar";
+import MobileNav from "../components/navs/mobileNav";
 import Header from "../components/header";
 import { getCropById, deleteCrop, harvestCrop } from "../api/crops";
-import DeleteButton from "../components/deleteButton";
-import HarvestModal from "../components/harvestModal";
-import DiagnoseInCropDetails from "../components/diagnoseInCropDetails";
-import TipsInCropDetails from "../components/tipsInCropDetails";
+import DeleteButton from "../components/buttons/deleteButton";
+import HarvestModal from "../components/modalComponent/harvestModal";
+import DiagnoseInCropDetails from "../components/cropComponent/diagnoseInCropDetails";
+import TipsInCropDetails from "../components/tipsComponent/tipsInCropDetails";
 
 const statusStyles = {
   Healthy: "bg-green-50 text-green-700 border border-green-100",

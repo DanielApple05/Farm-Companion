@@ -4,7 +4,7 @@ import {
   Activity, Calendar, Loader2
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import AddCropModal from './addCropModal';
+import AddCropModal from '../modalComponent/addCropModal';
 
 const CropCardInFarmDetails = ({ crops, onAdded, farmId, onClose, error, loading }) => {
 

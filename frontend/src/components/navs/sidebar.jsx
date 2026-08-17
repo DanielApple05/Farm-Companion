@@ -12,7 +12,7 @@ import {
   LogOut,
   Users
 } from "lucide-react";
-import { useLogout } from "../utils";
+import { useLogout } from "../../utils";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 
 const navItems = [

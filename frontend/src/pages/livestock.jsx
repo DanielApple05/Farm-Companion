@@ -8,14 +8,14 @@ import {
   RefreshCw,
   AlertTriangle,
 } from "lucide-react";
-import Sidebar from "../components/sidebar";
+import Sidebar from "../components/navs/sidebar";
 import Header from "../components/header";
-import AddLivestockModal from "../components/addLivestockModal";
+import AddLivestockModal from "../components/modalComponent/addLivestockModal";
 import { useEffect, useState } from "react";
 import { getLivestock } from "../api/livestock";
-import LivestockLoading from "../components/livestockLoadingGrid";
+import LivestockLoading from "../components/livestockComponent/livestockLoadingGrid";
 import { Link } from "react-router-dom";
-import MobileNav from "../components/mobileNav";
+import MobileNav from "../components/navs/mobileNav";
 
 const statusStyles = {
   Healthy: "bg-green-50 text-green-700",
@@ -49,7 +49,6 @@ const Livestock = () => {
   };
 
   useEffect(() => {
-
     fetchLivestock();
   }, []);
 

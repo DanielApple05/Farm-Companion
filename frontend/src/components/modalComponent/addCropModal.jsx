@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { X, Calendar, Camera } from "lucide-react";
-import { createCrop, getSupportedCrops } from "../api/crops";
-import { getFarms } from "../api/farm";
+import { createCrop, getSupportedCrops } from "../../api/crops";
+import { getFarms } from "../../api/farm";
 
 const AddCropModal = ({ farmId, onClose, onAdded }) => {
   useEffect(() => {

@@ -16,12 +16,12 @@ import {
   RefreshCw,
 } from "lucide-react";
 
-import Sidebar from "../components/sidebar";
-import MobileNav from "../components/mobileNav";
+import Sidebar from "../components/navs/sidebar";
+import MobileNav from "../components/navs/mobileNav";
 import Header from "../components/header";
 import { getLivestockById, deleteLivestock } from "../api/livestock";
-import AddVaccinationModal from "../components/addVacinationModal";
-import DeleteButton from "../components/deleteButton";
+import AddVaccinationModal from "../components/modalComponent/addVacinationModal";
+import DeleteButton from "../components/buttons/deleteButton";
 
 const statusStyles = {
   Healthy: "bg-green-50 text-green-700",
@@ -84,7 +84,7 @@ const LivestockDetail = () => {
         <Sidebar />
         <MobileNav />
 
-        <main className="w-full px-4 sm:px-6 pb-24 xl:pb-6 bg-gray-50 space-y-4 sm:space-y-6 xl:mt-24 mt-28 xl:mb-0 mb-20">
+        <main className="w-full px-4 sm:px-6 pb-24 pt-4 xl:pb-6 bg-gray-50 space-y-4 sm:space-y-6 xl:mt-20 mt-28 xl:mb-0 mb-20">
           {loading && (
             <div className="flex items-center justify-center py-10">
               <div className="flex items-center gap-2 text-sm text-gray-500">

@@ -10,17 +10,17 @@ import {
   Lightbulb,
 } from "lucide-react";
 
-import Sidebar from "../components/sidebar";
-import MobileNav from "../components/mobileNav";
+import Sidebar from "../components/navs/sidebar";
+import MobileNav from "../components/navs/mobileNav";
 import Header from "../components/header";
 import Hero from "../components/hero";
-import FarmKnowledgeDaily from "../components/farmKnowledge";
+import FarmKnowledgeDaily from "../components/farmComponent/farmKnowledge";
 import { getFarms } from "../api/farm";
 import { getCrops } from "../api/crops";
 import { getLivestock } from "../api/livestock";
 import { Link } from "react-router-dom";
 import { capitalizeFirst } from "../helpers";
-import DiagnosisCard from "../components/diagnosisCard";
+import DiagnosisCard from "../components/cards/diagnosisCard";
 
 const quickActions = [
   {
@@ -58,7 +58,7 @@ const Dashboard = () => {
   const [farmLoading, setFarmLoading] = useState(true);
   const [cropLoading, setCropLoading] = useState(true);
   const [livestockLoading, setLivestockLoading] = useState(true);
-  const [ cropError, setCropError ] = useState([]);
+  const [cropError, setCropError] = useState([]);
 
   useEffect(() => {
     const fetchFarms = async () => {
@@ -280,75 +280,15 @@ const Dashboard = () => {
 
             {/* Today's Tips */}
             <section className="px-6">
-              <div className="flex items-center justify-between mb-3">
-                <div>
-                  <h2 className="font-semibold text-gray-900">
-                    Today's Tips
-                  </h2>
-
-                  <p className="text-xs text-gray-500 mt-1">
-                    A few things worth knowing today.
-                  </p>
-                </div>
-              </div>
 
               <FarmKnowledgeDaily />
             </section>
 
             {/* Recent Diagnosis */}
             <section className="px-6">
-              <div className="bg-white rounded-xl border border-gray-100 p-5">
 
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <h2 className="font-semibold text-gray-900">
-                      Recent Diagnosis
-                    </h2>
+              <DiagnosisCard recentDiagnoses={recentDiagnoses} cropError={cropError} cropLoading={cropLoading} />
 
-                    <p className="text-xs text-gray-500 mt-1">
-                      Your latest crop health checks.
-                    </p>
-                  </div>
-
-                  {/* <Link
-                    to="/diagnose"
-                    className="text-sm text-green-600 flex items-center gap-1 hover:text-green-700"
-                  >
-                    View all
-                    <ChevronRight size={14} />
-                  </Link> */}
-                </div>
-                {/* {recentDiagnoses.map((diagnosis) => (
-                  <div
-                    key={diagnosis._id}
-                    className="flex items-center justify-between gap-4 p-3 mb-2 rounded-xl bg-gray-50 border border-gray-100"
-                   >
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-9 h-9 rounded-lg bg-amber-50 flex items-center justify-center shrink-0">
-                        <Bug size={16} className="text-amber-600" />
-                      </div>
-
-                      <div className="min-w-0">
-                        <p className="text-sm font-medium text-gray-900 truncate">
-                          {capitalizeFirst(diagnosis.disease)}
-                        </p>
-
-                        <p className="text-xs text-gray-500 mt-0.5">
-                          {capitalizeFirst(diagnosis.cropName)}
-                          {" · "}
-                          {new Date(diagnosis.createdAt).toLocaleDateString()}
-                        </p>
-                      </div>
-                    </div>
-
-                    <span className="shrink-0 text-[11px] bg-amber-50 text-amber-700 px-2 py-1 rounded-md">
-                      {diagnosis.confidence}% match
-                    </span>
-                  </div>
-                ))} */}
-
-                <DiagnosisCard recentDiagnoses={recentDiagnoses} cropError={cropError} cropLoading={cropLoading} />
-              </div>
             </section>
           </div>
         </main>

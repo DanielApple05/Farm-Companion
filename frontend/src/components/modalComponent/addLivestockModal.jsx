@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { X, PawPrint, Camera } from "lucide-react";
-import { createLivestock, getSupportedLivestock } from "../api/livestock";
-import { getFarms } from "../api/farm";
+import { createLivestock, getSupportedLivestock } from "../../api/livestock";
+import { getFarms } from "../../api/farm";
 
 const AddLivestockModal = ({ farmId, onClose, onAdded }) => {
   useEffect(() => {

@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useLogout } from "../utils";
+import { useLogout } from "../../utils";
 
 const mainNavItems = [
   {

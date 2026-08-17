@@ -6,22 +6,22 @@ import {
   History
 } from "lucide-react";
 
-import Sidebar from "../components/sidebar";
+import Sidebar from "../components/navs/sidebar";
 import Header from "../components/header";
-import FarmDetailsSkeleton from "../components/farmDetailsSkeleton";
+import FarmDetailsSkeleton from "../components/farmComponent/farmDetailsSkeleton";
 
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { getFarmById, deleteFarm } from "../api/farm";
 import { useParams, Link, useNavigate } from "react-router-dom";
 
-import FarmFinances from "../components/farmFinances";
-import DeleteButton from "../components/deleteButton";
-import MobileNav from "../components/mobileNav";
-import CropCardInFarmDetails from "../components/cropCardInFarmDetails";
-import LivestockCardInFarmDetails from "../components/livestockCardInFarmDetails";
-import EquipmentCardInFarmDetails from "../components/equipmentCardInFarmDetails";
-import QuickStatsInFarmDetails from "../components/quickStatsInFarmDetails";
+import FarmFinances from "../components/farmComponent/farmFinances";
+import DeleteButton from "../components/buttons/deleteButton";
+import MobileNav from "../components/navs/mobileNav";
+import CropCardInFarmDetails from "../components/cards/cropCardInFarmDetails";
+import LivestockCardInFarmDetails from "../components/cards/livestockCardInFarmDetails";
+import EquipmentCardInFarmDetails from "../components/cards/equipmentCardInFarmDetails";
+import QuickStatsInFarmDetails from "../components/farmComponent/quickStatsInFarmDetails";
 
 const FarmDetail = () => {
   const { id } = useParams();

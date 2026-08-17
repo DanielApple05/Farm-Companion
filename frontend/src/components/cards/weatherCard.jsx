@@ -1,5 +1,5 @@
 import React from 'react';
-import { getWeatherIcon } from "./weatherIcon";
+import { getWeatherIcon } from "../weatherIcon";
 import { CloudSun, Droplets, Wind } from "lucide-react";
 
 const weatherCard = ({ weatherData, weatherLoading, weatherError }) => {

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { X, Syringe, Calendar } from "lucide-react";
-import { addVaccination } from "../api/livestock";
+import { addVaccination } from "../../api/livestock";
 
 const AddVaccinationModal = ({ livestockId, onClose, onAdded }) => {
   useEffect(() => {

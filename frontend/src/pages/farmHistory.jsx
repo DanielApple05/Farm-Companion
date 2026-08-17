@@ -13,8 +13,8 @@ import {
   Info,
 } from "lucide-react";
 import Header from "../components/header";
-import Sidebar from "../components/sidebar";
-import MobileNav from "../components/mobileNav";
+import Sidebar from "../components/navs/sidebar";
+import MobileNav from "../components/navs/mobileNav";
 
 const historyItems = [
   {

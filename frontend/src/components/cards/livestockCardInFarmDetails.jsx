@@ -4,7 +4,7 @@ import {
   Activity, Calendar, Loader2
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import AddLivestockModal from './addLivestockModal';
+import AddLivestockModal from '../modalComponent/addLivestockModal';
 
 const LivestockCardInFarmDetails = ({ livestock, onAdded, farmId, onClose, error, loading }) => {
 

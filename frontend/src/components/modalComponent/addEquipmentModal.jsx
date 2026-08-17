@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { X, Wrench, Hash } from "lucide-react";
-import { addEquipment } from "../api/equipment";
+import { addEquipment } from "../../api/equipment";
 
 const conditionOptions = ["Good", "Needs repair", "Broken"];
 

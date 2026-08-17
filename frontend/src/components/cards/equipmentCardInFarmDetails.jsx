@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Wrench, PlusCircle, Loader2 } from 'lucide-react';
-import AddEquipmentModal from './addEquipmentModal';
+import AddEquipmentModal from '../modalComponent/addEquipmentModal';
 
 const EquipmentCardInFarmDetails = ({ equipment, farmId, onClose, onAdded, error, loading }) => {
 

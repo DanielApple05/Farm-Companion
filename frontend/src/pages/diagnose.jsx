@@ -10,11 +10,11 @@ import {
   Loader2,
 } from "lucide-react";
 
-import Sidebar from "../components/sidebar";
+import Sidebar from "../components/navs/sidebar";
 import Header from "../components/header";
 import { diagnoseCrop } from "../api/diagnose";
 import { getCrops } from "../api/crops";
-import MobileNav from "../components/mobileNav";
+import MobileNav from "../components/navs/mobileNav";
 
 const riskStyles = {
   Low: "bg-green-50 text-green-700",

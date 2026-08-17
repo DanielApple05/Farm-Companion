@@ -1,5 +1,5 @@
 import { Lightbulb } from "lucide-react";
-import { getWeeklyTip } from "../components/plantingTips";
+import { getWeeklyTip } from "./plantingTips";
 
 const WeeklyTip = () => {
   const tip = getWeeklyTip();

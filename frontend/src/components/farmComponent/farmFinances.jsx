@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Wallet, Tag, PlusCircle, TrendingDown, TrendingUp, AlertCircle, Loader2, RefreshCw } from "lucide-react";
-import { getExpenses, getSales } from "../api/finances";
-import AddExpenseModal from "./addExpenseModal";
-import AddSaleModal from "./addSaleModal";
+import { getExpenses, getSales } from "../../api/finances";
+import AddExpenseModal from "../modalComponent/addExpenseModal";
+import AddSaleModal from "../modalComponent/addSaleModal";
 
 const categoryStyles = {
   Seeds: "bg-green-50 text-green-700",

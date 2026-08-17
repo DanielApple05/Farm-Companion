@@ -1,12 +1,12 @@
 import { Leaf, MapPin, Calendar, PlusCircle, ChevronRight, AlertTriangle } from "lucide-react";
-import Sidebar from "../components/sidebar";
+import Sidebar from "../components/navs/sidebar";
 import Header from "../components/header";
-import AddCropModal from "../components/addCropModal";
+import AddCropModal from "../components/modalComponent/addCropModal";
 import { useEffect, useState } from "react";
 import { getCrops } from "../api/crops";
-import CropsLoading from "../components/cropLoadingGrid";
+import CropsLoading from "../components/cropComponent/cropLoadingGrid";
 import { Link } from "react-router-dom";
-import MobileNav from "../components/mobileNav";
+import MobileNav from "../components/navs/mobileNav";
 
 const statusStyles = {
   Healthy: "bg-green-50 text-green-700",

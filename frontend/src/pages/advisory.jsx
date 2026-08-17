@@ -4,7 +4,7 @@ import {
   AlertTriangle,
   CheckCircle2,
 } from "lucide-react";
-import Sidebar from "../components/sidebar";
+import Sidebar from "../components/navs/sidebar";
 import Header from "../components/header";
 import { useEffect, useState } from "react";
 import { useWeather } from "../api/weather";
@@ -16,8 +16,8 @@ import {
   getLivestock,
   getLivestockById,
 } from "../api/livestock";
-import WeatherCard from "../components/weatherCard";
-import MobileNav from "../components/mobileNav";
+import WeatherCard from "../components/cards/weatherCard";
+import MobileNav from "../components/navs/mobileNav";
 
 const Advisory = () => {
   const {

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { X, MapPin, Camera, Loader2 } from "lucide-react";
-import { addFarm } from "../api/farm";
+import { addFarm } from "../../api/farm";
 
 // Temporary default.
 // Later this can come from the user's profile/location service.

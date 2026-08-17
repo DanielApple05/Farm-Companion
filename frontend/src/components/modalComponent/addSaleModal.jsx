@@ -6,7 +6,7 @@ import {
   Calendar,
   PawPrint,
 } from "lucide-react";
-import { addSale } from "../api/finances";
+import { addSale } from "../../api/finances";
 
 const AddSaleModal = ({
   farmId,

@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { Newspaper, ExternalLink, Lightbulb, Loader2 } from "lucide-react";
-import Sidebar from "../components/sidebar";
+import Sidebar from "../components/navs/sidebar";
 import Header from "../components/header";
 import { getAgricultureNews } from "../api/news";
-import MobileNav from "../components/mobileNav";
+import MobileNav from "../components/navs/mobileNav";
 // import WeeklyTip  from "../components/weeklyTip";
 // import MonthlyTip from "../components/monthlyTip";
 

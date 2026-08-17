@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { X, Wallet, Calendar } from "lucide-react";
-import { addExpense } from "../api/finances";
+import { addExpense } from "../../api/finances";
 
 const categoryOptions = ["Seeds", "Fertilizer", "Labor", "Equipment", "Veterinary", "Other"];
 

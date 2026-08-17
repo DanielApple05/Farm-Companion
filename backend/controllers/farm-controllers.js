@@ -24,7 +24,6 @@ const createFarm = async (req, res) => {
     await User.findByIdAndUpdate(req.user.id, { $push: { farms: farm._id } });
     res.status(201).json(farm);
   } catch (error) {
-    console.error("Create farm error:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -37,7 +36,6 @@ const getFarms = async (req, res) => {
     const farms = await Farm.find({ owner: req.user.id }).sort({ createdAt: -1 });
     res.json(farms);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -56,7 +54,6 @@ const getFarmById = async (req, res) => {
  
     res.json(farm);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -81,7 +78,6 @@ const updateFarm = async (req, res) => {
     await farm.save();
     res.json(farm);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "Server error" });
   }
 };

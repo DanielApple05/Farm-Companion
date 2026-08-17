@@ -13,7 +13,7 @@ import FarmDetail from './pages/farmDetails';
 import News from './pages/news';
 import CropDetail from './pages/cropDetail';
 import LivestockDetail from './pages/livestockDetail';
-import ProtectedRoute from './components/protectRoutes';
+import ProtectedRoute from './components/security/protectRoutes';
 import FarmHistory from './pages/farmHistory';
 
 const App = () => {

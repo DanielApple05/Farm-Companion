@@ -9,14 +9,14 @@ import {
   AlertTriangle,
   RefreshCw
 } from "lucide-react";
-import Sidebar from "../components/sidebar";
+import Sidebar from "../components/navs/sidebar";
 import Header from "../components/header";
-import AddFarmModal from "../components/addFarmModal";
+import AddFarmModal from "../components/modalComponent/addFarmModal";
 import { useState, useEffect } from "react";
 import { getFarms } from "../api/farm";
-import FarmCardSkeleton from "../components/farmSkeleton";
+import FarmCardSkeleton from "../components/farmComponent/farmSkeleton";
 import { Link } from "react-router-dom";
-import MobileNav from "../components/mobileNav";
+import MobileNav from "../components/navs/mobileNav";
 
 const MyFarms = () => {
   const [farmModalOpen, setFarmModalOpen] = useState(false);
@@ -24,23 +24,23 @@ const MyFarms = () => {
   const [error, setError] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const fetchFarms = async () => {
+    try {
+      setLoading(true);
+      setError(null)
+      const response = await getFarms();
+
+      setFarms(response.data);
+    } catch (error) {
+      setError(
+        error?.response?.data?.message || "Failed to fetch farms"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchFarms = async () => {
-      try {
-        setLoading(true);
-        setError(null)
-        const response = await getFarms();
-
-        setFarms(response.data);
-      } catch (error) {
-        setError(
-          error?.response?.data?.message || "Failed to fetch farms"
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchFarms();
   }, []);
 
@@ -83,7 +83,7 @@ const MyFarms = () => {
           </div>
 
           {/* Error */}
-          { error &&  (
+          {error && (
             <div className="flex flex-col items-center justify-center py-8 text-center">
               <AlertTriangle
                 size={24}
@@ -96,7 +96,7 @@ const MyFarms = () => {
 
               <button
                 type="button"
-                onClick={ () =>  { setLoading(true),  setError(null) } }
+                onClick={fetchFarms}
                 className="mt-3 inline-flex items-center gap-2 text-xs font-medium text-green-600 hover:text-green-700"
               >
                 <RefreshCw size={13} />

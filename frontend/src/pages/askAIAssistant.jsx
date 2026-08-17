@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Send, Sprout, User } from "lucide-react";
-import Sidebar from "../components/sidebar";
+import Sidebar from "../components/navs/sidebar";
 import Header from "../components/header";
-import MobileNav from "../components/mobileNav";
+import MobileNav from "../components/navs/mobileNav";
 
 // ---- Dummy conversation (swap for real Claude API messages later) ----
 const initialMessages = [
