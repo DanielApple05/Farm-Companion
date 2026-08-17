@@ -34,6 +34,7 @@ const DiagnosisCard = ({ recentDiagnoses, cropError, cropLoading }) => {
         )
       }
 
+
       {/* Error */}
       {cropError && (
         <div className="flex flex-col items-center justify-center py-8 text-center">

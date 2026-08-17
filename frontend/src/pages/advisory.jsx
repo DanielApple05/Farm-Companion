@@ -16,7 +16,6 @@ import {
   getLivestock,
   getLivestockById,
 } from "../api/livestock";
-import AdvisorySkeleton from "../components/advisorySkeleton";
 import WeatherCard from "../components/weatherCard";
 import MobileNav from "../components/mobileNav";
 

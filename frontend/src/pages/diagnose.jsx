@@ -288,7 +288,6 @@ const DiagnoseCrop = () => {
                       </>
                     )}
                   </button>
-
                 </form>
 
                 {/* Diagnosis loading */}
@@ -500,6 +499,13 @@ const DiagnoseCrop = () => {
                       No diagnoses yet — your results will show up here.
                     </p>
                   )}
+                {/* 
+                {!cropLoading &&
+                  recentDiagnoses.length === 0 && (
+                    <p className="text-xs text-gray-400">
+                      No diagnoses yet — your results will show up here.
+                    </p>
+                  )} */}
 
                 <div className="space-y-3">
 

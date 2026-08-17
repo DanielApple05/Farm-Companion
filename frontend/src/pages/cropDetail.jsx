@@ -19,7 +19,7 @@ import { getCropById, deleteCrop, harvestCrop } from "../api/crops";
 import DeleteButton from "../components/deleteButton";
 import HarvestModal from "../components/harvestModal";
 import DiagnoseInCropDetails from "../components/diagnoseInCropDetails";
-import TipsInCropDetails from "./tipsInCropDetails";
+import TipsInCropDetails from "../components/tipsInCropDetails";
 
 const statusStyles = {
   Healthy: "bg-green-50 text-green-700 border border-green-100",

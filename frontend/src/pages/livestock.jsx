@@ -5,6 +5,8 @@ import {
   ChevronRight,
   Syringe,
   AlertCircle,
+  RefreshCw,
+  AlertTriangle,
 } from "lucide-react";
 import Sidebar from "../components/sidebar";
 import Header from "../components/header";
@@ -27,23 +29,26 @@ const Livestock = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    const fetchLivestock = async () => {
-      try {
-        setLoading(true);
-        setMessage("");
 
-        const response = await getLivestock();
-        setLivestock(response.data);
-      } catch (error) {
-        setMessage(
-          error?.response?.data?.message ||
-            "Failed to load livestock"
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
+
+  const fetchLivestock = async () => {
+    try {
+      setLoading(true);
+      setMessage("");
+
+      const response = await getLivestock();
+      setLivestock(response.data);
+    } catch (error) {
+      setMessage(
+        error?.response?.data?.message ||
+        "Failed to load livestock"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
 
     fetchLivestock();
   }, []);
@@ -80,13 +85,11 @@ const Livestock = () => {
               <p className="text-gray-500 text-sm mt-1">
                 {loading
                   ? "Loading your livestock..."
-                  : `${totalAnimals} ${
-                      totalAnimals === 1 ? "animal" : "animals"
-                    } across ${livestock.length} ${
-                      livestock.length === 1
-                        ? "group"
-                        : "groups"
-                    }`}
+                  : `${totalAnimals} ${totalAnimals === 1 ? "animal" : "animals"
+                  } across ${livestock.length} ${livestock.length === 1
+                    ? "group"
+                    : "groups"
+                  }`}
               </p>
             </div>
 
@@ -183,6 +186,21 @@ const Livestock = () => {
           {loading && (
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
               <LivestockLoading />
+            </div>
+          )}
+
+          {!loading && message && (
+            <div className="max-w-2xl mx-auto flex flex-col items-center justify-center py-8 text-center">
+              <AlertTriangle size={24} className="text-gray-300" />
+              <p className="text-sm text-gray-600 mt-2">{message || "No crop data found."}</p>
+              <button
+                type="button"
+                onClick={fetchLivestock}
+                className="mt-3 inline-flex items-center gap-2 text-xs font-medium text-green-600 hover:text-green-700"
+              >
+                <RefreshCw size={13} />
+                Try again
+              </button>
             </div>
           )}
 
@@ -319,11 +337,11 @@ const Livestock = () => {
 
                         {group.status ===
                           "Due for vaccination" && (
-                          <Syringe
-                            size={14}
-                            className="text-red-500"
-                          />
-                        )}
+                            <Syringe
+                              size={14}
+                              className="text-red-500"
+                            />
+                          )}
 
                       </div>
 
