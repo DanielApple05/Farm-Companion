@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import {
   PawPrint, PlusCircle, AlertTriangle,
-  Activity, Calendar
+  Activity, Calendar, Loader2
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import AddLivestockModal from './addLivestockModal';
 
-const LivestockCardInFarmDetails = ({ livestock, onAdded, farmId, onClose }) => {
+const LivestockCardInFarmDetails = ({ livestock, onAdded, farmId, onClose, error, loading }) => {
 
   const [livestockModal, setLivestockModal] = useState(false);
 
@@ -48,7 +48,36 @@ const LivestockCardInFarmDetails = ({ livestock, onAdded, farmId, onClose }) => 
           />
         )}
 
-        {livestock.length === 0 ? (
+        {/* Loading */}
+        {loading && (
+          <div className="flex flex-col items-center justify-center py-8 text-gray-400">
+            <Loader2
+              size={20}
+              className="animate-spin"
+            />
+
+            <p className="text-sm mt-2">
+              Loading livestock...
+            </p>
+          </div>
+        )}
+
+        {/* Error */}
+        {error && (
+          <div className="flex flex-col items-center justify-center py-8 text-center">
+            <PawPrint
+              size={24}
+              className="text-gray-300"
+            />
+
+            <p className="text-sm text-gray-600 mt-2">
+              failed to fetch livestock
+            </p>
+
+          </div>
+        )}
+
+        {livestock.length === 0 && !loading && !error ? (
           <div className="text-center py-8">
             <PawPrint
               size={22}

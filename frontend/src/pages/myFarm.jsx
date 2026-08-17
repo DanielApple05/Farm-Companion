@@ -7,6 +7,7 @@ import {
   ChevronRight,
   CheckCircle2,
   AlertTriangle,
+  RefreshCw
 } from "lucide-react";
 import Sidebar from "../components/sidebar";
 import Header from "../components/header";
@@ -20,19 +21,19 @@ import MobileNav from "../components/mobileNav";
 const MyFarms = () => {
   const [farmModalOpen, setFarmModalOpen] = useState(false);
   const [farms, setFarms] = useState([]);
-  const [message, setMessage] = useState("");
+  const [error, setError] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchFarms = async () => {
       try {
         setLoading(true);
-
+        setError(null)
         const response = await getFarms();
 
         setFarms(response.data);
       } catch (error) {
-        setMessage(
+        setError(
           error?.response?.data?.message || "Failed to fetch farms"
         );
       } finally {
@@ -53,7 +54,7 @@ const MyFarms = () => {
 
       <div className="flex min-h-screen">
         <Sidebar />
-         <MobileNav />
+        <MobileNav />
         <main className="w-full bg-gray-50 p-4 sm:p-6 xl:mt-20 mt-28 xl:mb-0 mb-20 space-y-6">
 
           {/* Page header */}
@@ -66,9 +67,8 @@ const MyFarms = () => {
               <p className="text-gray-500 text-sm mt-1">
                 {loading
                   ? "Loading your farms..."
-                  : `${farms.length} ${
-                      farms.length === 1 ? "farm" : "farms"
-                    } registered`}
+                  : `${farms.length} ${farms.length === 1 ? "farm" : "farms"
+                  } registered`}
               </p>
             </div>
 
@@ -83,9 +83,25 @@ const MyFarms = () => {
           </div>
 
           {/* Error */}
-          {message && (
-            <div className="bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl px-4 py-3">
-              {message}
+          { error &&  (
+            <div className="flex flex-col items-center justify-center py-8 text-center">
+              <AlertTriangle
+                size={24}
+                className="text-gray-300"
+              />
+
+              <p className="text-sm text-gray-600 mt-2">
+                {error}
+              </p>
+
+              <button
+                type="button"
+                onClick={ () =>  { setLoading(true),  setError(null) } }
+                className="mt-3 inline-flex items-center gap-2 text-xs font-medium text-green-600 hover:text-green-700"
+              >
+                <RefreshCw size={13} />
+                Try again
+              </button>
             </div>
           )}
 
@@ -107,7 +123,7 @@ const MyFarms = () => {
           )}
 
           {/* Empty state */}
-          {!loading && farms.length === 0 && (
+          {!loading && !error && farms.length === 0 && (
             <div className="bg-white border border-gray-100 rounded-xl p-8 sm:p-10 text-center">
 
               <div className="w-12 h-12 mx-auto rounded-xl bg-green-50 flex items-center justify-center">

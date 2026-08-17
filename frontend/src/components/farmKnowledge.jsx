@@ -79,7 +79,7 @@ const FarmKnowledgeDaily = () => {
         )}
 
         {/* Error */}
-        {!loading && error && (
+        { error && (
           <div className="flex flex-col items-center justify-center py-8 text-center">
             <BookOpen
               size={24}
@@ -102,7 +102,7 @@ const FarmKnowledgeDaily = () => {
         )}
 
         {/* Empty */}
-        {!loading && !error && tips.length === 0 && (
+        { !loading && !error && tips.length === 0 && (
           <div className="flex flex-col items-center justify-center py-8 text-center">
             <Leaf
               size={24}

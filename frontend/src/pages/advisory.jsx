@@ -141,10 +141,6 @@ const Advisory = () => {
     fetchAdvisories();
   }, []);
 
-  // if (weatherLoading || tipsLoading) {
-  //   return <AdvisorySkeleton />;
-  // }
-
   const totalWarnings =
     cropWarnings.length + livestockWarnings.length;
 

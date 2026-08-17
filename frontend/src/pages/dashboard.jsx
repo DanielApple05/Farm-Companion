@@ -20,6 +20,7 @@ import { getCrops } from "../api/crops";
 import { getLivestock } from "../api/livestock";
 import { Link } from "react-router-dom";
 import { capitalizeFirst } from "../helpers";
+import DiagnosisCard from "../components/diagnosisCard";
 
 const quickActions = [
   {
@@ -57,20 +58,19 @@ const Dashboard = () => {
   const [farmLoading, setFarmLoading] = useState(true);
   const [cropLoading, setCropLoading] = useState(true);
   const [livestockLoading, setLivestockLoading] = useState(true);
-
-  const [message, setMessage] = useState("");
+  const [ cropError, setCropError ] = useState([]);
 
   useEffect(() => {
     const fetchFarms = async () => {
       try {
         setFarmLoading(true);
-
         const response = await getFarms();
         setFarms(response.data);
       } catch (error) {
-        setMessage(
-          error?.response?.data?.message || "Failed to fetch farms"
-        );
+        // setMessage(
+        //   error?.response?.data?.message || "Failed to fetch farms"
+        // );
+
       } finally {
         setFarmLoading(false);
       }
@@ -83,11 +83,11 @@ const Dashboard = () => {
     const fetchCrops = async () => {
       try {
         setCropLoading(true);
-
+        setCropError(null)
         const response = await getCrops();
         setCrops(response.data);
       } catch (error) {
-        setMessage(
+        setCropError(
           error?.response?.data?.message || "Failed to fetch crops"
         );
       } finally {
@@ -106,9 +106,9 @@ const Dashboard = () => {
         const response = await getLivestock();
         setLivestock(response.data);
       } catch (error) {
-        setMessage(
-          error?.response?.data?.message || "Failed to fetch livestock"
-        );
+        // setMessage(
+        //   error?.response?.data?.message || "Failed to fetch livestock"
+        // );
       } finally {
         setLivestockLoading(false);
       }
@@ -142,7 +142,7 @@ const Dashboard = () => {
           <div className="space-y-6 pb-10">
 
             {/* Hero */}
-            <Hero farms={farms} crops={crops} livestock={livestock} cropLoading={cropLoading} farmLoading={farmLoading} livestockLoading={livestockLoading} message={message} />
+            <Hero farms={farms} crops={crops} livestock={livestock} cropLoading={cropLoading} farmLoading={farmLoading} livestockLoading={livestockLoading} />
 
             {/* Quick Actions */}
             <section className="px-6">
@@ -318,7 +318,7 @@ const Dashboard = () => {
                     <ChevronRight size={14} />
                   </Link> */}
                 </div>
-                {recentDiagnoses.map((diagnosis) => (
+                {/* {recentDiagnoses.map((diagnosis) => (
                   <div
                     key={diagnosis._id}
                     className="flex items-center justify-between gap-4 p-3 mb-2 rounded-xl bg-gray-50 border border-gray-100"
@@ -345,7 +345,9 @@ const Dashboard = () => {
                       {diagnosis.confidence}% match
                     </span>
                   </div>
-                ))}
+                ))} */}
+
+                <DiagnosisCard recentDiagnoses={recentDiagnoses} cropError={cropError} cropLoading={cropLoading} />
               </div>
             </section>
           </div>

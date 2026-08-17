@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Wrench, PlusCircle } from 'lucide-react';
+import { Wrench, PlusCircle, Loader2 } from 'lucide-react';
 import AddEquipmentModal from './addEquipmentModal';
 
-const EquipmentCardInFarmDetails = ({equipment, farmId, onClose, onAdded }) => {
+const EquipmentCardInFarmDetails = ({ equipment, farmId, onClose, onAdded, error, loading }) => {
 
   const conditionStyles = {
     Good: "bg-green-50 text-green-700",
@@ -10,7 +10,7 @@ const EquipmentCardInFarmDetails = ({equipment, farmId, onClose, onAdded }) => {
     Broken: "bg-red-50 text-red-700",
   };
 
-  const [ equipModalOpen, setEquipModalOpen ] = useState(false);
+  const [equipModalOpen, setEquipModalOpen] = useState(false);
 
   return (
     <div>
@@ -45,7 +45,36 @@ const EquipmentCardInFarmDetails = ({equipment, farmId, onClose, onAdded }) => {
           />
         )}
 
-        {equipment.length === 0 ? (
+        {/* Loading */}
+        {loading && (
+          <div className="flex flex-col items-center justify-center py-8 text-gray-400">
+            <Loader2
+              size={20}
+              className="animate-spin"
+            />
+
+            <p className="text-sm mt-2">
+              Loading Tools...
+            </p>
+          </div>
+        )}
+
+        {/* Error */}
+        {error && (
+          <div className="flex flex-col items-center justify-center py-8 text-center">
+            <Wrench
+              size={24}
+              className="text-gray-300"
+            />
+
+            <p className="text-sm text-gray-600 mt-2">
+              failed to fetch Tools
+            </p>
+
+          </div>
+        )}
+
+        {equipment.length === 0 && !error && !loading ? (
           <div className="text-center py-8">
             <Wrench
               size={22}

@@ -1,12 +1,12 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import {
   Sprout, PlusCircle, AlertTriangle,
-  Activity, Calendar
+  Activity, Calendar, Loader2
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import AddCropModal from './addCropModal';
 
-const CropCardInFarmDetails = ({ crops, onAdded, farmId, onClose }) => {
+const CropCardInFarmDetails = ({ crops, onAdded, farmId, onClose, error, loading }) => {
 
   const statusStyles = {
     Healthy: "bg-green-50 text-green-700",
@@ -46,7 +46,36 @@ const CropCardInFarmDetails = ({ crops, onAdded, farmId, onClose }) => {
           />
         )}
 
-        {crops.length === 0 ? (
+        {/* Loading */}
+        {loading && (
+          <div className="flex flex-col items-center justify-center py-8 text-gray-400">
+            <Loader2
+              size={20}
+              className="animate-spin"
+            />
+
+            <p className="text-sm mt-2">
+              Loading Crops...
+            </p>
+          </div>
+        )}
+
+        {/* Error */}
+        {error && (
+          <div className="flex flex-col items-center justify-center py-8 text-center">
+            <Sprout
+              size={24}
+              className="text-gray-300"
+            />
+
+            <p className="text-sm text-gray-600 mt-2">
+              failed to fetch crops
+            </p>
+          </div>
+        )}
+
+        {/* Empty State */}
+        {crops.length === 0 && !loading && !error && (
           <div className="text-center py-8">
             <Sprout
               size={22}
@@ -63,8 +92,9 @@ const CropCardInFarmDetails = ({ crops, onAdded, farmId, onClose }) => {
             >
               Add your first crop
             </button>
-          </div>
-        ) : (
+          </div>)}
+
+        {!loading && !error && crops.length > 0 &&
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
 
             {crops.map((crop) => (
@@ -140,8 +170,7 @@ const CropCardInFarmDetails = ({ crops, onAdded, farmId, onClose }) => {
                 </div>
               </Link>
             ))}
-          </div>
-        )}
+          </div>}
       </div>
     </div>
   );
