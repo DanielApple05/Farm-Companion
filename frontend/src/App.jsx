@@ -15,6 +15,7 @@ import CropDetail from './pages/cropDetail';
 import LivestockDetail from './pages/livestockDetail';
 import ProtectedRoute from './components/security/protectRoutes';
 import FarmHistory from './pages/farmHistory';
+import NotFound from './pages/notFound';
 
 const App = () => {
   return (
@@ -37,6 +38,7 @@ const App = () => {
         <Route path="/news" element={<News />} />
         <Route path="/comingSoon" element={<ComingSoon />} />
         <Route path="/history" element={<FarmHistory />} />
+        <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
   );

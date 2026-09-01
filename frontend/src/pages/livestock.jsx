@@ -188,7 +188,7 @@ const Livestock = () => {
             </div>
           )}
 
-          {!loading && message && (
+          { message && (
             <div className="max-w-2xl mx-auto flex flex-col items-center justify-center py-8 text-center">
               <AlertTriangle size={24} className="text-gray-300" />
               <p className="text-sm text-gray-600 mt-2">{message || "No crop data found."}</p>
