@@ -43,18 +43,8 @@ const AddSaleModal = ({
    */
   const harvestedCrops = useMemo(() => {
     return (crops || []).filter((crop) => {
-      const isHarvested =
-        crop.harvested === true ||
-        Boolean(crop.harvestedOn) ||
-        crop.status === "Harvested" ||
-        crop.growth === "Harvested";
-
-      const availableAmount = Number(
-        crop.yield?.amount ??
-        crop.quantity ??
-        crop.harvest?.quantity ??
-        0
-      );
+      const isHarvested = Boolean(crop.harvestedOn);
+      const availableAmount = Number(crop.availableForSale ?? 0);
 
       return isHarvested && availableAmount > 0;
     });
@@ -65,17 +55,9 @@ const AddSaleModal = ({
    * The farm stores livestock counts as headcount, not quantity/availableLivestock.
    */
   const availableLivestock = useMemo(() => {
-    return (livestock || []).filter((animal) => {
-      const availableCount = Number(
-        animal.headcount ??
-        animal.quantity ??
-        animal.availableQuantity ??
-        0
-      );
-
-      return availableCount > 0 &&
-        (animal.availableForSale !== false);
-    });
+    return (livestock || []).filter(
+      (animal) => Number(animal.headcount ?? 0) > 0
+    );
   }, [livestock]);
 
   const items =
@@ -87,17 +69,15 @@ const AddSaleModal = ({
     (item) => item._id === selectedItem
   );
 
-  const availableQuantity =
-    selectedItemData?.availableQuantity ??
-    selectedItemData?.quantity ??
-    selectedItemData?.yield?.amount ??
-    selectedItemData?.headcount ??
-    selectedItemData?.harvest?.quantity ??
-    0;
+const availableQuantity =
+  saleType === "crop"
+    ? Number(selectedItemData?.availableForSale ?? 0)
+    : Number(selectedItemData?.headcount ?? 0);
 
-  const unit =
-    selectedItemData?.unit ??
-    (saleType === "crop" ? "kg" : "animals");
+const unit =
+  saleType === "crop"
+    ? selectedItemData?.yield?.unit ?? "kg"
+    : "animals";
 
   const quantityNumber = Number(quantitySold) || 0;
 
@@ -214,8 +194,8 @@ const AddSaleModal = ({
           {message && (
             <div
               className={`rounded-xl border px-4 py-3 text-sm ${isSuccess
-                  ? "bg-green-50 border-green-200 text-green-600"
-                  : "bg-red-50 border-red-200 text-red-500"
+                ? "bg-green-50 border-green-200 text-green-600"
+                : "bg-red-50 border-red-200 text-red-500"
                 }`}
             >
               {message}
@@ -235,8 +215,8 @@ const AddSaleModal = ({
                   handleSaleTypeChange("crop")
                 }
                 className={`flex items-center justify-center gap-2 rounded-xl border px-3 py-3 text-base ${saleType === "crop"
-                    ? "border-green-500 bg-green-50 text-green-700"
-                    : "border-gray-200 text-gray-600"
+                  ? "border-green-500 bg-green-50 text-green-700"
+                  : "border-gray-200 text-gray-600"
                   }`}
               >
                 <Sprout size={17} />
@@ -249,8 +229,8 @@ const AddSaleModal = ({
                   handleSaleTypeChange("livestock")
                 }
                 className={`flex items-center justify-center gap-2 rounded-xl border px-3 py-3 text-base ${saleType === "livestock"
-                    ? "border-green-500 bg-green-50 text-green-700"
-                    : "border-gray-200 text-gray-600"
+                  ? "border-green-500 bg-green-50 text-green-700"
+                  : "border-gray-200 text-gray-600"
                   }`}
               >
                 <PawPrint size={17} />
@@ -288,7 +268,7 @@ const AddSaleModal = ({
                   key={item._id}
                   value={item._id}
                 >
-                  {item.name || item.breed }
+                  {item.name || item.breed}
                 </option>
               ))}
             </select>

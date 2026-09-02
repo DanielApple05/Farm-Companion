@@ -257,6 +257,7 @@ const FarmFinances = ({ farmId, crops, livestock }) => {
               setSales([newSale, ...sales]);
               setTotalSales(totalSales + newSale.amount);
               setTotalOwed(totalOwed + (newSale.amount - newSale.amountPaid));
+              fetchFinances(); // Refresh to get updated quantitySold for crops/livestock
             }}
           />
         )}

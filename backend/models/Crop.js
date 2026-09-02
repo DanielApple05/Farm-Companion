@@ -25,17 +25,24 @@ const cropSchema = new mongoose.Schema(
       enum: ["Healthy", "Flagged"],
       default: "Healthy",
     },
-    
+
     yield: {
       amount: {
         type: Number,
         min: 0,
+        default: 0,
       },
       unit: {
         type: String,
         enum: ["kg", "tons", "bags"],
         default: "kg",
       },
+    },
+
+    quantitySold: {
+      type: Number,
+      min: 0,
+      default: 0,
     },
 
     harvestedOn: {
@@ -78,6 +85,13 @@ cropSchema.virtual("percentComplete").get(function () {
 
 cropSchema.virtual("isOverdue").get(function () {
   return calculateCropStage(this.name, this.plantedOn).isOverdue;
+});
+
+cropSchema.virtual("availableForSale").get(function () {
+  const total = this.yield?.amount || 0;
+  const sold = this.quantitySold || 0;
+
+  return Math.max(0, total - sold);
 });
 
 module.exports = mongoose.model("Crop", cropSchema);

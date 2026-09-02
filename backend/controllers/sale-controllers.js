@@ -20,6 +20,7 @@ const addSale = async (req, res) => {
   try {
     const qty = Number(quantity);
     const totalAmount = Number(amount);
+    const paidAmount = Number(amountPaid) || 0;
 
     if (
       !farmId ||
@@ -28,7 +29,7 @@ const addSale = async (req, res) => {
       !Number.isFinite(qty) ||
       qty <= 0 ||
       !unit ||
-      !buyer ||
+      !buyer?.trim() ||
       !Number.isFinite(totalAmount) ||
       totalAmount < 0
     ) {
@@ -59,6 +60,10 @@ const addSale = async (req, res) => {
     let availableQuantity = 0;
     let itemLabel = "item";
 
+    // =========================
+    // CROP SALE
+    // =========================
+
     if (itemType === "crop") {
       item = await Crop.findOne({
         _id: itemId,
@@ -71,27 +76,40 @@ const addSale = async (req, res) => {
         });
       }
 
-      const isHarvested =
-        item.harvested === true ||
-        Boolean(item.harvestedOn) ||
-        item.status === "Harvested" ||
-        item.growth === "Harvested";
-
-      if (!isHarvested) {
+      // Your current Crop schema uses harvestedOn
+      if (!item.harvestedOn) {
         return res.status(400).json({
           message: "This crop has not been harvested yet",
         });
       }
 
-      availableQuantity = Number(item.yield?.amount ?? item.quantity ?? 0);
+      // Use the virtual from the Crop schema
+      availableQuantity = Number(item.availableForSale ?? 0);
+
       itemLabel = item.name;
+
+      // Make sure sale unit matches crop yield unit
+      if (unit !== item.yield?.unit) {
+        return res.status(400).json({
+          message: `This crop is measured in ${item.yield?.unit}`,
+        });
+      }
 
       if (qty > availableQuantity) {
         return res.status(400).json({
           message: `Only ${availableQuantity} ${unit} of this crop is available for sale`,
         });
       }
+
+      // Update sold quantity
+      item.quantitySold += qty;
+
+      await item.save();
     }
+
+    // =========================
+    // LIVESTOCK SALE
+    // =========================
 
     if (itemType === "livestock") {
       item = await Livestock.findOne({
@@ -105,31 +123,42 @@ const addSale = async (req, res) => {
         });
       }
 
-      availableQuantity = Number(item.headcount ?? item.quantity ?? 0);
+      availableQuantity = Number(item.headcount || 0);
       itemLabel = item.type;
-
-      if (item.availableForSale === false) {
-        return res.status(400).json({
-          message: "This livestock is not available for sale",
-        });
-      }
 
       if (qty > availableQuantity) {
         return res.status(400).json({
-          message: `Only ${availableQuantity} ${unit} available`,
+          message: `Only ${availableQuantity} animals are available`,
         });
       }
+
+      // Reduce the current livestock inventory
+      item.headcount -= qty;
+
+      await item.save();
     }
+
+    // =========================
+    // CREATE SALE
+    // =========================
 
     const sale = await Sale.create({
       farm: farmId,
-      description: `${qty} ${unit} of ${itemLabel} sold to ${buyer}`,
-      buyer,
+
+      description: `${qty} ${unit} of ${itemLabel} sold to ${buyer.trim()}`,
+
+      buyer: buyer.trim(),
+
       amount: totalAmount,
-      amountPaid: Number(amountPaid) || 0,
+
+      amountPaid: paidAmount,
+
       date: date || new Date(),
+
       ...(itemType === "crop" ? { crop: itemId } : { livestock: itemId }),
+
       quantitySold: qty,
+
       unit,
     });
 

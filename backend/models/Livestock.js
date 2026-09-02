@@ -4,7 +4,6 @@ const livestockSchema = new mongoose.Schema(
   {
     type: {
       type: String,
-      // enum: ["Poultry", "Goats", "Cattle", "Sheep"],
       required: true,
     },
 
@@ -23,6 +22,12 @@ const livestockSchema = new mongoose.Schema(
       type: Number,
       required: true,
       min: 1,
+    },
+
+    quantitySold: {
+      type: Number,
+      min: 0,
+      default: 0,
     },
 
     farm: {
@@ -76,7 +81,13 @@ const livestockSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  },
 );
+
+livestockSchema.virtual("availableForSale").get(function () {
+  return Math.max(0, this.headcount - this.quantitySold);
+});
 
 module.exports = mongoose.model("Livestock", livestockSchema);
