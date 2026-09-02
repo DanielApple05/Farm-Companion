@@ -72,7 +72,7 @@ const AddSaleModal = ({
 const availableQuantity =
   saleType === "crop"
     ? Number(selectedItemData?.availableForSale ?? 0)
-    : Number(selectedItemData?.headcount ?? 0);
+    : Number(selectedItemData?.availableHeads ?? 0);
 
 const unit =
   saleType === "crop"

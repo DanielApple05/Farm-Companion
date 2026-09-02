@@ -112,10 +112,10 @@ const LivestockCardInFarmDetails = ({ livestock, onAdded, farmId, onClose, error
                     </p>
 
                     <p className="text-xs text-gray-500 mt-1">
-                      {animal.headcount}{" "}
-                      {animal.headcount === 1
-                        ? "animal"
-                        : "animals"}
+                      {animal.availableHeads}{" "}
+                      {animal.availableHeads === 1
+                        ? "head"
+                        : "heads"}
 
                       {animal.breed &&
                         ` · ${animal.breed}`}

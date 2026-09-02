@@ -90,6 +90,7 @@ const CropDetail = () => {
     : [];
   const isHarvestReady = growth?.stage === "Harvested" && crop && !crop.harvestedOn;
   const isHarvested = Boolean(crop?.harvestedOn);
+  const availableForSale = crop?.availableForSale ?? 0;
 
   return (
     <>
@@ -192,15 +193,23 @@ const CropDetail = () => {
                   </div>
 
                   {isHarvested ? (
-                    <div className="bg-green-50 rounded-xl p-3">
-                      <p className="text-[11px] uppercase tracking-wide text-green-600">Harvest</p>
-                      <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-1">
-                        <span className="text-sm font-medium text-green-700">
-                          {crop.yield?.amount} {crop.yield?.unit}
-                        </span>
-                        <span className="text-xs text-green-600">
-                          · {new Date(crop.harvestedOn).toLocaleDateString()}
-                        </span>
+                    <div className="bg-green-50 rounded-xl p-3 flex xl:flex-row flex-col justify-between items-center">
+                      <div>
+                        <p className="text-[11px] uppercase tracking-wide text-green-600">Harvest</p>
+                        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-1">
+                          <span className="text-sm font-medium text-green-700">
+                            {crop.yield?.amount} {crop.yield?.unit}
+                          </span>
+                          <span className="text-xs text-green-600">
+                            · {new Date(crop.harvestedOn).toLocaleDateString()}
+                          </span>
+                        </div>
+                      </div>
+                      <div>
+                        <p className="text-[11px] uppercase tracking-wide text-green-600 mt-2">Available for Sale</p>
+                        <p className="text-sm font-medium text-green-700 mt-1">
+                          {availableForSale} {crop.yield?.unit}
+                        </p>
                       </div>
                     </div>
                   ) : (
