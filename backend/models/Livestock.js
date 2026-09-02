@@ -87,7 +87,7 @@ const livestockSchema = new mongoose.Schema(
 );
 
 livestockSchema.virtual("availableHeads").get(function () {
-  return Math.max(0, this.headcount - this.quantitySold);
+  return Math.max(0, this.headcount - this.quantitySold || 0 );
 });
 
 module.exports = mongoose.model("Livestock", livestockSchema);
