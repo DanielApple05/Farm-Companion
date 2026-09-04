@@ -91,6 +91,7 @@ const CropDetail = () => {
   const isHarvestReady = growth?.stage === "Harvested" && crop && !crop.harvestedOn;
   const isHarvested = Boolean(crop?.harvestedOn);
   const availableForSale = crop?.availableForSale ?? 0;
+  const isSold = crop?.isSold ?? false;
 
   return (
     <>
@@ -157,12 +158,6 @@ const CropDetail = () => {
                     </div>
 
                     <div className="min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        {crop.status === "Flagged" && (
-                          <AlertTriangle size={16} className="text-amber-500 shrink-0" />
-                        )}
-                      </div>
-
                       <div className="flex items-start gap-1.5 mt-1.5 text-sm text-gray-500">
                         <MapPin size={13} className="mt-0.5 shrink-0" />
                         <span className="break-words">
@@ -173,12 +168,17 @@ const CropDetail = () => {
                     </div>
                   </div>
 
-                  <span
-                    className={`shrink-0 text-[11px] sm:text-xs px-2.5 py-1 rounded-full font-medium ${statusStyles[crop.status] || "bg-gray-50 text-gray-600 border border-gray-100"
-                      }`}
-                  >
-                    {crop.status}
-                  </span>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    {crop.status === "Flagged" && (
+                      <AlertTriangle size={16} className="text-amber-500 shrink-0" />
+                    )}
+                    <span
+                      className={`shrink-0 text-[11px] sm:text-xs px-2.5 py-1 rounded-full font-medium ${statusStyles[crop.status] || "bg-gray-50 text-gray-600 border border-gray-100"
+                        }`}
+                    >
+                      {crop.status}
+                    </span>
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-5 pt-4 border-t border-gray-100">
@@ -191,8 +191,7 @@ const CropDetail = () => {
                       </span>
                     </div>
                   </div>
-
-                  {isHarvested ? (
+                  { isHarvested ? (
                     <div className="bg-green-50 rounded-xl p-3 flex xl:flex-row flex-col justify-between items-center">
                       <div>
                         <p className="text-[11px] uppercase tracking-wide text-green-600">Harvest</p>
@@ -216,7 +215,9 @@ const CropDetail = () => {
                     <div className="bg-gray-50 rounded-xl p-3">
                       <p className="text-[11px] uppercase tracking-wide text-gray-400">Current Stage</p>
                       <p className="text-sm font-medium text-gray-700 mt-1">
-                        {growth?.stage || "Not specified"}
+                        {!crop.harvestedOn
+                          ? "Not harvested"
+                          : growth?.stage || "Not specified"}
                       </p>
                     </div>
                   )}

@@ -95,7 +95,7 @@ cropSchema.virtual("availableForSale").get(function () {
 });
 
 cropSchema.virtual("isSold").get(function () {
-  return this.availableForSale <= 0;
+  return Boolean(this.harvestedOn) && this.availableForSale <= 0;
 });
 
 module.exports = mongoose.model("Crop", cropSchema);

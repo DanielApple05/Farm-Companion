@@ -72,7 +72,7 @@ const Crops = () => {
                   className="bg-white rounded-xl border border-gray-100 p-4 sm:p-5 flex flex-col gap-4 hover:border-green-300 transition-colors"
                 >
                   {/* Header */}
-                  <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-2 min-w-0">
                       <div className="w-9 h-9 rounded-lg bg-green-50 flex items-center justify-center shrink-0">
                         <Leaf size={16} className="text-green-600" />
@@ -84,10 +84,7 @@ const Crops = () => {
                     </div>
 
                     {crop.isSold && (
-                      <AlertTriangle
-                        size={16}
-                        className="text-amber-500 shrink-0"
-                      />
+                      <span className="text-gray-400 bg-green-700 p-1 text-sm rounded-full ">Sold</span>
                     )}
                   </div>
 
@@ -126,18 +123,12 @@ const Crops = () => {
 
                       {crop.harvestedOn ? (
                         <div className="flex items-center gap-1.5 text-gray-700">
-                          <Calendar
-                            size={13}
-                            className="text-gray-400 shrink-0"
-                          />
-
-                          <span>
-                            {new Date(crop.harvestedOn).toLocaleDateString()}
-                          </span>
+                          <Calendar size={13} className="text-gray-400 shrink-0" />
+                          <span>{new Date(crop.harvestedOn).toLocaleDateString()}</span>
                         </div>
                       ) : (
                         <span className="font-medium text-gray-700">
-                          {crop.stage || "Not specified"}
+                          {crop.stage === "Harvested" ? "Not harvested" : crop.stage || "Not specified"}
                         </span>
                       )}
                     </div>
