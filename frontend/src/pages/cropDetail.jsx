@@ -192,7 +192,7 @@ const CropDetail = () => {
                     </div>
                   </div>
                   { isHarvested ? (
-                    <div className="bg-green-50 rounded-xl p-3 flex xl:flex-row flex-col justify-between items-center">
+                    <div className="bg-green-50 rounded-xl p-3 flex  justify-between items-center">
                       <div>
                         <p className="text-[11px] uppercase tracking-wide text-green-600">Harvest</p>
                         <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-1">
@@ -270,6 +270,7 @@ const CropDetail = () => {
                 </div>
 
                 <div className="mt-5 pt-4 border-t border-gray-100">
+                 { !isHarvested && (
                   <div className="flex gap-3 justify-between">
                     <div>
                       <p className="text-xs text-gray-400">Days elapsed</p>
@@ -279,7 +280,7 @@ const CropDetail = () => {
                       <p className="text-xs text-gray-400">Progress</p>
                       <p className="text-sm font-medium text-gray-800 mt-1">{growth?.percentComplete || 0}%</p>
                     </div>
-                  </div>
+                  </div>) }
 
                   <div className="mt-4">
                     {isHarvested ? (
@@ -311,7 +312,7 @@ const CropDetail = () => {
                 </div>
               </section>
 
-              <TipsInCropDetails weatherTips={weatherTips} cropTips={cropTips} />
+             { !isSold && <TipsInCropDetails weatherTips={weatherTips} cropTips={cropTips} /> }
 
               <DiagnoseInCropDetails diagnosisLogs={diagnosisLogs} />
             </>
