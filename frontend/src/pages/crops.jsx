@@ -83,7 +83,7 @@ const Crops = () => {
                       </h2>
                     </div>
 
-                    {crop.status === "Flagged" && (
+                    {crop.isSold && (
                       <AlertTriangle
                         size={16}
                         className="text-amber-500 shrink-0"
@@ -146,13 +146,21 @@ const Crops = () => {
                   {/* Footer */}
                   <div className="flex items-center justify-between pt-1 mt-auto">
 
-                    <span
-                      className={`text-xs px-2 py-1 rounded-md ${statusStyles[crop.status] ||
-                        "bg-gray-50 text-gray-600"
-                        }`}
-                    >
-                      {crop.status}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span
+                        className={`text-xs px-2 py-1 rounded-md ${statusStyles[crop.status] ||
+                          "bg-gray-50 text-gray-600"
+                          }`}
+                      >
+                        {crop.status}
+                      </span>
+                      {crop.status === "Flagged" && (
+                        <AlertTriangle
+                          size={16}
+                          className="text-amber-500 shrink-0"
+                        />
+                      )}
+                    </div>
 
                     <Link
                       to={`/crops/${crop._id}`}

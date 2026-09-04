@@ -94,4 +94,8 @@ cropSchema.virtual("availableForSale").get(function () {
   return Math.max(0, total - sold);
 });
 
+cropSchema.virtual("isSold").get(function () {
+  return this.availableForSale <= 0;
+});
+
 module.exports = mongoose.model("Crop", cropSchema);
