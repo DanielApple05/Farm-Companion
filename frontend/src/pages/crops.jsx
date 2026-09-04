@@ -128,7 +128,7 @@ const Crops = () => {
                         </div>
                       ) : (
                         <span className="font-medium text-gray-700">
-                          {crop.stage === "Harvested" ? "Not harvested" : crop.stage || "Not specified"}
+                          {crop.stage === "Harvested" ? "Ready for harvest" : crop.stage || "Not specified"}
                         </span>
                       )}
                     </div>
