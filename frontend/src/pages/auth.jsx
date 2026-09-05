@@ -17,6 +17,7 @@ const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const [form, setForm] = useState({
     name: "",
@@ -36,6 +37,7 @@ const Auth = () => {
 
     try {
       setLoading(true);
+      setIsSuccess(false);
       setMessage("");
 
       if (!isLogin) {
@@ -52,6 +54,7 @@ const Auth = () => {
         );
 
         setMessage("Registration successful! Please log in.");
+        setIsSuccess(true);
         setIsLogin(true);
 
         setForm({
@@ -70,7 +73,6 @@ const Auth = () => {
           "user",
           JSON.stringify(res.data.user)
         );
-
         navigate("/");
       }
     } catch (error) {
@@ -79,6 +81,7 @@ const Auth = () => {
         error.message ||
         "Something went wrong. Please try again."
       );
+      setIsSuccess(false);
     } finally {
       setLoading(false);
     }
@@ -151,7 +154,12 @@ const Auth = () => {
 
         {/* Message */}
         {message && (
-          <div className="mt-5 rounded-xl border border-red-200 bg-red-50 px-3.5 py-3 text-xs sm:text-sm text-red-600">
+          <div
+            className={`w-full border text-sm rounded-xl px-4 py-3 mt-3 ${isSuccess
+                ? "bg-green-50 border-green-200 text-green-600"
+                : "bg-red-50 border-red-200 text-red-500"
+              }`}
+          >
             {message}
           </div>
         )}
