@@ -16,4 +16,23 @@ const explainDiagnosis = async (diseaseName, cropName, confidence) => {
   return completion.choices[0].message.content;
 };
 
-module.exports = { explainDiagnosis };
+
+const askFarmAssistant = async (userQuestion, farmerContext) => {
+  const completion = await groq.chat.completions.create({
+    model: "openai/gpt-oss-120b",
+    messages: [
+      {
+        role: "system",
+        content: `You are a helpful farm assistant. Here is what you know about this farmer's operation:\n${farmerContext}\n\nAnswer their questions using this context where relevant. If their question isn't related to their farm data, just answer normally.`,
+      },
+      {
+        role: "user",
+        content: userQuestion,
+      },
+    ],
+  });
+
+  return completion.choices[0].message.content;
+};
+
+module.exports = { explainDiagnosis, askFarmAssistant };

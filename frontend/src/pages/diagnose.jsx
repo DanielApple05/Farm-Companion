@@ -384,7 +384,8 @@ const DiagnoseCrop = () => {
                       <div className="relative">
                         <input
                           type="text"
-                          placeholder="Ask a follow-up question..."
+                          disabled
+                          placeholder= "Ask our AI assistant (coming soon!)"
                           className="w-full pl-3 pr-11 py-3 text-sm rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-200"
                         />
 
