@@ -1,11 +1,10 @@
-// services/groqService.js
 const Groq = require("groq-sdk");
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 const explainDiagnosis = async (diseaseName, cropName, confidence) => {
   const completion = await groq.chat.completions.create({
-    model: "llama-3.3-70b-versatile",
+    model: "openai/gpt-oss-120b",
     messages: [
       {
         role: "user",
