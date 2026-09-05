@@ -1,3 +1,3 @@
 import API from "./axios";
 
-export const askAssistant = (question) => API.post("/api/assistant/chat", { question });
+export const askAssistant = (question) => API.post("/assistant/chat", { question });
