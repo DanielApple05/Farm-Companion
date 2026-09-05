@@ -1,19 +1,16 @@
 import {
   MapPin,
   AlertTriangle,
-  Calendar,
-  Activity,
   History
 } from "lucide-react";
 
 import Sidebar from "../components/navs/sidebar";
 import Header from "../components/header";
-import FarmDetailsSkeleton from "../components/farmComponent/farmDetailsSkeleton";
 
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { getFarmById, deleteFarm } from "../api/farm";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import FarmFinances from "../components/farmComponent/farmFinances";
 import DeleteButton from "../components/buttons/deleteButton";
@@ -77,7 +74,7 @@ const FarmDetail = () => {
 
 
   const totalLivestock = livestock.reduce(
-    (sum, animal) => sum + Number(animal.headcount || 0),
+    (sum, animal) => sum + Number(animal.availableHeads || 0),
     0
   );
 

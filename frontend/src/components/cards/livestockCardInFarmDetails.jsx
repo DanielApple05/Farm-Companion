@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import {
-  PawPrint, PlusCircle, AlertTriangle,
-  Activity, Calendar, Loader2
+  PawPrint, PlusCircle, AlertTriangle, Loader2
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import AddLivestockModal from '../modalComponent/addLivestockModal';
