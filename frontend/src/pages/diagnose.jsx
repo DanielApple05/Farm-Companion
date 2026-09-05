@@ -126,6 +126,8 @@ const DiagnoseCrop = () => {
       .slice(0, 5);
   }, [cropOptions]);
 
+  console.log("explanation:", diagnosisResult?.explanation);
+
   return (
     <>
       <Header />
