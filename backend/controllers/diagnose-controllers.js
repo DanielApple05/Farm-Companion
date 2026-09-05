@@ -1,6 +1,6 @@
 const axios = require("axios");
 const Crop = require("../models/Crop");
-const { explainDiagnosis } = require("../services/claudeService");
+const { explainDiagnosis } = require("../services/geminiServices");
 
 const isOwnerMatch = (ownerId, userId) => {
   if (!ownerId || !userId) return false;
@@ -92,7 +92,7 @@ const diagnoseCrop = async (req, res) => {
 
     let explanation = "";
 
-    if (process.env.CLAUDE_API_KEY) {
+    if (process.env.GEMINI_API_KEY) {
       try {
         explanation = await explainDiagnosis(
           topDisease.name,
