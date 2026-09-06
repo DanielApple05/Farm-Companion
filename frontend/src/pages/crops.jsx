@@ -27,7 +27,7 @@ const Crops = () => {
         const response = await getCrops();
         setCrops(response.data);
       } catch (error) {
-        setMessage(error.response.data || " failed to fetch crops")
+        setMessage(error.response.data || "failed to fetch crops")
       } finally {
         setLoading(false)
       }
@@ -59,6 +59,28 @@ const Crops = () => {
             addCropModal && <AddCropModal onClose={() => setAddCropModal(false)} onAdded={(newItem) =>
               setCrops([...crops, newItem])
             } />
+          }
+
+          {
+            crops.length === 0 && !loading && (
+              <div className="flex flex-col items-center justify-center py-8 text-center">
+                <Leaf size={24} className="text-gray-300" />
+                <p className="text-sm text-gray-500 mt-2">
+                  {message || "No crops found. Add a crop to get started."}
+                </p>
+              </div>
+            )
+          }
+
+          {
+            message && (
+              <div className="flex flex-col items-center justify-center py-8 text-center">
+                <Leaf size={24} className="text-gray-300" />
+                <p className="text-sm text-red-500 mt-2">
+                  {message}
+                </p>
+              </div>
+            )
           }
 
           {/* Crops list */}

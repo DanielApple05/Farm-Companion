@@ -93,42 +93,6 @@ const FarmFinances = ({ farmId, crops, livestock }) => {
           </div>
         )}
 
-        {/* Loading */}
-
-        {loadingFinance && (
-          <div className="grid p-3 space-y-3 ">
-            <div className="grid items-center justify-between bg-gray-50 space-y-3 rounded-lg animate-pulse">
-              <div className="flex flex-col gap-1.5">
-                {/* description */}
-                <div className="h-3.5 w-40 bg-gray-200 rounded-md" />
-                {/* date */}
-                <div className="h-3 w-20 bg-gray-200 rounded-md" />
-              </div>
-              <div className="flex items-center gap-2">
-                {/* category badge */}
-                <div className="h-5 w-16 bg-gray-200 rounded-md" />
-                {/* amount */}
-                <div className="h-3.5 w-14 bg-gray-200 rounded-md" />
-              </div>
-            </div>
-            <div className="grid items-center justify-between bg-gray-50 rounded-lg space-y-3 animate-pulse">
-              <div className="flex flex-col gap-1.5">
-                {/* description */}
-                <div className="h-3.5 w-40 bg-gray-200 rounded-md" />
-                {/* date */}
-                <div className="h-3 w-20 bg-gray-200 rounded-md" />
-              </div>
-              <div className="flex items-center gap-2">
-                {/* category badge */}
-                <div className="h-5 w-16 bg-gray-200 rounded-md" />
-                {/* amount */}
-                <div className="h-3.5 w-14 bg-gray-200 rounded-md" />
-              </div>
-            </div>
-          </div>
-        )}
-
-
         {/* Error */}
         {financeErr && (
           <div className="flex flex-col items-center justify-center py-8 text-center">
@@ -137,7 +101,7 @@ const FarmFinances = ({ farmId, crops, livestock }) => {
               className="text-gray-300"
             />
 
-            <p className="text-sm text-gray-600 mt-2">
+            <p className="text-sm text-red-600 mt-2">
               {financeErr}
             </p>
 
@@ -151,8 +115,9 @@ const FarmFinances = ({ farmId, crops, livestock }) => {
             </button>
           </div>)}
 
-        {!loadingFinance && !financeErr && expenses.length > 0 &&
+        { !financeErr && (
           <>
+
             {/* Expenses  */}
             <div>
               <div className="flex items-center justify-between mb-3">
@@ -169,28 +134,29 @@ const FarmFinances = ({ farmId, crops, livestock }) => {
                 </button>
               </div>
               {
-                expenses.length === 0 && !loadingFinance && !financeErr && (
-                  <p className="text-xs text-gray-400">No expenses logged yet.</p>
+                expenses.length === 0 && (
+                  <p className="text-xs text-gray-400">{  loadingFinance ? "Loading expenses..." : "No expenses logged yet." }</p>
                 )
               }
-              < div className="space-y-2">
-                {expenses.map((e) => (
-                  <div key={e._id} className="flex items-center justify-between bg-gray-50 rounded-lg p-3">
-                    <div>
-                      <p className="text-sm text-gray-900">{e.description}</p>
-                      <p className="text-xs text-gray-500">{new Date(e.date).toLocaleDateString()}</p>
+              {!loadingFinance && !financeErr && expenses.length > 0 && (
+                < div className="space-y-2">
+                  {expenses.map((e) => (
+                    <div key={e._id} className="flex items-center justify-between bg-gray-50 rounded-lg p-3">
+                      <div>
+                        <p className="text-sm text-gray-900">{e.description}</p>
+                        <p className="text-xs text-gray-500">{new Date(e.date).toLocaleDateString()}</p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className={`text-xs px-2 py-1 rounded-md ${categoryStyles[e.category]}`}>
+                          {e.category}
+                        </span>
+                        <span className="text-sm font-medium text-gray-900">
+                          ₦{e.amount.toLocaleString()}
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className={`text-xs px-2 py-1 rounded-md ${categoryStyles[e.category]}`}>
-                        {e.category}
-                      </span>
-                      <span className="text-sm font-medium text-gray-900">
-                        ₦{e.amount.toLocaleString()}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>)}
             </div>
 
             {/* Sales */}
@@ -209,32 +175,33 @@ const FarmFinances = ({ farmId, crops, livestock }) => {
                 </button>
               </div>
 
-              {sales.length === 0 && !loadingFinance && !financeErr && (
-                <p className="text-xs text-gray-400">No sales recorded yet.</p>
+              {sales.length === 0 && (
+                <p className="text-xs text-gray-400">{ loadingFinance ? "Loading sales..." : "No sales recorded yet." }</p>
               )}
-              <div className="space-y-2">
-                {sales.map((s) => (
-                  <div key={s._id} className="flex items-center justify-between bg-gray-50 rounded-lg p-3">
-                    <div>
-                      <p className="text-sm text-gray-900">{s.description}</p>
-                      <p className="text-xs text-gray-500">
-                        {s.buyer} · {new Date(s.date).toLocaleDateString()}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-sm font-medium text-gray-900">₦{s.amount.toLocaleString()}</p>
-                      {s.amountOwed > 0 ? (
-                        <p className="text-xs text-red-600">₦{s.amountOwed.toLocaleString()} owed</p>
-                      ) : (
-                        <p className="text-xs text-green-600">Paid in full</p>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
 
-          </>}
+              {!loadingFinance && !financeErr && sales.length > 0 && (
+                <div className="space-y-2">
+                  {sales.map((s) => (
+                    <div key={s._id} className="flex items-center justify-between bg-gray-50 rounded-lg p-3">
+                      <div>
+                        <p className="text-sm text-gray-900">{s.description}</p>
+                        <p className="text-xs text-gray-500">
+                          {s.buyer} · {new Date(s.date).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm font-medium text-gray-900">₦{s.amount.toLocaleString()}</p>
+                        {s.amountOwed > 0 ? (
+                          <p className="text-xs text-red-600">₦{s.amountOwed.toLocaleString()} owed</p>
+                        ) : (
+                          <p className="text-xs text-green-600">Paid in full</p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>)}
+            </div>
+          </>)}
 
         {expenseModalOpen && (
           <AddExpenseModal
