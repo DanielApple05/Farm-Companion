@@ -127,15 +127,13 @@ const DiagnoseCrop = () => {
       .slice(0, 5);
   }, [cropOptions]);
 
-  console.log("explanation:", diagnosisResult?.explanation);
-
   return (
     <>
       <Header />
       <div className="flex min-h-screen bg-gray-50">
         <Sidebar />
         <MobileNav />
-        <main className="w-full min-w-0 pt-20 xl:ml-0 xl:mt-0 mt-10 mb-20 p-5 " >
+        <main className="w-full min-w-0 xl:ml-0 mt-14 mb-20 p-5 " >
           {/* Page header */}
           <div>
             <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">
@@ -147,22 +145,14 @@ const DiagnoseCrop = () => {
             </p>
           </div>
 
-          <div className="mt-5 xl:flex grid  justify-between gap-5">
-
-            {/* Global error */}
-            {message && (
-              <div className="bg-red-50 border border-red-200 text-red-500 text-sm rounded-xl px-4 py-3">
-                {message}
-              </div>
-            )}
-
+          <div className="mt-5 flex xl:flex-row flex-col w-full justify-between gap-5">
             {/* Main layout */}
             <div className="grid grid-cols-1 lg:grid-cols-1 gap-5 lg:gap-6 w-full">
               {/* Diagnosis form */}
               <form
                 onSubmit={handleDiagnose}
                 className="bg-white rounded-2xl border border-gray-100 p-4 sm:p-5 space-y-5"
-               >
+              >
 
                 {/* Crop selector */}
                 <div>
@@ -178,7 +168,7 @@ const DiagnoseCrop = () => {
                       className="w-full appearance-none border border-gray-200 rounded-xl px-3 py-3 pr-10 text-sm text-gray-700 bg-white transition focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 disabled:bg-gray-50 disabled:text-gray-400"
                     >
                       <option value="">
-                        {cropLoading ? "Loading your crops..." : "Select a crop"}
+                        {cropLoading ? "Loading your crops..." : message ? <p className="text-red-400 text-sm "> {message}</p>  : "Select a crop"}
                       </option>
 
                       {cropOptions.map((crop) => (
@@ -399,7 +389,7 @@ const DiagnoseCrop = () => {
             </div>
 
             {/* Recent diagnoses */}
-            <div className=" bg-white rounded-2xl border border-gray-100 p-4 h-fit">
+            <div className=" bg-white rounded-2xl border border-gray-100 p-4 h-fit xl:w-5/12 w-full">
 
               <div className="flex items-center justify-between mb-3">
                 <h2 className="font-medium text-gray-900">

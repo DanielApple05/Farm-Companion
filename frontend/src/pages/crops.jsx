@@ -1,4 +1,4 @@
-import { Leaf, MapPin, Calendar, PlusCircle, ChevronRight, AlertTriangle } from "lucide-react";
+import { Leaf, MapPin, Calendar, PlusCircle, ChevronRight, AlertTriangle, RefreshCw } from "lucide-react";
 import Sidebar from "../components/navs/sidebar";
 import Header from "../components/header";
 import AddCropModal from "../components/modalComponent/addCropModal";
@@ -20,20 +20,23 @@ const Crops = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    const fetchCrops = async () => {
-      try {
-        setLoading(true)
-        const response = await getCrops();
-        setCrops(response.data);
-      } catch (error) {
-        setMessage(error.response.data || "failed to fetch crops")
-      } finally {
-        setLoading(false)
-      }
+
+  const fetchCrops = async () => {
+    try {
+      setLoading(true)
+      setMessage("")
+      const response = await getCrops();
+      setCrops(response.data);
+    } catch (error) {
+      setMessage(error?.response?.data?.message || "failed to fetch crops")
+    } finally {
+      setLoading(false)
     }
+  };
+
+  useEffect(() => {
     fetchCrops();
-  }, [])
+  }, []);
 
   return (
     <>
@@ -41,7 +44,7 @@ const Crops = () => {
       <div className="flex min-h-screen">
         <Sidebar />
         <MobileNav />
-        <div className="w-full p-6 space-y-6 xl:mt-20 mt-28 xl:mb-0 mb-20 bg-gray-50">
+        <div className="w-full p-6 space-y-6 mt-14 xl:mb-0 mb-20 bg-gray-50">
           {/* Page header */}
           <div className="flex items-center justify-between">
             <div>
@@ -62,22 +65,27 @@ const Crops = () => {
           }
 
           {
-            crops.length === 0 && !loading && (
+            message &&  (
+              <div className="max-w-2xl mx-auto flex flex-col items-center justify-center py-8 text-center">
+                <AlertTriangle size={24} className="text-red-300" />
+                <p className="text-sm text-red-600 mt-2">{message || "No crop data found."}</p>
+                <button
+                  type="button"
+                  onClick={fetchCrops}
+                  className="mt-3 inline-flex items-center gap-2 text-xs font-medium text-green-600 hover:text-green-700"
+                >
+                  <RefreshCw size={13} />
+                  Try again
+                </button>
+              </div>
+            )}
+
+          {
+            crops.length === 0 && !loading && !message && (
               <div className="flex flex-col items-center justify-center py-8 text-center">
                 <Leaf size={24} className="text-gray-300" />
                 <p className="text-sm text-gray-500 mt-2">
-                  {message || "No crops found. Add a crop to get started."}
-                </p>
-              </div>
-            )
-          }
-
-          {
-            message && (
-              <div className="flex flex-col items-center justify-center py-8 text-center">
-                <Leaf size={24} className="text-gray-300" />
-                <p className="text-sm text-red-500 mt-2">
-                  {message}
+                  No crops found. Add a crop to get started.
                 </p>
               </div>
             )

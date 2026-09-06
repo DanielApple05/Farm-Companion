@@ -72,7 +72,7 @@ const Livestock = () => {
       <div className="flex min-h-screen">
         <Sidebar />
         <MobileNav />
-        <main className="w-full min-w-0 px-4 sm:px-6 py-5 sm:py-6 space-y-5 sm:space-y-6 xl:mt-20 mt-28 xl:mb-0 mb-20 bg-gray-50">
+        <main className="w-full min-w-0 px-4 sm:px-6 py-5 sm:py-6 space-y-5 sm:space-y-6 mt-14 xl:mb-0 mb-20 bg-gray-50">
           {/* Page header */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 
@@ -108,17 +108,6 @@ const Livestock = () => {
               onClose={() => setLivestockModal(false)}
               onAdded={handleLivestockAdded}
             />
-          )}
-
-          {/* Error */}
-          {message && (
-            <div className="flex items-start gap-2 bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl px-4 py-3">
-              <AlertCircle
-                size={16}
-                className="mt-0.5 shrink-0"
-              />
-              <span>{message}</span>
-            </div>
           )}
 
           {/* Quick stats */}
@@ -191,7 +180,7 @@ const Livestock = () => {
           { message && (
             <div className="max-w-2xl mx-auto flex flex-col items-center justify-center py-8 text-center">
               <AlertTriangle size={24} className="text-gray-300" />
-              <p className="text-sm text-gray-600 mt-2">{message || "No crop data found."}</p>
+              <p className="text-sm text-red-600 mt-2">{message || "No crop data found."}</p>
               <button
                 type="button"
                 onClick={fetchLivestock}

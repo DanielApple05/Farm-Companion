@@ -100,7 +100,7 @@ const CropDetail = () => {
         <Sidebar />
         <MobileNav />
 
-        <main className="w-full min-w-0 bg-gray-50 px-4 sm:px-6 py-5 sm:py-6 space-y-5 sm:space-y-6 xl:mt-20 mt-28 mb-20 xl:mb-0">
+        <main className="w-full min-w-0 bg-gray-50 px-4 sm:px-6 py-5 sm:py-6 space-y-5 sm:space-y-6 mt-14 mb-20 xl:mb-0">
           {loading && (
             <div className="flex items-center justify-center py-10">
               <div className="flex items-center gap-2 text-sm text-gray-500">

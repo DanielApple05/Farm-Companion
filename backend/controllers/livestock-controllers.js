@@ -68,7 +68,6 @@ const getLivestock = async (req, res) => {
 
     res.json(livestock);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "Server error" });
   }
 };

@@ -4,11 +4,13 @@ import {
   Sprout,
   Loader2,
   AlertCircle,
+  Bell,
 } from "lucide-react";
 import { getUserName, getInitials } from "../helpers";
 import { useEffect } from "react";
 import { useWeather } from "../api/weather";
 import { getWeatherIcon } from "./weatherIcon";
+import { Link } from "react-router-dom";
 
 const user = {
   role: "Smallholder Farmer",
@@ -30,13 +32,15 @@ const Header = () => {
   const WeatherIconComponent = getWeatherIcon(iconCode);
 
   return (
-    <header className="fixed top-0 left-0 z-50 w-full bg-gray-100 border-b border-gray-200">
+    <header className="fixed top-0 z-50 w-full bg-gray-100 border-b border-gray-200">
 
       {/* Main header row */}
       <div className="h-16 xl:h-20 px-4 sm:px-6 flex items-center justify-between gap-4">
 
         {/* Logo */}
-        <div className="flex items-center gap-2 shrink-0">
+        <Link 
+        to={'/'}
+        className="flex items-center gap-2 shrink-0">
           <Sprout size={22} className="text-green-600" />
 
           <span className="font-semibold text-gray-900 hidden sm:block">
@@ -47,10 +51,10 @@ const Header = () => {
           <span className="font-semibold text-gray-900 sm:hidden">
             Farm
           </span>
-        </div>
+        </Link>
 
         {/* Desktop search */}
-        <div className="relative w-full max-w-xl hidden md:block">
+        {/* <div className="relative w-full max-w-xl hidden md:block">
           <Search
             size={16}
             className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
@@ -62,7 +66,7 @@ const Header = () => {
             placeholder="Coming Soon..."
             className="w-full pl-9 pr-3 py-2 text-base rounded-lg border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-green-200"
           />
-        </div>
+        </div> */}
 
         {/* Weather */}
         <div className="hidden xl:flex flex-col text-sm shrink-0">
@@ -104,7 +108,12 @@ const Header = () => {
         </div>
 
         {/* Profile */}
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex items-center gap-6 shrink-0 ">
+
+          <Bell 
+          size={20}
+          className="text-green-700 cursor-pointer hover:rotate-45  "
+          />
 
           {user.avatarUrl ? (
             <img
@@ -131,7 +140,7 @@ const Header = () => {
       </div>
 
       {/* Mobile search */}
-      <div className="px-4 pb-3 md:hidden">
+      {/* <div className="px-4 pb-3 hidden">
         <div className="relative">
           <Search
             size={16}
@@ -144,7 +153,7 @@ const Header = () => {
             className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-green-200"
           />
         </div>
-      </div>
+      </div> */}
     </header>
   );
 };

@@ -152,7 +152,7 @@ const Advisory = () => {
         <main
           className="
             w-full
-            mt-28
+            mt-14
             mb-20
             bg-gray-50
             p-4
@@ -161,7 +161,6 @@ const Advisory = () => {
             lg:space-y-6
             pb-28
             lg:pb-6
-            xl:mt-20
             xl:mb-0
           "
         >

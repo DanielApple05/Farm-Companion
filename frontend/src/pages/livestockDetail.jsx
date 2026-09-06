@@ -84,7 +84,7 @@ const LivestockDetail = () => {
         <Sidebar />
         <MobileNav />
 
-        <main className="w-full px-4 sm:px-6 pb-24 pt-4 xl:pb-6 bg-gray-50 space-y-4 sm:space-y-6 xl:mt-20 mt-28 xl:mb-0 mb-20">
+        <main className="w-full px-4 sm:px-6 pb-24 pt-4 xl:pb-6 bg-gray-50 space-y-4 sm:space-y-6 mt-14 xl:mb-0 mb-20">
           {loading && (
             <div className="flex items-center justify-center py-10">
               <div className="flex items-center gap-2 text-sm text-gray-500">

@@ -54,7 +54,6 @@ const getCrops = async (req, res) => {
 
     res.json(crops);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "Server error" });
   }
 };

@@ -138,11 +138,18 @@ const Dashboard = () => {
       <div className="flex min-h-screen">
         <Sidebar />
         <MobileNav />
-        <main className="w-full xl:mt-20 mt-28 xl:mb-0 mb-20 bg-gray-50 overflow-y-auto">
+        <main className="w-full mt-14 xl:mb-0 mb-20 bg-gray-50 overflow-y-auto">
           <div className="space-y-6 pb-10">
 
             {/* Hero */}
-            <Hero farms={farms} crops={crops} livestock={livestock} cropLoading={cropLoading} farmLoading={farmLoading} livestockLoading={livestockLoading} />
+            <Hero
+              farms={farms}
+              crops={crops}
+              livestock={livestock}
+              cropLoading={cropLoading}
+              farmLoading={farmLoading}
+              livestockLoading={livestockLoading}
+            />
 
             {/* Quick Actions */}
             <section className="px-6">
