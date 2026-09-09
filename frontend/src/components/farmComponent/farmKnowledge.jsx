@@ -17,14 +17,37 @@ const FarmKnowledgeDaily = () => {
       setLoading(true);
       setError("");
 
+      const today = new Date().toISOString().split("T")[0];
+
+      // Check localStorage first
+      const saved = localStorage.getItem("farmKnowledge");
+
+      if (saved) {
+        const parsed = JSON.parse(saved);
+
+        if (parsed.date === today && Array.isArray(parsed.tips)) {
+          setTips(parsed.tips);
+          return;
+        }
+      }
+
+      // No tips for today → ask backend
       const response = await getFarmKnowledge();
 
-      const data = response.data?.data ?? response.data;
+      const tips = response.data?.data?.tips ?? [];
 
-      setTips(Array.isArray(data) ? data : data ? [data] : []);
+      setTips(tips);
+
+      // Save today's tips
+      localStorage.setItem(
+        "farmKnowledge",
+        JSON.stringify({
+          date: today,
+          tips,
+        })
+      );
     } catch (error) {
       console.error("Error fetching farm knowledge:", error);
-
       setError("Unable to load today's farm knowledge.");
     } finally {
       setLoading(false);
@@ -34,6 +57,8 @@ const FarmKnowledgeDaily = () => {
   useEffect(() => {
     fetchTips();
   }, []);
+
+  console.log("Farm Knowledge Tips:", tips);
 
   return (
     <>
