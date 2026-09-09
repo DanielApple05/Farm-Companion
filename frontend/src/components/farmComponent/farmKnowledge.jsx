@@ -5,7 +5,7 @@ import {
   Loader2,
   RefreshCw,
 } from "lucide-react";
-import { getFarmManagementTips } from "../../api/farmKnowledge";
+import { getFarmKnowledge } from "../../api/assistant";
 
 const FarmKnowledgeDaily = () => {
   const [tips, setTips] = useState([]);
@@ -17,18 +17,15 @@ const FarmKnowledgeDaily = () => {
       setLoading(true);
       setError("");
 
-      const response = await getFarmManagementTips();
+      const response = await getFarmKnowledge();
 
-      setTips(Array.isArray(response.data) ? response.data : []);
+      const data = response.data?.data ?? response.data;
+
+      setTips(Array.isArray(data) ? data : data ? [data] : []);
     } catch (error) {
-      console.error(
-        "Error fetching farm knowledge:",
-        error
-      );
+      console.error("Error fetching farm knowledge:", error);
 
-      setError(
-        "Unable to load today's farm knowledge."
-      );
+      setError("Unable to load today's farm knowledge.");
     } finally {
       setLoading(false);
     }
@@ -51,6 +48,7 @@ const FarmKnowledgeDaily = () => {
           </p>
         </div>
       </div>
+
       <section className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
 
         {/* Header */}
@@ -77,6 +75,7 @@ const FarmKnowledgeDaily = () => {
 
         {/* Content */}
         <div className="p-5 sm:p-6">
+
           {/* Loading */}
           {loading && (
             <div className="flex flex-col items-center justify-center py-8 text-gray-400">
@@ -86,7 +85,7 @@ const FarmKnowledgeDaily = () => {
               />
 
               <p className="text-sm mt-2">
-                Loading farm knowledge...
+                Generating farm knowledge...
               </p>
             </div>
           )}
@@ -135,17 +134,18 @@ const FarmKnowledgeDaily = () => {
                 <article
                   key={tip.id || index}
                   className="
-                  group
-                  rounded-xl
-                  border border-gray-100
-                  bg-gray-50/70
-                  p-4
-                  transition-all
-                  hover:border-green-200
-                  hover:bg-green-50/40
-                "
+                    group
+                    rounded-xl
+                    border border-gray-100
+                    bg-gray-50/70
+                    p-4
+                    transition-all
+                    hover:border-green-200
+                    hover:bg-green-50/40
+                  "
                 >
                   <div className="flex items-start gap-3">
+
                     {/* Icon */}
                     <div className="w-8 h-8 rounded-lg bg-white border border-gray-100 flex items-center justify-center shrink-0">
                       <Leaf
@@ -161,7 +161,7 @@ const FarmKnowledgeDaily = () => {
                       </h3>
 
                       <p className="text-xs text-gray-500 leading-relaxed mt-2">
-                        {tip.body}
+                        {tip.tip}
                       </p>
 
                       {tip.category && (
@@ -170,11 +170,13 @@ const FarmKnowledgeDaily = () => {
                         </span>
                       )}
                     </div>
+
                   </div>
                 </article>
               ))}
             </div>
           )}
+
         </div>
       </section>
     </>

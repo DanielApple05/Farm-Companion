@@ -46,11 +46,6 @@ const Header = () => {
           <span className="font-semibold text-gray-900 hidden sm:block">
             Farm Companion
           </span>
-
-          {/* Smaller mobile branding */}
-          <span className="font-semibold text-gray-900 sm:hidden">
-            Farm
-          </span>
         </Link>
 
         {/* Desktop search */}
