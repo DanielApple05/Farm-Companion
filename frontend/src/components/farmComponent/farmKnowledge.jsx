@@ -58,8 +58,6 @@ const FarmKnowledgeDaily = () => {
     fetchTips();
   }, []);
 
-  console.log("Farm Knowledge Tips:", tips);
-
   return (
     <>
       <div className="flex items-center justify-between mb-3">

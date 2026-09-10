@@ -43,7 +43,7 @@ const Header = () => {
         className="flex items-center gap-2 shrink-0">
           <Sprout size={22} className="text-green-600" />
 
-          <span className="font-semibold text-gray-900 hidden sm:block">
+          <span className="font-semibold text-gray-900 ">
             Farm Companion
           </span>
         </Link>
